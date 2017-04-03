@@ -44,7 +44,7 @@ private:
 class ConsoleWindow
 {
 public:
-	ConsoleWindow(unsigned width, unsigned height);
+	ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager);
 
 	void setFontSize(unsigned size);
 
@@ -52,6 +52,7 @@ public:
 	void draw(ConsoleSprite& sprite);
 	void draw(const CText & text);
 	void draw(ConsoleCharacter& character);
+	void draw(ConsoleText& consoleText);
 	void show();
 
 	void drawsf(const Vertex *vertices, unsigned int vertexCount,
@@ -77,6 +78,8 @@ private:
 	unsigned fontWidth_;
 
 	RenderWindow window_;
+
+	TextureManager* textureManager_;
 
 	Font font_;
 	Texture tileset_;

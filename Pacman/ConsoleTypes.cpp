@@ -40,7 +40,7 @@ int ConsoleObject::getY()
 // ----------------------------
 
 
-ConsoleText::ConsoleText(std::wstring text, sf::Color color) :
+ConsoleText::ConsoleText(std::wstring text, TextureManager::CharacterColor color) :
 	text_(text),
 	color_(color)
 {
@@ -56,12 +56,12 @@ std::wstring ConsoleText::getText()
 	return text_;
 }
 
-void ConsoleText::setColor(sf::Color color)
+void ConsoleText::setColor(TextureManager::CharacterColor color)
 {
 	color_ = color;
 }
 
-sf::Color ConsoleText::getColor()
+TextureManager::CharacterColor ConsoleText::getColor()
 {
 	return color_;
 }

@@ -31,7 +31,7 @@ public:
 	TextureCharacter getTexture(wchar_t c, CharacterColor color);
 	TextureCharacter getTexture(Textures texture);
 
-	sf::Texture getTileset();
+	sf::Texture& getTileset();
 
 
 	void generateTileset();

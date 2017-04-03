@@ -7,10 +7,11 @@ using namespace std;
 
 
 
-ConsoleWindow::ConsoleWindow(unsigned width, unsigned height) :
+ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager) :
 	width_(width),
 	height_(height),
-	fontHeight_(8)
+	fontHeight_(8),
+	textureManager_(textureManager)
 {
 
     if (!font_.loadFromFile("PxPlus_IBM_BIOS.ttf"))
@@ -18,8 +19,6 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height) :
 		cout << "ERROR";
 	}
 
-	if (!tileset_.loadFromFile("tileset.png"))
-		std::cout << "ERROR LOAD TEXTURE" << endl;
 
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
@@ -129,12 +128,32 @@ void ConsoleWindow::draw(ConsoleCharacter & character)
 	int x = character.getX();
 	int y = character.getY();
 
-	if (x > 0 && x < width_ 
-		&&	y > 0 && y < height_)
+	if (x >= 0 && x < width_ 
+		&&	y >= 0 && y < height_)
 	{
-		textures_[x][y] = character.getTexture().rect;
-		background_[x][y] = character.getTexture().backgroundColor;
+		textures_[y][x] = character.getTexture().rect;
+		background_[y][x] = character.getTexture().backgroundColor;
 	}
+}
+
+void ConsoleWindow::draw(ConsoleText & consoleText)
+{
+	int x = consoleText.getX();
+	int y = consoleText.getY();
+
+	std::wstring text = consoleText.getText();
+
+	if (y >= 0 && y < height_)
+	{
+		for (int i = 0; i < text.length() && i + x < width_; ++i)
+		{
+			TextureCharacter& texture = textureManager_->getTexture(text[i], consoleText.getColor());
+
+			textures_[y][i+x] = texture.rect;
+			background_[y][i + x] = consoleText.getBackground();
+		}
+	}
+
 }
 
 void ConsoleWindow::show()
@@ -218,7 +237,7 @@ void ConsoleWindow::show()
 
 	}
 	window_.draw(tiles);
-	window_.draw(tilesTex, &tileset_);
+	window_.draw(tilesTex, &textureManager_->getTileset());
 
 
 

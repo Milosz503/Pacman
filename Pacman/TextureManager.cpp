@@ -36,7 +36,7 @@ void TextureManager::loadTextures()
 
 
 	textures[Player] = getTexture(L'P', CharacterColor::White);
-	textures[Player].backgroundColor = sf::Color::Green;
+	textures[Player].backgroundColor = sf::Color(100, 100, 100);
 
 	textures[PlayerInv] = getTexture(L'p', CharacterColor::White);
 
@@ -91,7 +91,7 @@ TextureCharacter TextureManager::getTexture(Textures texture)
 	return textures[texture];
 }
 
-sf::Texture TextureManager::getTileset()
+sf::Texture& TextureManager::getTileset()
 {
 	return tileset_;
 }
