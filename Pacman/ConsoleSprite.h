@@ -15,7 +15,7 @@ public:
 
 	void setPosition(int x, int y);
 	
-	void setTexture(TextureManager::Textures texture);
+	void setTexture(Textures::ID texture);
 	void fill(wchar_t character, Color color = Color::White, Color background = Color::Blue);
 
 	unsigned getWidth();
@@ -27,7 +27,7 @@ public:
 	 Color getColor(unsigned x, unsigned y);
 	 Color getBackgroundColor(unsigned x, unsigned y);
 
-	 TextureManager::Textures getTexture();
+	 Textures::ID getTexture();
 
 	~ConsoleSprite();
 
@@ -44,7 +44,7 @@ protected:
 	Color** colors_;
 	Color** background_;
 
-	TextureManager::Textures texture_;
+	Textures::ID texture_;
 
 
 };

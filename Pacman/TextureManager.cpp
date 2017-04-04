@@ -35,32 +35,32 @@ void TextureManager::loadTextures()
 		std::cout << "ERROR LOAD TEXTURE" << std::endl;
 
 
-	textures[Player] = getTexture(L'P', CharacterColor::White);
-	textures[Player].backgroundColor = sf::Color(100, 100, 100);
+	textures[Textures::Player] = getTexture(L'P', CharacterColor::White);
+	textures[Textures::Player].backgroundColor = sf::Color(100, 100, 100);
 
-	textures[PlayerInv] = getTexture(L'p', CharacterColor::White);
+	textures[Textures::PlayerInv] = getTexture(L'p', CharacterColor::White);
 
-	textures[Wall] = getTexture(L'#', CharacterColor::White);
-	textures[Wall].backgroundColor = sf::Color::Blue;
+	textures[Textures::Wall] = getTexture(L'#', CharacterColor::White);
+	textures[Textures::Wall].backgroundColor = sf::Color::Blue;
 
-	textures[Border] = getTexture(L'B', CharacterColor::White);
+	textures[Textures::Border] = getTexture(L'B', CharacterColor::White);
 
-	textures[ProjectileLeft] = getTexture(L'<', CharacterColor::White);
+	textures[Textures::ProjectileLeft] = getTexture(L'<', CharacterColor::White);
 
-	textures[ProjectileUp] = getTexture(L'^', CharacterColor::White);
+	textures[Textures::ProjectileUp] = getTexture(L'^', CharacterColor::White);
 
-	textures[ProjectileRight] = getTexture(L'>', CharacterColor::White);
+	textures[Textures::ProjectileRight] = getTexture(L'>', CharacterColor::White);
 
-	textures[ProjectileDown] = getTexture(L'v', CharacterColor::White);
+	textures[Textures::ProjectileDown] = getTexture(L'v', CharacterColor::White);
 
-	textures[Bomb] = getTexture(L'Q', CharacterColor::White);
+	textures[Textures::Bomb] = getTexture(L'Q', CharacterColor::White);
 
-	textures[Explosion] = getTexture(L'*', CharacterColor::White);
+	textures[Textures::Explosion] = getTexture(L'*', CharacterColor::White);
 
-	textures[None] = getTexture(L' ', CharacterColor::White);
+	textures[Textures::None] = getTexture(L' ', CharacterColor::White);
 }
 
-TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor color)
+TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor::Color color)
 {
 	TextureCharacter texture;
 
@@ -86,7 +86,7 @@ TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor color)
 	return texture;
 }
 
-TextureCharacter TextureManager::getTexture(Textures texture)
+TextureCharacter TextureManager::getTexture(Textures::ID texture)
 {
 	return textures[texture];
 }
@@ -98,18 +98,18 @@ sf::Texture& TextureManager::getTileset()
 
 void TextureManager::generateTileset()
 {
-	std::array<sf::Color, ColorCount> colors;
+	std::array<sf::Color, CharacterColor::Count> colors;
 
-	colors[White] = sf::Color::White;
-	colors[Green] = sf::Color::Green;
+	colors[CharacterColor::White] = sf::Color::White;
+	colors[CharacterColor::Green] = sf::Color::Green;
 
 
 	sf::RenderTexture tileset;
-	tileset.create(144, 144 * ColorCount);
+	tileset.create(144, 144 * CharacterColor::Count);
 
 	tileset.clear(sf::Color::Transparent);
 
-	for (int i = 0; i < ColorCount; ++i)
+	for (int i = 0; i < CharacterColor::Count; ++i)
 	{
 
 		drawTileset(colors[i], i * 144, &tileset);

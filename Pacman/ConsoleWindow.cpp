@@ -3,7 +3,7 @@
 #include <iostream>
 
 using namespace std;
-
+using namespace sf;
 
 
 
@@ -54,6 +54,11 @@ void ConsoleWindow::setFontSize(unsigned size)
 	window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
 }
 
+unsigned ConsoleWindow::getFontSize()
+{
+	return fontHeight_;
+}
+
 void ConsoleWindow::clear(Color color)
 {
     for (int i = 0; i < width_; i++)
@@ -90,7 +95,7 @@ void ConsoleWindow::draw(ConsoleSprite& sprite)
 					
 			//}
 
-			if (sprite.getTexture() != TextureManager::None)
+			if (sprite.getTexture() != Textures::None)
 			{
 //				background_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getBackground(sprite.getTexture());
 	//			textures_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getTexture(sprite.getTexture());
@@ -279,6 +284,16 @@ unsigned ConsoleWindow::getWidth()
 unsigned ConsoleWindow::getHeight()
 {
 	return height_;
+}
+
+bool ConsoleWindow::isOpen()
+{
+	return window_.isOpen();
+}
+
+void ConsoleWindow::close()
+{
+	window_.close();
 }
 
 

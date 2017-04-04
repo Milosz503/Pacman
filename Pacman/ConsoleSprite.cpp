@@ -7,7 +7,7 @@ ConsoleSprite::ConsoleSprite(unsigned width, unsigned height, int x, int y) :
 	height_(height),
 	x_(x),
 	y_(y),
-	texture_(TextureManager::Wall)
+	texture_(Textures::Wall)
 {
 
 
@@ -38,7 +38,7 @@ void ConsoleSprite::setPosition(int x, int y)
 	y_ = y;
 }
 
-void ConsoleSprite::setTexture(TextureManager::Textures texture)
+void ConsoleSprite::setTexture(Textures::ID texture)
 {
 	texture_ = texture;
 }
@@ -117,7 +117,7 @@ Color ConsoleSprite::getBackgroundColor(unsigned x, unsigned y)
 	return background_[x][y];
 }
 
-TextureManager::Textures ConsoleSprite::getTexture()
+Textures::ID ConsoleSprite::getTexture()
 {
 	return texture_;
 }

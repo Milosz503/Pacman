@@ -6,7 +6,6 @@
 #include "ConsoleTypes.h"
 #include "ConsoleSprite.h"
 
-using namespace sf;
 
 class ConsoleWindow;
 
@@ -47,23 +46,27 @@ public:
 	ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager);
 
 	void setFontSize(unsigned size);
+	unsigned getFontSize();
 
-	void clear(Color color = Color::Black);
+	void clear(sf::Color color = sf::Color::Black);
 	void draw(ConsoleSprite& sprite);
 	void draw(const CText & text);
 	void draw(ConsoleCharacter& character);
 	void draw(ConsoleText& consoleText);
 	void show();
 
-	void drawsf(const Vertex *vertices, unsigned int vertexCount,
-		PrimitiveType type, const RenderStates &states = RenderStates::Default);
+	void drawsf(const sf::Vertex *vertices, unsigned int vertexCount,
+		sf::PrimitiveType type, const sf::RenderStates &states = sf::RenderStates::Default);
 
-	void drawsf(const Drawable& drawable, const RenderStates& states = RenderStates::Default);
+	void drawsf(const sf::Drawable& drawable, const sf::RenderStates& states = sf::RenderStates::Default);
 
-	bool pollEvent(Event& event);
+	bool pollEvent(sf::Event& event);
 
 	unsigned getWidth();
 	unsigned getHeight();
+
+	bool isOpen();
+	void close();
 
 
 
@@ -77,17 +80,17 @@ private:
 	unsigned fontHeight_;
 	unsigned fontWidth_;
 
-	RenderWindow window_;
+	sf::RenderWindow window_;
 
 	TextureManager* textureManager_;
 
-	Font font_;
-	Texture tileset_;
+	sf::Font font_;
+	sf::Texture tileset_;
 
 	wchar_t** buffer_;
-	Color** colors_;
-	Color** background_;
-	Vector2i** textures_;
+	sf::Color** colors_;
+	sf::Color** background_;
+	sf::Vector2i** textures_;
 
 
 };

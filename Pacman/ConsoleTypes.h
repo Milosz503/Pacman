@@ -30,17 +30,17 @@ private:
 class ConsoleText : public ConsoleObject
 {
 public:
-	ConsoleText(std::wstring text, TextureManager::CharacterColor color = TextureManager::White);
+	ConsoleText(std::wstring text, CharacterColor::Color color = CharacterColor::White);
 
 	void setText(std::wstring text);
 	std::wstring getText();
 
-	void setColor(TextureManager::CharacterColor color);
-	TextureManager::CharacterColor getColor();
+	void setColor(CharacterColor::Color color);
+	CharacterColor::Color getColor();
 
 private:
 	std::wstring text_;
-	TextureManager::CharacterColor color_;
+	CharacterColor::Color color_;
 
 };
 
