@@ -5,7 +5,9 @@
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
 	posY(6),
-	posX(3)
+	posX(3),
+	currentColor(CharacterColor::Grey),
+	backgroundColor_(sf::Color::Black)
 {
 }
 
@@ -24,6 +26,43 @@ bool GameState::handleEvent(sf::Event event)
 		{
 			requestStackPop();
 			requestStackPush(States::Menu);
+
+		}
+		if (event.key.code == Keyboard::Return)
+		{
+
+			if (currentColor + 1 != CharacterColor::Count)
+			{
+				currentColor = (CharacterColor::Color)((int)(currentColor) + 1);
+			}
+			else
+			{
+				currentColor = CharacterColor::White;
+			}
+
+		}
+		if (event.key.code == Keyboard::R)
+		{
+			if (backgroundColor_.r < 250)
+				backgroundColor_.r += 10;
+			else
+				backgroundColor_.r = 0;
+
+		}
+		if (event.key.code == Keyboard::G)
+		{
+			if (backgroundColor_.g < 250)
+				backgroundColor_.g += 10;
+			else
+				backgroundColor_.g = 0;
+
+		}
+		if (event.key.code == Keyboard::B)
+		{
+			if (backgroundColor_.b < 250)
+				backgroundColor_.b += 10;
+			else
+				backgroundColor_.b = 0;
 
 		}
 		if (event.key.code == Keyboard::S)
@@ -53,8 +92,8 @@ bool GameState::handleEvent(sf::Event event)
 
 void GameState::draw()
 {
-	ConsoleText text(L"Pacman gra", CharacterColor::Green);
-
+	ConsoleText text(L"Pacman gra", currentColor);
+	text.setBackground(backgroundColor_);
 	text.setPosition(posX, posY);
 
 	getContext().console->draw(text);

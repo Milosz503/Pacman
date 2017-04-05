@@ -19,5 +19,8 @@ public:
 private:
 	int posY;
 	int posX;
+
+	CharacterColor::Color currentColor;
+	sf::Color backgroundColor_;
 };
 

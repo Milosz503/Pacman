@@ -10,13 +10,13 @@ class ConsoleObject
 {
 public:
 
-	void setBackground(sf::Color& color);
+	void setBackground(const sf::Color& color);
 	sf::Color& getBackground();
 
-	void setPosition(sf::Vector2i& position);
+	void setPosition(const sf::Vector2i& position);
 	void setPosition(int x, int y);
 
-	sf::Vector2i& getPosition();
+	sf::Vector2i getPosition();
 	int getX();
 	int getY();
 
@@ -50,10 +50,11 @@ class ConsoleCharacter : public ConsoleObject
 {
 
 public:
-	ConsoleCharacter(TextureCharacter& texture);
+	ConsoleCharacter();
+	ConsoleCharacter(const TextureCharacter& texture);
 
 
-	void setTexture(TextureCharacter& texture);
+	void setTexture(const TextureCharacter& texture);
 
 	TextureCharacter getTexture();
 

@@ -7,7 +7,7 @@
 
 struct TextureCharacter 
 {
-	sf::Vector2i rect;
+	sf::Vector2i rect = sf::Vector2i(15, 15);
 	sf::Color backgroundColor = sf::Color::Transparent;
 };
 
@@ -23,7 +23,7 @@ namespace Textures
 
 namespace CharacterColor
 {
-	enum Color : unsigned int { White = 0, Green, Count };
+	enum Color : unsigned int { White = 0, Red, Green, Blue, Grey, DarkGrey, LightGrey, Count };
 }
 
 

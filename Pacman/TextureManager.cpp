@@ -101,7 +101,12 @@ void TextureManager::generateTileset()
 	std::array<sf::Color, CharacterColor::Count> colors;
 
 	colors[CharacterColor::White] = sf::Color::White;
+	colors[CharacterColor::Red] = sf::Color::Red;
 	colors[CharacterColor::Green] = sf::Color::Green;
+	colors[CharacterColor::Blue] = sf::Color::Blue;
+	colors[CharacterColor::Grey] = sf::Color(128, 128, 128);
+	colors[CharacterColor::DarkGrey] = sf::Color(64, 64, 64);
+	colors[CharacterColor::LightGrey] = sf::Color(192, 192, 192);
 
 
 	sf::RenderTexture tileset;

@@ -9,6 +9,7 @@ int main()
 {
 
 	TextureManager textureManager;
+	textureManager.generateTileset();
 	textureManager.loadTextures();
 	ConsoleWindow console(20, 20, &textureManager);
 
