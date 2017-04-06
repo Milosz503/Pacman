@@ -10,8 +10,7 @@ class ConsoleObject
 {
 public:
 
-	void setBackground(const sf::Color& color);
-	sf::Color& getBackground();
+	
 
 	void setPosition(const sf::Vector2i& position);
 	void setPosition(int x, int y);
@@ -21,7 +20,7 @@ public:
 	int getY();
 
 private:
-	sf::Color background_ = sf::Color::Transparent;
+	
 	sf::Vector2i position_;
 };
 
@@ -38,9 +37,14 @@ public:
 	void setColor(CharacterColor::Color color);
 	CharacterColor::Color getColor();
 
+	void setBackground(const sf::Color& color);
+	sf::Color& getBackground();
+
 private:
 	std::wstring text_;
 	CharacterColor::Color color_;
+
+	sf::Color background_;
 
 };
 

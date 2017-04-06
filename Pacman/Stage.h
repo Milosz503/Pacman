@@ -5,12 +5,13 @@
 #include "ConsoleWindow.h"
 #include "TextureManager.h"
 #include "PlayerController.h"
-#include "GameObject.h"
 
 class ConsoleWindow;
 class TextureManager;
 class PlayerController;
 class GameObject;
+class Entity;
+class Tile;
 
 class Stage
 {
@@ -20,8 +21,8 @@ public:
 	virtual TextureManager* getTextureManager() = 0;
 	virtual PlayerController* getPlayerController() = 0;
 
-	virtual GameObject* getTile(int x, int y) = 0;
-	virtual std::vector<GameObject*> getEntities() = 0;
+	virtual Tile* getTile(int x, int y) = 0;
+	virtual std::vector<Entity*> getEntities() = 0;
 
 };
 

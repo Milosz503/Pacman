@@ -10,10 +10,15 @@
 
 
 
+namespace Category
+{
+	enum ID {Player, Enemy, Wall, Point};
+}
+
+
 struct TileTable
 {
-	TextureCharacter texture;
-	sf::Color backgroundColor;
+	Textures::ID texture;
 
 	bool isPhysical;
 };
@@ -24,8 +29,9 @@ struct EntityTable
 	unsigned speed;
 	unsigned visionRange;
 
-	TextureCharacter texture;
-	sf::Color backgroundColor;
+	Textures::ID texture;
+
+
 };
 
 

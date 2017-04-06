@@ -1,14 +1,6 @@
 #include "ConsoleTypes.h"
 
-void ConsoleObject::setBackground(const sf::Color& color)
-{
-	background_ = color;
-}
 
-sf::Color& ConsoleObject::getBackground()
-{
-	return background_;
-}
 
 void ConsoleObject::setPosition(const sf::Vector2i& position)
 {
@@ -42,7 +34,8 @@ int ConsoleObject::getY()
 
 ConsoleText::ConsoleText(std::wstring text, CharacterColor::Color color) :
 	text_(text),
-	color_(color)
+	color_(color),
+	background_(sf::Color::Transparent)
 {
 }
 
@@ -66,6 +59,15 @@ CharacterColor::Color ConsoleText::getColor()
 	return color_;
 }
 
+void ConsoleText::setBackground(const sf::Color& color)
+{
+	background_ = color;
+}
+
+sf::Color& ConsoleText::getBackground()
+{
+	return background_;
+}
 
 
 // ------------------------------

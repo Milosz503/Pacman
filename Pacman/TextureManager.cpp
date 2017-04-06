@@ -45,6 +45,10 @@ void TextureManager::loadTextures()
 
 	textures[Textures::Border] = getTexture(L'B', CharacterColor::White);
 
+	textures[Textures::Point].rect.x = 10;
+	textures[Textures::Point].rect.y = CharacterColor::Green * 16 + 12;
+	textures[Textures::Point].backgroundColor = sf::Color::Transparent;
+
 	textures[Textures::ProjectileLeft] = getTexture(L'<', CharacterColor::White);
 
 	textures[Textures::ProjectileUp] = getTexture(L'^', CharacterColor::White);
@@ -79,7 +83,7 @@ TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor::Color col
 	}
 	else
 	{
-		texture.rect.x = 10;
+		texture.rect.x = 11;
 		texture.rect.y = 12;
 	}
 
@@ -152,7 +156,7 @@ void TextureManager::drawTileset(sf::Color color, int offset, sf::RenderTexture 
 		L'\u25BC', L'\u25C4', L'\u25C6', L'\u25CA', L'\u25CB', L'\u25CF', L'\u25D8', L'\u25D9',
 		L'\u25E6', L'\u263A', L'\u263B', L'\u263C', L'\u2640', L'\u2642', L'\u2660', L'\u2663',
 		L'\u2665', L'\u2666', L'\u266A', L'\u266B', L'\u2713', L'\uFB01', L'\uFB02', L'\u2261',
-		L'\uFFFD' };
+		L'\u2027', L'\uFFFD' };
 
 	sf::RectangleShape lineH(sf::Vector2f(144, 1));
 	lineH.setFillColor(sf::Color::Red);

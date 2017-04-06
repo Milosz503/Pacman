@@ -4,6 +4,7 @@
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
+	world_(context),
 	posY(6),
 	posX(3),
 	currentColor(CharacterColor::Grey),
@@ -13,15 +14,17 @@ GameState::GameState(StateStack & stack, Context context) :
 
 bool GameState::update(sf::Time dt)
 {
+	world_.update(dt);
 
-
-	return false;
+	return true;
 }
 
 bool GameState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed)
 	{
+		world_.handleEvent(event);
+
 		if (event.key.code == Keyboard::Escape)
 		{
 			requestStackPop();
@@ -97,6 +100,8 @@ void GameState::draw()
 	text.setPosition(posX, posY);
 
 	getContext().console->draw(text);
+
+	world_.draw();
 
 }
 

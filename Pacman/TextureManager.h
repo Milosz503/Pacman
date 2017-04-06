@@ -15,7 +15,7 @@ struct TextureCharacter
 namespace Textures
 {
 	enum ID {
-		Player, PlayerInv, Wall, Border,
+		Player, PlayerInv, Wall, Border, Point,
 		ProjectileLeft, ProjectileUp, ProjectileRight, ProjectileDown,
 		Bomb, Explosion, None, Count
 	};

@@ -2,7 +2,7 @@
 
 
 #include "State.h"
-
+#include "World.h"
 
 class GameState : public State
 {
@@ -13,10 +13,12 @@ public:
 	virtual bool update(sf::Time dt) override;
 	virtual bool handleEvent(sf::Event event) override;
 	virtual void draw() override;
-
+	
 	~GameState();
 
 private:
+	World world_;
+
 	int posY;
 	int posX;
 

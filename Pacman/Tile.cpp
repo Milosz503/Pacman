@@ -9,11 +9,11 @@ namespace
 
 
 Tile::Tile(Stage * stage, Type type, int x, int y) :
-	GameObject(stage)
+	GameObject(stage),
+	isPhysical_(Table[type].isPhysical)
 {
-	setTexture(Table[type].texture);
-	setBackground(Table[type].backgroundColor);
-	isPhysical_ = Table[type].isPhysical;
+	setTexture(stage->getTextureManager()->getTexture(Table[type].texture));
+	
 
 	setPosition(x, y);
 }
@@ -34,5 +34,6 @@ bool Tile::isPhysical()
 
 void Tile::setPhysical(bool physical)
 {
+	isPhysical_ = physical;
 }
 

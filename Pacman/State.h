@@ -5,6 +5,7 @@
 #include "ConsoleWindow.h"
 #include "TextureManager.h"
 #include "PlayerController.h"
+#include "Level.h"
 
 
 class StateStack;
@@ -31,11 +32,13 @@ public:
 
 	struct Context
 	{
-		Context(ConsoleWindow* console, TextureManager* textureManager, PlayerController* playerController);
+		Context(ConsoleWindow* console, TextureManager* textureManager, PlayerController* playerController, Level* level);
 
 		ConsoleWindow* console;
 		TextureManager* textureManager;
 		PlayerController* playerController;
+
+		Level* level;
 	};
 
 

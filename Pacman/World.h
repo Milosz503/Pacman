@@ -1,17 +1,50 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include <vector>
+
+#include "State.h"
+#include "Stage.h"
+#include "Entity.h"
+#include "Tile.h"
 
 
-class World
+class World : public Stage
 {
 public:
-	World();
+	World(State::Context context);
 
-	bool update(sf::Time dt);
-	bool handleEvent(sf::Event event);
+	void update(sf::Time dt);
+	void handleEvent(sf::Event event);
 	void draw();
 
+	virtual ConsoleWindow* getConsole() override;
+	virtual TextureManager* getTextureManager() override;
+	virtual PlayerController* getPlayerController() override;
+
+	virtual Tile* getTile(int x, int y) override;
+	virtual std::vector<Entity*> getEntities() override;
+
 	~World();
+
+private:
+
+	ConsoleWindow* console_;
+	TextureManager* textureManager_;
+	PlayerController* playerController_;
+
+	std::vector<Entity*> entities_;
+	std::vector<std::vector<Tile*>> tiles_;
+
+	unsigned width_;
+	unsigned height_;
+
+	int offsetX_;
+	int offsetY_;
+
+	void prepareLevel();
+
+	void addTile(Tile::Type type, int x, int y);
+	void addEntity(Entity::Type type, int x, int y);
 };
 

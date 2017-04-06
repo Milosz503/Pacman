@@ -13,7 +13,9 @@ int main()
 	textureManager.loadTextures();
 	ConsoleWindow console(20, 20, &textureManager);
 
-	State::Context context(&console, &textureManager, nullptr);
+
+
+	State::Context context(&console, &textureManager, nullptr, nullptr);
 
 
 	StateStack stack(context);
@@ -25,7 +27,7 @@ int main()
 
 
 
-	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
+	const sf::Time TimePerFrame = sf::seconds(1.f / 10.f);
 
 	sf::Clock clock;
 
