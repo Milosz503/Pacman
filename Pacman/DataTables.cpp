@@ -23,9 +23,11 @@ std::array<EntityTable, Entity::TypeCount> initializeEntityData()
 	std::array<EntityTable, Entity::TypeCount> table;
 
 	table[Entity::Pacman].texture = Textures::Player;
+	table[Entity::Pacman].speed = 10;
 
 	table[Entity::Ghost].texture = Textures::Bomb;
+	table[Entity::Ghost].speed = 10;
 
 
-	return std::array<EntityTable, Entity::TypeCount>();
+	return table;
 }

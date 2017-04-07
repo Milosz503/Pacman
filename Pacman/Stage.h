@@ -4,7 +4,6 @@
 
 #include "ConsoleWindow.h"
 #include "TextureManager.h"
-#include "PlayerController.h"
 
 class ConsoleWindow;
 class TextureManager;
@@ -23,6 +22,12 @@ public:
 
 	virtual Tile* getTile(int x, int y) = 0;
 	virtual std::vector<Entity*> getEntities() = 0;
+
+	virtual unsigned long long getFrameNumber() = 0;
+
+	virtual void moveTile(int x, int y, Vector2i offset) = 0;
+	virtual bool isTileCollidable(int x, int y) = 0;
+	virtual bool isTileEmpty(int x, int y) = 0;
 
 };
 

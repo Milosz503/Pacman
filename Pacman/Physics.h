@@ -18,6 +18,8 @@ public:
 private:
 	Stage* stage_;
 
+	void checkCollision(Entity* entity);
+
 	
 };
 

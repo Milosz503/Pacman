@@ -15,6 +15,9 @@ public:
 	void setPosition(const sf::Vector2i& position);
 	void setPosition(int x, int y);
 
+	void move(int x, int y);
+	void move(const sf::Vector2i& offset);
+
 	sf::Vector2i getPosition();
 	int getX();
 	int getY();

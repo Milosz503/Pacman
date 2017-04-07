@@ -13,6 +13,17 @@ void ConsoleObject::setPosition(int x, int y)
 	position_.y = y;
 }
 
+void ConsoleObject::move(int x, int y)
+{
+	position_.x += x;
+	position_.y += y;
+}
+
+void ConsoleObject::move(const sf::Vector2i& offset)
+{
+	position_ += offset;
+}
+
 sf::Vector2i ConsoleObject::getPosition()
 {
 	return position_;

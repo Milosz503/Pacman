@@ -7,6 +7,7 @@
 #include "Stage.h"
 #include "Entity.h"
 #include "Tile.h"
+#include "Physics.h"
 
 
 class World : public Stage
@@ -25,6 +26,12 @@ public:
 	virtual Tile* getTile(int x, int y) override;
 	virtual std::vector<Entity*> getEntities() override;
 
+	virtual unsigned long long getFrameNumber() override;
+
+	virtual void moveTile(int x, int y, Vector2i offset) override;
+	virtual bool isTileCollidable(int x, int y) override;
+	virtual bool isTileEmpty(int x, int y) override;
+
 	~World();
 
 private:
@@ -33,8 +40,12 @@ private:
 	TextureManager* textureManager_;
 	PlayerController* playerController_;
 
+	Physics physics_;
+
 	std::vector<Entity*> entities_;
 	std::vector<std::vector<Tile*>> tiles_;
+
+	unsigned long long frameCounter_;
 
 	unsigned width_;
 	unsigned height_;
