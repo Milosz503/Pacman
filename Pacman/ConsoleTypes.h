@@ -32,7 +32,7 @@ private:
 class ConsoleText : public ConsoleObject
 {
 public:
-	ConsoleText(std::wstring text, CharacterColor::Color color = CharacterColor::White);
+	ConsoleText(std::wstring text = L"", CharacterColor::Color color = CharacterColor::White);
 
 	void setText(std::wstring text);
 	std::wstring getText();

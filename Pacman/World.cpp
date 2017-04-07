@@ -12,11 +12,17 @@ World::World(State::Context context) :
 	width_(20),
 	height_(20),
 	offsetX_(5),
-	offsetY_(5)
+	offsetY_(5),
+	score_(0)
 {
 
 	prepareLevel();
 
+}
+
+int World::getScore()
+{
+	return score_;
 }
 
 World::~World()
@@ -73,6 +79,35 @@ void World::draw()
 	
 }
 
+
+
+void World::handleStaticCollisions()
+{
+	std::list<Physics::Pair> collisions;
+
+	physics_.checkStaticCollisions(collisions);
+
+	for (auto& collision : collisions)
+	{
+		collision.second->setTexture(textureManager_->getTexture(Textures::Colliding));
+
+		std::cout << "KOLIZJA" << std::endl;
+
+		switch (collision.second->getType())
+		{
+		case Tile::Point:
+			removeTile(collision.second->getX(), collision.second->getY());
+			score_++;
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+}
+
 void World::prepareLevel()
 {
 	tiles_.resize(width_);
@@ -104,11 +139,11 @@ void World::prepareLevel()
 		else
 		{
 			addTile(Tile::Wall, 0, y);
-			addTile(Tile::Wall, width_-1, y);
+			addTile(Tile::Wall, width_ - 1, y);
 
 			if (y == 1)
 			{
-				for (int x = 1; x < width_-1; ++x)
+				for (int x = 1; x < width_ - 1; ++x)
 				{
 					addTile(Tile::Point, x, y);
 				}
@@ -124,9 +159,9 @@ void World::prepareLevel()
 	addTile(Tile::Wall, 5, 6);
 	addTile(Tile::Wall, 6, 6);
 
-	addEntity(Entity::Pacman, 5, 5);
+	addEntity(Entity::Pacman, 7, 7);
 
-	
+
 }
 
 void World::addTile(Tile::Type type, int x, int y)
@@ -145,7 +180,7 @@ void World::removeTile(int x, int y)
 	x -= offsetX_;
 	y -= offsetY_;
 
-	if (x  >= 0 || y >= 0 ||
+	if (x >= 0 || y >= 0 ||
 		x < width_ || y < height_)
 	{
 		if (tiles_[x][y] != nullptr)
@@ -154,32 +189,6 @@ void World::removeTile(int x, int y)
 			tiles_[x][y] = nullptr;
 		}
 	}
-}
-
-void World::handleStaticCollisions()
-{
-	std::list<Physics::Pair> collisions;
-
-	physics_.checkStaticCollisions(collisions);
-
-	for (auto& collision : collisions)
-	{
-		collision.second->setTexture(textureManager_->getTexture(Textures::Bomb));
-
-		std::cout << "KOLIZJA" << std::endl;
-
-		switch (collision.second->getType())
-		{
-		case Tile::Point:
-			removeTile(collision.second->getX(), collision.second->getY());
-			break;
-
-		default:
-			break;
-		}
-
-	}
-
 }
 
 ConsoleWindow * World::getConsole()

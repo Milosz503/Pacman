@@ -17,7 +17,7 @@ namespace Textures
 	enum ID {
 		Player, PlayerInv, Wall, Border, Point,
 		ProjectileLeft, ProjectileUp, ProjectileRight, ProjectileDown,
-		Bomb, Explosion, None, Count
+		Bomb, Explosion, Colliding, None, Count
 	};
 }
 

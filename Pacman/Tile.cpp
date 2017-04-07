@@ -26,7 +26,7 @@ Tile::~Tile()
 
 void Tile::update(sf::Time dt)
 {
-	if(getStage()->getFrameNumber() % 20 == 0)
+	if(getStage()->getFrameNumber() % 21 == 0)
 		setTexture(getStage()->getTextureManager()->getTexture(Table[type_].texture));
 }
 

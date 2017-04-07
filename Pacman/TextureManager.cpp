@@ -41,7 +41,7 @@ void TextureManager::loadTextures()
 	textures[Textures::PlayerInv] = getTexture(L'p', CharacterColor::White);
 
 	textures[Textures::Wall] = getTexture(L'#', CharacterColor::White);
-	textures[Textures::Wall].backgroundColor = sf::Color::Blue;
+	//textures[Textures::Wall].backgroundColor = sf::Color::Blue;
 
 	textures[Textures::Border] = getTexture(L'B', CharacterColor::White);
 
@@ -60,6 +60,8 @@ void TextureManager::loadTextures()
 	textures[Textures::Bomb] = getTexture(L'Q', CharacterColor::White);
 
 	textures[Textures::Explosion] = getTexture(L'*', CharacterColor::White);
+
+	textures[Textures::Colliding] = getTexture(L'O', CharacterColor::Red);
 
 	textures[Textures::None] = getTexture(L' ', CharacterColor::White);
 }

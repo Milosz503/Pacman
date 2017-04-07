@@ -24,5 +24,8 @@ private:
 
 	CharacterColor::Color currentColor;
 	sf::Color backgroundColor_;
+
+
+	ConsoleText scoreText_;
 };
 

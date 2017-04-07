@@ -94,10 +94,6 @@ void Physics::addPair(std::list<Pair>& collisions, Entity * entity, int tileX, i
 	if (tile != nullptr)
 	{
 		collisions.push_back(Pair(entity, tile));
-
-
-		std::cout << "Dodanie" << std::endl;
 	}
-	std::cout << "?" << std::endl;
 
 }

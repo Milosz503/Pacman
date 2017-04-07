@@ -5,11 +5,14 @@
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
 	world_(context),
-	posY(6),
-	posX(3),
+	posY(0),
+	posX(5),
 	currentColor(CharacterColor::Grey),
 	backgroundColor_(sf::Color::Black)
 {
+
+	scoreText_.setPosition(2, 2);
+
 }
 
 bool GameState::update(sf::Time dt)
@@ -99,7 +102,11 @@ void GameState::draw()
 	text.setBackground(backgroundColor_);
 	text.setPosition(posX, posY);
 
+	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
+
+
 	getContext().console->draw(text);
+	getContext().console->draw(scoreText_);
 
 	world_.draw();
 

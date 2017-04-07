@@ -15,6 +15,9 @@ class World : public Stage
 public:
 	World(State::Context context);
 
+	int getScore();
+
+
 	void update(sf::Time dt);
 	void handleEvent(sf::Event event);
 	void draw();
@@ -53,6 +56,10 @@ private:
 	int offsetX_;
 	int offsetY_;
 
+	int score_;
+
+	void handleStaticCollisions();
+
 	void prepareLevel();
 
 	void addTile(Tile::Type type, int x, int y);
@@ -60,6 +67,6 @@ private:
 
 	void removeTile(int x, int y);
 
-	void handleStaticCollisions();
+	
 };
 
