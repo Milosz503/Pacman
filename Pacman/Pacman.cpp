@@ -11,7 +11,7 @@ int main()
 	TextureManager textureManager;
 	textureManager.generateTileset();
 	textureManager.loadTextures();
-	ConsoleWindow console(20, 20, &textureManager);
+	ConsoleWindow console(30, 30, &textureManager);
 
 	PlayerController controller;
 

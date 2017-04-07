@@ -57,5 +57,9 @@ private:
 
 	void addTile(Tile::Type type, int x, int y);
 	void addEntity(Entity::Type type, int x, int y);
+
+	void removeTile(int x, int y);
+
+	void handleStaticCollisions();
 };
 

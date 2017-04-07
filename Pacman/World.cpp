@@ -1,5 +1,6 @@
 #include "World.h"
 
+#include <iostream>
 
 
 World::World(State::Context context) :
@@ -10,8 +11,8 @@ World::World(State::Context context) :
 	frameCounter_(0),
 	width_(20),
 	height_(20),
-	offsetX_(0),
-	offsetY_(0)
+	offsetX_(5),
+	offsetY_(5)
 {
 
 	prepareLevel();
@@ -43,7 +44,7 @@ void World::update(sf::Time dt)
 				tiles_[x][y]->update(dt);
 		}
 	}
-	physics_.update(dt);
+	handleStaticCollisions();
 
 	++frameCounter_;
 }
@@ -136,7 +137,49 @@ void World::addTile(Tile::Type type, int x, int y)
 
 void World::addEntity(Entity::Type type, int x, int y)
 {
-	entities_.push_back(new Entity(this, type, x, y));
+	entities_.push_back(new Entity(this, type, offsetX_ + x, offsetY_ + y));
+}
+
+void World::removeTile(int x, int y)
+{
+	x -= offsetX_;
+	y -= offsetY_;
+
+	if (x  >= 0 || y >= 0 ||
+		x < width_ || y < height_)
+	{
+		if (tiles_[x][y] != nullptr)
+		{
+			delete tiles_[x][y];
+			tiles_[x][y] = nullptr;
+		}
+	}
+}
+
+void World::handleStaticCollisions()
+{
+	std::list<Physics::Pair> collisions;
+
+	physics_.checkStaticCollisions(collisions);
+
+	for (auto& collision : collisions)
+	{
+		collision.second->setTexture(textureManager_->getTexture(Textures::Bomb));
+
+		std::cout << "KOLIZJA" << std::endl;
+
+		switch (collision.second->getType())
+		{
+		case Tile::Point:
+			removeTile(collision.second->getX(), collision.second->getY());
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
 }
 
 ConsoleWindow * World::getConsole()
@@ -156,7 +199,7 @@ PlayerController * World::getPlayerController()
 
 Tile * World::getTile(int x, int y)
 {
-	return tiles_[x][y];
+	return tiles_[x-offsetX_][y - offsetY_];
 }
 
 std::vector<Entity*> World::getEntities()
@@ -171,7 +214,11 @@ unsigned long long World::getFrameNumber()
 
 void World::moveTile(int x, int y, Vector2i offset)
 {
-	if (x + offset.x < 0 || y + offset.y < 0 || x + offset.x >= width_ || y + offset.y >= height_)
+	x -= offsetX_;
+	y -= offsetY_;
+
+	if (x + offset.x < 0 || y + offset.y < 0 ||
+		x + offset.x >= width_ || y + offset.y >= height_)
 	{
 		delete tiles_[x][y];
 		tiles_[x][y] = nullptr;
@@ -186,6 +233,9 @@ void World::moveTile(int x, int y, Vector2i offset)
 
 bool World::isTileCollidable(int x, int y)
 {
+	x -= offsetX_;
+	y -= offsetY_;
+
 	if (x < 0 || y < 0 || x >= width_ || y >= height_)
 		return false;
 
@@ -201,6 +251,9 @@ bool World::isTileCollidable(int x, int y)
 
 bool World::isTileEmpty(int x, int y)
 {
+	x -= offsetX_;
+	y -= offsetY_;
+
 	if (x < 0 || y < 0 || x >= width_ || y >= height_)
 		return true;
 

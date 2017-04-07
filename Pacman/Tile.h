@@ -15,9 +15,11 @@ public:
 	bool isPhysical();
 	void setPhysical(bool physical);
 
+	Type getType();
 
 
 private:
 	bool isPhysical_;
+	Type type_;
 };
 
