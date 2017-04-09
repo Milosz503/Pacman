@@ -7,13 +7,15 @@
 class Physics
 {
 public:
-	typedef std::pair<Entity*, Tile*> Pair;
+	typedef std::pair<Entity*, Tile*> StaticPair;
+	typedef std::pair<Entity*, Entity*> DynamicPair;
 
 	Physics(Stage* stage);
 
 	void update(sf::Time dt);
 
-	void checkStaticCollisions(std::list < Pair >& collisions);
+	void checkStaticCollisions(std::list < StaticPair >& collisions);
+	void checkDynamicCollisions(std::list < DynamicPair >& collisions);
 
 	~Physics();
 
@@ -21,8 +23,10 @@ public:
 private:
 	Stage* stage_;
 
-	void checkMove(Entity* entity, std::list < Pair >& collisions);
-	void addPair(std::list < Pair >& collisions, Entity* entity, int tileX, int tileY);
+	void checkMove(Entity* entity, std::list < StaticPair >& collisions);
+
+	void addPair(std::list < StaticPair >& collisions, Entity* entity, int tileX, int tileY);
+
 
 	
 };

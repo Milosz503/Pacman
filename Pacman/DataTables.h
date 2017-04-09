@@ -2,10 +2,12 @@
 
 
 #include <array>
+#include <map>
 
 #include "TextureManager.h"
 #include "Tile.h"
 #include "Entity.h"
+#include "Animation.h"
 
 
 
@@ -16,9 +18,10 @@ namespace Category
 }
 
 
+
 struct TileTable
 {
-	Textures::ID texture;
+	TextureCharacter texture;
 
 	bool isPhysical;
 };
@@ -28,9 +31,14 @@ struct EntityTable
 {
 	unsigned speed;
 	unsigned visionRange;
+	int hitpoints;
+	bool isVulnerable;
 
-	Textures::ID texture;
 
+	TextureCharacter texture;
+	TextureCharacter secondTexture;
+	std::map<Animation::ID, Animation> animations;
+	
 
 };
 

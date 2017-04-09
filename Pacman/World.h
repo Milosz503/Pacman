@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "Tile.h"
 #include "Physics.h"
+#include "EntityController.h"
 
 
 class World : public Stage
@@ -27,38 +28,52 @@ public:
 	virtual PlayerController* getPlayerController() override;
 
 	virtual Tile* getTile(int x, int y) override;
-	virtual std::vector<Entity*> getEntities() override;
+	virtual std::vector<Entity*>& getEntities() override;
+	virtual Entity* getPlayer() override;
 
 	virtual unsigned long long getFrameNumber() override;
+
+	virtual sf::IntRect getBounds() override;
 
 	virtual void moveTile(int x, int y, Vector2i offset) override;
 	virtual bool isTileCollidable(int x, int y) override;
 	virtual bool isTileEmpty(int x, int y) override;
+	virtual bool isInside(int x, int y) override;
 
 	~World();
 
 private:
+	unsigned width_;
+	unsigned height_;
+
+	int offsetX_;
+	int offsetY_;
+	unsigned long long frameCounter_;
+
+	int score_;
+	sf::Vector2i spawnPoint_;
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
 	PlayerController* playerController_;
 
 	Physics physics_;
+	EntityController entityController_;
+
 
 	std::vector<Entity*> entities_;
 	std::vector<std::vector<Tile*>> tiles_;
 
-	unsigned long long frameCounter_;
+	
 
-	unsigned width_;
-	unsigned height_;
+	
 
-	int offsetX_;
-	int offsetY_;
+	
 
-	int score_;
+	Entity* player_;
 
 	void handleStaticCollisions();
+	void handleDynamicCollisions();
 
 	void prepareLevel();
 

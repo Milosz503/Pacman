@@ -87,6 +87,12 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EntityController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +150,12 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

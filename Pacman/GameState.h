@@ -27,5 +27,9 @@ private:
 
 
 	ConsoleText scoreText_;
+	ConsoleText updateTime_;
+	ConsoleText drawTime_;
+	float fps;
+	
 };
 

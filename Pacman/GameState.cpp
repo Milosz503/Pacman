@@ -8,16 +8,30 @@ GameState::GameState(StateStack & stack, Context context) :
 	posY(0),
 	posX(5),
 	currentColor(CharacterColor::Grey),
-	backgroundColor_(sf::Color::Black)
+	backgroundColor_(sf::Color::Black),
+	fps(0)
 {
 
 	scoreText_.setPosition(2, 2);
+	updateTime_.setPosition(0, 47);
+	drawTime_.setPosition(0, 48);
 
 }
 
 bool GameState::update(sf::Time dt)
 {
+	sf::Clock clock;
+	clock.restart();
+
 	world_.update(dt);
+
+	updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
+
+	if (dt.asSeconds() != 0)
+	{
+		fps = 1.0 / dt.asSeconds();
+	}
+
 
 	return true;
 }
@@ -98,17 +112,29 @@ bool GameState::handleEvent(sf::Event event)
 
 void GameState::draw()
 {
-	ConsoleText text(L"Pacman gra", currentColor);
+
+
+	sf::Clock clock;
+	clock.restart();
+
+
+	
+
+	ConsoleText text(L"fps: " + std::to_string(fps), currentColor);
 	text.setBackground(backgroundColor_);
-	text.setPosition(posX, posY);
+	text.setPosition(0, 45);
 
 	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
 
 
 	getContext().console->draw(text);
 	getContext().console->draw(scoreText_);
+	getContext().console->draw(updateTime_);
+	getContext().console->draw(drawTime_);
 
 	world_.draw();
+
+	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
 
 }
 

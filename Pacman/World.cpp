@@ -1,19 +1,23 @@
 #include "World.h"
 
 #include <iostream>
+#include <algorithm>
 
 
 World::World(State::Context context) :
+	width_(40),
+	height_(40),
+	offsetX_(0),
+	offsetY_(0),
+	score_(0),
+	spawnPoint_(2 + offsetX_, 2 + offsetY_),
 	console_(context.console),
 	textureManager_(context.textureManager),
 	playerController_(context.playerController),
 	physics_(this),
-	frameCounter_(0),
-	width_(20),
-	height_(20),
-	offsetX_(5),
-	offsetY_(5),
-	score_(0)
+	entityController_(this),
+	frameCounter_(0)
+	
 {
 
 	prepareLevel();
@@ -35,10 +39,12 @@ World::~World()
 
 void World::update(sf::Time dt)
 {
-	playerController_->update(dt, entities_[0]);
+	playerController_->update(dt, player_);
+	
 
 	for (auto& entity : entities_)
 	{
+		entityController_.update(entity);
 		entity->update(dt);
 	}
 
@@ -51,6 +57,7 @@ void World::update(sf::Time dt)
 		}
 	}
 	handleStaticCollisions();
+	handleDynamicCollisions();
 
 	++frameCounter_;
 }
@@ -70,12 +77,16 @@ void World::draw()
 				console_->draw(*tiles_[x][y]);
 		}
 	}
+	entityController_.draw();
+
 
 	for (auto& entity : entities_)
 	{
 		console_->draw(*entity);
 	}
+	console_->draw(*player_);
 
+	
 	
 }
 
@@ -83,15 +94,21 @@ void World::draw()
 
 void World::handleStaticCollisions()
 {
-	std::list<Physics::Pair> collisions;
+	std::list<Physics::StaticPair> collisions;
 
 	physics_.checkStaticCollisions(collisions);
 
 	for (auto& collision : collisions)
 	{
-		collision.second->setTexture(textureManager_->getTexture(Textures::Colliding));
+		//collision.second->setTexture(textureManager_->getTexture(L'O', CharacterColor::Red));
 
 		std::cout << "KOLIZJA" << std::endl;
+
+		if (collision.first->getType() == Entity::Ghost)
+		{
+			entityController_.handleCollision(collision.first, collision.second);
+		}
+
 
 		switch (collision.second->getType())
 		{
@@ -106,6 +123,52 @@ void World::handleStaticCollisions()
 
 	}
 
+}
+
+bool matchesCategories(Physics::DynamicPair& colliders, Entity::Type type1, Entity::Type type2)
+{
+	Entity::Type col1 = colliders.first->getType();
+	Entity::Type col2 = colliders.second->getType();
+
+	if (col1 == type1 && col2 == type2)
+		return true;
+	else if (col1 == type2 && col2 == type1)
+	{
+		std::swap(colliders.first, colliders.second);
+		return true;
+	}
+	return false;
+}
+
+void World::handleDynamicCollisions()
+{
+
+	std::list<Physics::DynamicPair> collisions;
+
+	physics_.checkDynamicCollisions(collisions);
+
+	for (auto& colliders : collisions)
+	{
+
+		if (matchesCategories(colliders, Entity::Pacman, Entity::Ghost))
+		{
+			if (colliders.second->isVulnerable())
+			{
+				colliders.second->setPosition(15, 15);
+			}
+
+			else if (colliders.first->isVulnerable())
+			{
+				//player_->setPosition(spawnPoint_);
+
+				//colliders.second->setVulnerability(true, 120);
+				//colliders.first->setVulnerability(false, 120);
+			}
+
+			
+		}
+
+	}
 }
 
 void World::prepareLevel()
@@ -148,6 +211,12 @@ void World::prepareLevel()
 					addTile(Tile::Point, x, y);
 				}
 			}
+			if (y > 2 && y < height_ - 3 && y != 10)
+			{
+				addTile(Tile::Wall, 8, y);
+				addTile(Tile::Wall, 10, y);
+				addTile(Tile::Wall, 12, y);
+			}
 		}
 
 	}
@@ -160,7 +229,11 @@ void World::prepareLevel()
 	addTile(Tile::Wall, 6, 6);
 
 	addEntity(Entity::Pacman, 7, 7);
+	player_ = entities_.back();
 
+	addEntity(Entity::Ghost, 7, 9);
+	addEntity(Entity::SlowGhost, 8, 10);
+	//addEntity(Entity::Ghost, 8, 5);
 
 }
 
@@ -180,8 +253,8 @@ void World::removeTile(int x, int y)
 	x -= offsetX_;
 	y -= offsetY_;
 
-	if (x >= 0 || y >= 0 ||
-		x < width_ || y < height_)
+	if (x >= 0 && y >= 0 &&
+		x < width_ && y < height_)
 	{
 		if (tiles_[x][y] != nullptr)
 		{
@@ -208,17 +281,33 @@ PlayerController * World::getPlayerController()
 
 Tile * World::getTile(int x, int y)
 {
-	return tiles_[x-offsetX_][y - offsetY_];
+	x -= offsetX_;
+	y -= offsetY_;
+
+	if (x < 0 || y < 0 || x >= width_ || y >= height_)
+		return nullptr;
+
+	return tiles_[x][y];
 }
 
-std::vector<Entity*> World::getEntities()
+std::vector<Entity*>& World::getEntities()
 {
 	return entities_;
+}
+
+Entity * World::getPlayer()
+{
+	return player_;
 }
 
 unsigned long long World::getFrameNumber()
 {
 	return frameCounter_;
+}
+
+sf::IntRect World::getBounds()
+{
+	return sf::IntRect(offsetX_, offsetY_, width_, height_);
 }
 
 void World::moveTile(int x, int y, Vector2i offset)
@@ -246,7 +335,7 @@ bool World::isTileCollidable(int x, int y)
 	y -= offsetY_;
 
 	if (x < 0 || y < 0 || x >= width_ || y >= height_)
-		return false;
+		return true;
 
 	if (tiles_[x][y] != nullptr && tiles_[x][y]->isPhysical())
 	{
@@ -267,4 +356,13 @@ bool World::isTileEmpty(int x, int y)
 		return true;
 
 	return tiles_[x][y] == nullptr;
+}
+
+bool World::isInside(int x, int y)
+{
+	x -= offsetX_;
+	y -= offsetY_;
+
+	return (x >= 0 && x < width_
+		&& y >= 0 && y < height_);
 }

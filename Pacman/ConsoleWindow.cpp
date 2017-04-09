@@ -95,12 +95,12 @@ void ConsoleWindow::draw(ConsoleSprite& sprite)
 					
 			//}
 
-			if (sprite.getTexture() != Textures::None)
-			{
+//			if (sprite.getTexture() != Textures::None)
+//			{
 //				background_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getBackground(sprite.getTexture());
 	//			textures_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getTexture(sprite.getTexture());
-			}
-			else
+//			}
+	//		else
 			{
 				if (sprite.getCharacter(x, y) != L' ')
 				{

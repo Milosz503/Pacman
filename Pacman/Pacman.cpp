@@ -5,13 +5,16 @@
 #include "MenuState.h"
 
 
+//Po setPosition entity moze przeskoczyc przez sciane
+//Brak wsparcia dla przesuniecia swiata prze EntityController
+
 int main()
 {
 
 	TextureManager textureManager;
 	textureManager.generateTileset();
 	textureManager.loadTextures();
-	ConsoleWindow console(30, 30, &textureManager);
+	ConsoleWindow console(50, 50, &textureManager);
 
 	PlayerController controller;
 
@@ -53,9 +56,10 @@ int main()
 
 		while (timeSinceLasUpdate >= TimePerFrame)
 		{
+			stack.update(timeSinceLasUpdate);
 			timeSinceLasUpdate -= TimePerFrame;
 
-			stack.update(TimePerFrame);
+			//stack.update(TimePerFrame);
 
 			if (stack.isEmpty())
 			{

@@ -2,6 +2,7 @@
 
 #include "ConsoleTypes.h"
 #include "Stage.h"
+#include "Animation.h"
 
 class Stage;
 
@@ -19,5 +20,8 @@ protected:
 
 private:
 	Stage* stage_;
+
+protected:
+	
 };
 

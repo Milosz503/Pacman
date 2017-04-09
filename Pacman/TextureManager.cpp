@@ -34,36 +34,6 @@ void TextureManager::loadTextures()
 	if (!tileset_.loadFromFile("tileset.png"))
 		std::cout << "ERROR LOAD TEXTURE" << std::endl;
 
-
-	textures[Textures::Player] = getTexture(L'P', CharacterColor::White);
-	textures[Textures::Player].backgroundColor = sf::Color(100, 100, 100);
-
-	textures[Textures::PlayerInv] = getTexture(L'p', CharacterColor::White);
-
-	textures[Textures::Wall] = getTexture(L'#', CharacterColor::White);
-	//textures[Textures::Wall].backgroundColor = sf::Color::Blue;
-
-	textures[Textures::Border] = getTexture(L'B', CharacterColor::White);
-
-	textures[Textures::Point].rect.x = 10;
-	textures[Textures::Point].rect.y = CharacterColor::Green * 16 + 12;
-	textures[Textures::Point].backgroundColor = sf::Color::Transparent;
-
-	textures[Textures::ProjectileLeft] = getTexture(L'<', CharacterColor::White);
-
-	textures[Textures::ProjectileUp] = getTexture(L'^', CharacterColor::White);
-
-	textures[Textures::ProjectileRight] = getTexture(L'>', CharacterColor::White);
-
-	textures[Textures::ProjectileDown] = getTexture(L'v', CharacterColor::White);
-
-	textures[Textures::Bomb] = getTexture(L'Q', CharacterColor::White);
-
-	textures[Textures::Explosion] = getTexture(L'*', CharacterColor::White);
-
-	textures[Textures::Colliding] = getTexture(L'O', CharacterColor::Red);
-
-	textures[Textures::None] = getTexture(L' ', CharacterColor::White);
 }
 
 TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor::Color color)
@@ -92,10 +62,7 @@ TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor::Color col
 	return texture;
 }
 
-TextureCharacter TextureManager::getTexture(Textures::ID texture)
-{
-	return textures[texture];
-}
+
 
 sf::Texture& TextureManager::getTileset()
 {
@@ -110,6 +77,7 @@ void TextureManager::generateTileset()
 	colors[CharacterColor::Red] = sf::Color::Red;
 	colors[CharacterColor::Green] = sf::Color::Green;
 	colors[CharacterColor::Blue] = sf::Color::Blue;
+	colors[CharacterColor::Yellow] = sf::Color::Yellow;
 	colors[CharacterColor::Grey] = sf::Color(128, 128, 128);
 	colors[CharacterColor::DarkGrey] = sf::Color(64, 64, 64);
 	colors[CharacterColor::LightGrey] = sf::Color(192, 192, 192);

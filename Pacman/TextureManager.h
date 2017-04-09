@@ -12,18 +12,11 @@ struct TextureCharacter
 };
 
 
-namespace Textures
-{
-	enum ID {
-		Player, PlayerInv, Wall, Border, Point,
-		ProjectileLeft, ProjectileUp, ProjectileRight, ProjectileDown,
-		Bomb, Explosion, Colliding, None, Count
-	};
-}
+
 
 namespace CharacterColor
 {
-	enum Color : unsigned int { White = 0, Red, Green, Blue, Grey, DarkGrey, LightGrey, Count };
+	enum Color : unsigned int { White = 0, Red, Green, Blue, Yellow, Grey, DarkGrey, LightGrey, Count };
 }
 
 
@@ -35,8 +28,7 @@ public:
 
 	void loadTextures();
 
-	TextureCharacter getTexture(wchar_t c, CharacterColor::Color color);
-	TextureCharacter getTexture(Textures::ID texture);
+	static TextureCharacter getTexture(wchar_t c, CharacterColor::Color color);
 
 	sf::Texture& getTileset();
 
@@ -48,7 +40,6 @@ public:
 private:
 	const int fontHeight_ = 8;
 
-	std::array<TextureCharacter, Textures::Count> textures;
 
 	sf::Texture tileset_;
 	

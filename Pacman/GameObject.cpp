@@ -5,6 +5,7 @@
 
 GameObject::GameObject(Stage * stage) :
 	stage_(stage)
+	//animations_(this)
 {
 }
 

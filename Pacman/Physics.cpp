@@ -19,9 +19,9 @@ void Physics::update(sf::Time dt)
 
 }
 
-void Physics::checkStaticCollisions(std::list < Pair >& collisions)
+void Physics::checkStaticCollisions(std::list < StaticPair >& collisions)
 {
-	std::vector<Entity*> entities = stage_->getEntities();
+	std::vector<Entity*>& entities = stage_->getEntities();
 
 	for (auto& entity : entities)
 	{
@@ -29,12 +29,40 @@ void Physics::checkStaticCollisions(std::list < Pair >& collisions)
 	}
 }
 
+void Physics::checkDynamicCollisions(std::list<DynamicPair>& collisions)
+{
+
+	std::vector<Entity*>& entities = stage_->getEntities();
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		for (int j = i + 1; j < entities.size(); ++j)
+		{
+			if (entities[i]->getNextMove() == -entities[j]->getNextMove())
+			{
+				if (entities[i]->getNextPosition() == entities[j]->getPosition())
+				{
+					collisions.push_back(DynamicPair(entities[i], entities[j]));
+				}
+			}
+			else if(entities[i]->getNextPosition() == entities[j]->getNextPosition())
+			{
+				collisions.push_back(DynamicPair(entities[i], entities[j]));
+			}
+			
+		}
+	}
+
+
+
+}
+
 
 Physics::~Physics()
 {
 }
 
-void Physics::checkMove(Entity* entity, std::list < Pair >& collisions)
+void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 {
 	Vector2i nextMove = entity->getNextMove();
 	Vector2i position = entity->getPosition();
@@ -84,16 +112,18 @@ void Physics::checkMove(Entity* entity, std::list < Pair >& collisions)
 
 	addPair(collisions, entity, position.x + newNextMove.x, position.y + newNextMove.y);
 
-	entity->getNextMove(newNextMove);
+	entity->setNextMove(newNextMove);
 }
 
-void Physics::addPair(std::list<Pair>& collisions, Entity * entity, int tileX, int tileY)
+
+
+void Physics::addPair(std::list<StaticPair>& collisions, Entity * entity, int tileX, int tileY)
 {
 	Tile* tile = stage_->getTile(tileX, tileY);
 
 	if (tile != nullptr)
 	{
-		collisions.push_back(Pair(entity, tile));
+		collisions.push_back(StaticPair(entity, tile));
 	}
 
 }
