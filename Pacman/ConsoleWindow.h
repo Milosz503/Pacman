@@ -68,6 +68,8 @@ public:
 	bool isOpen();
 	void close();
 
+	sf::RenderWindow* getWindow();
+
 
 
 	~ConsoleWindow();

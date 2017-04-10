@@ -213,9 +213,9 @@ void World::prepareLevel()
 			}
 			if (y > 2 && y < height_ - 3 && y != 10)
 			{
-				addTile(Tile::Wall, 8, y);
-				addTile(Tile::Wall, 10, y);
-				addTile(Tile::Wall, 12, y);
+				//addTile(Tile::Wall, 8, y);
+				//addTile(Tile::Wall, 10, y);
+				//addTile(Tile::Wall, 12, y);
 			}
 		}
 
@@ -232,7 +232,7 @@ void World::prepareLevel()
 	player_ = entities_.back();
 
 	addEntity(Entity::Ghost, 7, 9);
-	addEntity(Entity::SlowGhost, 8, 10);
+	//addEntity(Entity::SlowGhost, 8, 10);
 	//addEntity(Entity::Ghost, 8, 5);
 
 }

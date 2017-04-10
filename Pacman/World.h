@@ -40,6 +40,13 @@ public:
 	virtual bool isTileEmpty(int x, int y) override;
 	virtual bool isInside(int x, int y) override;
 
+
+
+	void addTile(Tile::Type type, int x, int y);
+	void addEntity(Entity::Type type, int x, int y);
+
+	void removeTile(int x, int y);
+
 	~World();
 
 private:
@@ -77,10 +84,7 @@ private:
 
 	void prepareLevel();
 
-	void addTile(Tile::Type type, int x, int y);
-	void addEntity(Entity::Type type, int x, int y);
-
-	void removeTile(int x, int y);
+	
 
 	
 };

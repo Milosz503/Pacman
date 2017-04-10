@@ -296,6 +296,11 @@ void ConsoleWindow::close()
 	window_.close();
 }
 
+sf::RenderWindow* ConsoleWindow::getWindow()
+{
+	return &window_;
+}
+
 
 
 ConsoleWindow::~ConsoleWindow()

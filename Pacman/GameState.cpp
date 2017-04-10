@@ -32,6 +32,38 @@ bool GameState::update(sf::Time dt)
 		fps = 1.0 / dt.asSeconds();
 	}
 
+	if (Mouse::isButtonPressed(Mouse::Button::Left))
+	{
+		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+
+		pos.x /= 16;
+		pos.y /= 16;
+
+		sf::IntRect rect = world_.getBounds();
+
+		if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
+			pos.y >= rect.top && pos.y < rect.top + rect.height)
+		{
+			if (world_.getTile(pos.x, pos.y) == nullptr)
+			{
+				world_.addTile(Tile::Wall, pos.x, pos.y);
+			}
+		}
+	}
+
+	if (Mouse::isButtonPressed(Mouse::Button::Right))
+	{
+		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+
+		pos.x /= 16;
+		pos.y /= 16;
+
+		if (world_.getTile(pos.x, pos.y) != nullptr)
+		{
+			world_.removeTile(pos.x, pos.y);
+		}
+	}
+
 
 	return true;
 }
@@ -48,62 +80,19 @@ bool GameState::handleEvent(sf::Event event)
 			requestStackPush(States::Menu);
 
 		}
-		if (event.key.code == Keyboard::Return)
+	
+	}
+
+	if (event.type == Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
 		{
-
-			if (currentColor + 1 != CharacterColor::Count)
-			{
-				currentColor = (CharacterColor::Color)((int)(currentColor) + 1);
-			}
-			else
-			{
-				currentColor = CharacterColor::White;
-			}
-
+			//world_.addTile(Tile::Wall, event.mouseButton.x / 16, event.mouseButton.y / 16);
 		}
-		if (event.key.code == Keyboard::R)
-		{
-			if (backgroundColor_.r < 250)
-				backgroundColor_.r += 10;
-			else
-				backgroundColor_.r = 0;
 
-		}
-		if (event.key.code == Keyboard::G)
+		if (event.mouseButton.button == sf::Mouse::Right)
 		{
-			if (backgroundColor_.g < 250)
-				backgroundColor_.g += 10;
-			else
-				backgroundColor_.g = 0;
-
-		}
-		if (event.key.code == Keyboard::B)
-		{
-			if (backgroundColor_.b < 250)
-				backgroundColor_.b += 10;
-			else
-				backgroundColor_.b = 0;
-
-		}
-		if (event.key.code == Keyboard::S)
-		{
-			posY++;
-
-		}
-		if (event.key.code == Keyboard::W)
-		{
-			posY--;
-
-		}
-		if (event.key.code == Keyboard::A)
-		{
-			posX--;
-
-		}
-		if (event.key.code == Keyboard::D)
-		{
-			posX++;
-
+			world_.removeTile(event.mouseButton.x / 16, event.mouseButton.y / 16);
 		}
 	}
 
