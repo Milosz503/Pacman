@@ -18,6 +18,8 @@ public:
 
 	int getScore();
 
+	void prepareLevel();
+	void prepareLevel(Level* level);
 
 	void update(sf::Time dt);
 	void handleEvent(sf::Event event);
@@ -82,7 +84,7 @@ private:
 	void handleStaticCollisions();
 	void handleDynamicCollisions();
 
-	void prepareLevel();
+	
 
 	
 

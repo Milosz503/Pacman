@@ -93,7 +93,7 @@ void EntityController::update(Entity * entity)
 		else if (dir.y < 0) y = DirectionY::Up;
 		else y = DirectionY::Zero;
 
-		//entity->setSpeed(x, y);
+		entity->setSpeed(x, y);
 
 		
 
@@ -110,6 +110,7 @@ void EntityController::handleCollision(Entity * entity, Tile * tile)
 
 void EntityController::draw()
 {
+	return;
 	ConsoleCharacter character(TextureManager::getTexture(L'.', CharacterColor::Red));
 
 

@@ -30,6 +30,8 @@ private:
 	ConsoleText updateTime_;
 	ConsoleText drawTime_;
 	float fps;
+
+	float averageUpdate_;
 	
 };
 

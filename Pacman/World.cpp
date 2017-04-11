@@ -20,7 +20,7 @@ World::World(State::Context context) :
 	
 {
 
-	prepareLevel();
+	//prepareLevel();
 
 }
 
@@ -235,6 +235,75 @@ void World::prepareLevel()
 	//addEntity(Entity::SlowGhost, 8, 10);
 	//addEntity(Entity::Ghost, 8, 5);
 
+}
+
+void World::prepareLevel(Level * level)
+{
+	width_ = level->getSize().x + 2;
+	height_ = level->getSize().y + 2;
+
+	tiles_.resize(width_);
+
+	for (int x = 0; x < tiles_.size(); ++x)
+	{
+		tiles_[x].resize(height_);
+	}
+
+	for (int x = 0; x < width_; ++x)
+	{
+		for (int y = 0; y < height_; ++y)
+		{
+			tiles_[x][y] = nullptr;
+		}
+	}
+
+	for (int x = 0; x < width_-2; ++x)
+	{
+		for (int y = 0; y < height_-2; ++y)
+		{
+			if(level->getTile(x, y) != Tile::None)
+				addTile(level->getTile(x, y), x+1, y+1);
+		}
+	}
+
+
+	for (int y = 0; y < height_; ++y)
+	{
+		if (y == 0 || y == height_ - 1)
+		{
+			for (int x = 0; x < width_; ++x)
+			{
+				addTile(Tile::Wall, x, y);
+			}
+		}
+		else
+		{
+			addTile(Tile::Wall, 0, y);
+			addTile(Tile::Wall, width_ - 1, y);
+
+			if (y == 1)
+			{
+				for (int x = 1; x < width_ - 1; ++x)
+				{
+					//addTile(Tile::Point, x, y);
+				}
+			}
+			if (y > 2 && y < height_ - 3 && y != 10)
+			{
+				//addTile(Tile::Wall, 8, y);
+				//addTile(Tile::Wall, 10, y);
+				//addTile(Tile::Wall, 12, y);
+			}
+		}
+
+	}
+
+	addEntity(Entity::Pacman, 7, 7);
+	player_ = entities_.back();
+
+	addEntity(Entity::Ghost, 1, 1);
+	addEntity(Entity::SlowGhost, 1, height_-2);
+	addEntity(Entity::SlowGhost, width_-2, 1);
 }
 
 void World::addTile(Tile::Type type, int x, int y)

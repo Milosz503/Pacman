@@ -164,7 +164,7 @@
     <ClInclude Include="EntityController.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
-    <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
@@ -187,7 +187,7 @@
     <ClCompile Include="EntityController.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="Physics.cpp" />

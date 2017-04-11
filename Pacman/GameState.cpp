@@ -16,6 +16,11 @@ GameState::GameState(StateStack & stack, Context context) :
 	updateTime_.setPosition(0, 47);
 	drawTime_.setPosition(0, 48);
 
+
+	LevelManager levelManager(getContext().level);
+	levelManager.loadFromFile("level.txt");
+
+	world_.prepareLevel(getContext().level);
 }
 
 bool GameState::update(sf::Time dt)
@@ -25,7 +30,13 @@ bool GameState::update(sf::Time dt)
 
 	world_.update(dt);
 
-	updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
+
+	if (world_.getFrameNumber() % 20 == 0)
+		averageUpdate_ = 0;
+
+	averageUpdate_ += clock.getElapsedTime().asSeconds();
+	updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
+	L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
 
 	if (dt.asSeconds() != 0)
 	{

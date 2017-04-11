@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "MenuState.h"
+#include "LevelManager.h"
 
 
 //Po setPosition entity moze przeskoczyc przez sciane
@@ -18,7 +19,12 @@ int main()
 
 	PlayerController controller;
 
-	State::Context context(&console, &textureManager, &controller, nullptr);
+
+	Level level;
+
+	
+
+	State::Context context(&console, &textureManager, &controller, &level);
 
 
 	StateStack stack(context);
