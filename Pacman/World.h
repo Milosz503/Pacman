@@ -45,6 +45,7 @@ public:
 
 
 	void addTile(Tile::Type type, int x, int y);
+	void addTeleport(int x, int y, int targetX, int targetY);
 	void addEntity(Entity::Type type, int x, int y);
 
 	void removeTile(int x, int y);

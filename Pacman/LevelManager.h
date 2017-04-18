@@ -17,6 +17,16 @@ public:
 	void setTile(int x, int y, Tile::Type type);
 	Tile::Type getTile(int x, int y);
 
+	unsigned addH(unsigned x, unsigned offset);
+	unsigned addV(unsigned y, unsigned offset);
+	
+	unsigned subtractH(unsigned x, unsigned offset);
+	unsigned subtractV(unsigned y, unsigned offset);
+
+	unsigned normalizeH(int x);
+	unsigned normalizeV(int y);
+	sf::Vector2i normalize(sf::Vector2i position);
+
 
 private:
 
@@ -36,6 +46,7 @@ public:
 
 
 	void loadFromFile(std::string fileName);
+	void saveFile(std::string fileName);
 
 	~LevelManager();
 

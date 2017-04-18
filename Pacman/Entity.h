@@ -19,9 +19,9 @@ public:
 	enum Type { Pacman, Ghost, SlowGhost, TypeCount };
 
 
-	Entity(Stage* stage, Type type, int x = 0, int y = 0);
+	Entity(GameSystems* systems, Type type, int x = 0, int y = 0);
 
-	virtual void update(sf::Time dt) override;
+	virtual void update(unsigned long frameNumber) override;
 
 	void setSpeed(DirectionX::Move x, DirectionY::Move y);
 	sf::Vector2i getSpeed();
@@ -41,6 +41,8 @@ public:
 
 	bool isReadyToMove();
 
+	void teleport(sf::Vector2i location);
+
 	~Entity();
 
 private:
@@ -56,6 +58,8 @@ private:
 
 	unsigned long long vulnerbailityTimer_;
 	AnimationPlayer animations_;
+
+	bool teleported_;
 	
 };
 

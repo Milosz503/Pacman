@@ -18,9 +18,17 @@ GameState::GameState(StateStack & stack, Context context) :
 
 
 	LevelManager levelManager(getContext().level);
-	levelManager.loadFromFile("level.txt");
+	levelManager.loadFromFile("level2.txt");
+	
 
 	world_.prepareLevel(getContext().level);
+
+
+	systems_.frameSystem = new FrameSystem(systems_);
+
+
+
+
 }
 
 bool GameState::update(sf::Time dt)
@@ -58,6 +66,36 @@ bool GameState::update(sf::Time dt)
 			if (world_.getTile(pos.x, pos.y) == nullptr)
 			{
 				world_.addTile(Tile::Wall, pos.x, pos.y);
+
+				if (pos.x >= rect.left+1 && pos.x < rect.left + rect.width - 1 &&
+					pos.y >= rect.top+1 && pos.y < rect.top + rect.height - 1)
+				{
+					getContext().level->setTile(pos.x-1, pos.y-1, Tile::Wall);
+				}
+			}
+		}
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Q))
+	{
+		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+
+		pos.x /= 16;
+		pos.y /= 16;
+
+		sf::IntRect rect = world_.getBounds();
+
+		if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
+			pos.y >= rect.top && pos.y < rect.top + rect.height)
+		{
+			if (world_.getTile(pos.x, pos.y) == nullptr)
+			{
+				world_.addTile(Tile::Point, pos.x, pos.y);
+
+				if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
+					pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
+				{
+					getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::Point);
+				}
 			}
 		}
 	}
@@ -69,9 +107,16 @@ bool GameState::update(sf::Time dt)
 		pos.x /= 16;
 		pos.y /= 16;
 
+		sf::IntRect rect = world_.getBounds();
+
 		if (world_.getTile(pos.x, pos.y) != nullptr)
 		{
 			world_.removeTile(pos.x, pos.y);
+			if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
+				pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
+			{
+				getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::None);
+			}
 		}
 	}
 
@@ -87,6 +132,9 @@ bool GameState::handleEvent(sf::Event event)
 
 		if (event.key.code == Keyboard::Escape)
 		{
+			LevelManager levelManager(getContext().level);
+			levelManager.saveFile("level2.txt");
+
 			requestStackPop();
 			requestStackPush(States::Menu);
 
@@ -103,7 +151,7 @@ bool GameState::handleEvent(sf::Event event)
 
 		if (event.mouseButton.button == sf::Mouse::Right)
 		{
-			world_.removeTile(event.mouseButton.x / 16, event.mouseButton.y / 16);
+			//world_.removeTile(event.mouseButton.x / 16, event.mouseButton.y / 16);
 		}
 	}
 

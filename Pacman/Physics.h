@@ -2,17 +2,17 @@
 
 #include <list>
 
-#include "Stage.h"
+#include "System.h"
 
-class Physics
+class Physics : public System
 {
 public:
 	typedef std::pair<Entity*, Tile*> StaticPair;
 	typedef std::pair<Entity*, Entity*> DynamicPair;
 
-	Physics(Stage* stage);
+	Physics(GameSystems systems);
 
-	void update(sf::Time dt);
+	virtual void update() override;
 
 	void checkStaticCollisions(std::list < StaticPair >& collisions);
 	void checkDynamicCollisions(std::list < DynamicPair >& collisions);
@@ -21,7 +21,8 @@ public:
 
 
 private:
-	Stage* stage_;
+
+	Scene* scene_;
 
 	void checkMove(Entity* entity, std::list < StaticPair >& collisions);
 

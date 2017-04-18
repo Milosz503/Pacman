@@ -3,14 +3,15 @@
 #include "Entity.h"
 #include <iostream>
 
-Physics::Physics(Stage* stage) :
-	stage_(stage)
+Physics::Physics(GameSystems systems) :
+	System(systems),
+	scene_(systems.scene)
 {
 }
 
-void Physics::update(sf::Time dt)
+void Physics::update()
 {
-	std::vector<Entity*> entities = stage_->getEntities();
+	std::vector<Entity*> entities = scene_->getEntities();
 
 	for (auto& entity : entities)
 	{
@@ -21,7 +22,7 @@ void Physics::update(sf::Time dt)
 
 void Physics::checkStaticCollisions(std::list < StaticPair >& collisions)
 {
-	std::vector<Entity*>& entities = stage_->getEntities();
+	std::vector<Entity*>& entities = scene_->getEntities();
 
 	for (auto& entity : entities)
 	{
@@ -32,7 +33,7 @@ void Physics::checkStaticCollisions(std::list < StaticPair >& collisions)
 void Physics::checkDynamicCollisions(std::list<DynamicPair>& collisions)
 {
 
-	std::vector<Entity*>& entities = stage_->getEntities();
+	std::vector<Entity*>& entities = scene_->getEntities();
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
@@ -64,16 +65,23 @@ Physics::~Physics()
 
 void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 {
+
+
 	Vector2i nextMove = entity->getNextMove();
 	Vector2i position = entity->getPosition();
+
+	
+
+
+	//entity->setPosition(position);
 
 	Vector2i newNextMove(0, 0);
 
 	if (nextMove.x != 0 && nextMove.y != 0)
 	{
-		bool isEmptyX = !stage_->isTileCollidable(position.x + nextMove.x, position.y);
-		bool isEmptyY = !stage_->isTileCollidable(position.x, position.y + nextMove.y);
-		bool isEmptyXY = !stage_->isTileCollidable(position.x + nextMove.x, position.y + nextMove.y);
+		bool isEmptyX = !scene_->isTilePhysical(position.x + nextMove.x, position.y);
+		bool isEmptyY = !scene_->isTilePhysical(position.x, position.y + nextMove.y);
+		bool isEmptyXY = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
 
 		if ((isEmptyX || isEmptyY) && isEmptyXY)
 		{
@@ -101,7 +109,7 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 	}
 	else if(nextMove.x != 0 || nextMove.y != 0)
 	{
-		if (!stage_->isTileCollidable(position.x + nextMove.x, position.y + nextMove.y))
+		if (!scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y))
 			newNextMove = nextMove;
 		else
 		{
@@ -112,6 +120,11 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 
 	addPair(collisions, entity, position.x + newNextMove.x, position.y + newNextMove.y);
 
+	
+
+	//entity->setNextMove(newNextMove);
+
+
 	entity->setNextMove(newNextMove);
 }
 
@@ -119,7 +132,7 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 
 void Physics::addPair(std::list<StaticPair>& collisions, Entity * entity, int tileX, int tileY)
 {
-	Tile* tile = stage_->getTile(tileX, tileY);
+	Tile* tile = scene_->getTile(tileX, tileY);
 
 	if (tile != nullptr)
 	{

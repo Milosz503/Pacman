@@ -7,6 +7,9 @@ std::array<TileTable, Tile::TypeCount> initializeTileData()
 	table[Tile::Wall].texture = TextureManager::getTexture(L'#', CharacterColor::White);
 	table[Tile::Wall].isPhysical = true;
 
+	table[Tile::Teleport].texture = TextureManager::getTexture(L'#', CharacterColor::Blue);
+	table[Tile::Teleport].isPhysical = false;
+
 	table[Tile::Border].texture = TextureManager::getTexture(L'#', CharacterColor::Red);
 	table[Tile::Border].isPhysical = true;
 
@@ -42,15 +45,15 @@ std::array<EntityTable, Entity::TypeCount> initializeEntityData()
 
 
 
-	table[Entity::Ghost].texture = TextureManager::getTexture(L'G', CharacterColor::White);
+	table[Entity::Ghost].texture = TextureManager::getTexture(L'G', CharacterColor::Red);
 	table[Entity::Ghost].speed = 20;
 	table[Entity::Ghost].hitpoints = 10;
 	table[Entity::Ghost].isVulnerable = false;
 	table[Entity::Ghost].secondTexture = TextureManager::getTexture(L'g', CharacterColor::Blue);
 
 	Animation ghost = Animation(30);
-	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::White));
-	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::LightGrey));
+	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::Red));
+	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::Red));
 	table[Entity::Ghost].animations[Animation::Invulnerable] = ghost;
 
 	ghost = Animation(30);
@@ -66,7 +69,7 @@ std::array<EntityTable, Entity::TypeCount> initializeEntityData()
 	table[Entity::SlowGhost].secondTexture = TextureManager::getTexture(L'g', CharacterColor::Blue);
 
 	ghost = Animation(30);
-	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::Yellow));
+	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::Red));
 	ghost.frames.push_back(TextureManager::getTexture(L'G', CharacterColor::LightGrey));
 	table[Entity::SlowGhost].animations[Animation::Invulnerable] = ghost;
 

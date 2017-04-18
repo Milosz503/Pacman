@@ -17,6 +17,10 @@ public:
 	~GameState();
 
 private:
+
+	GameSystems systems_;
+
+
 	World world_;
 
 	int posY;

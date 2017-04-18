@@ -8,8 +8,8 @@ namespace
 }
 
 
-Tile::Tile(Stage * stage, Type type, int x, int y) :
-	GameObject(stage),
+Tile::Tile(GameSystems* systems, Type type, int x, int y) :
+	GameObject(systems),
 	isPhysical_(Table[type].isPhysical),
 	type_(type)
 {
@@ -24,9 +24,9 @@ Tile::~Tile()
 }
 
 
-void Tile::update(sf::Time dt)
+void Tile::update(unsigned long frameNumber)
 {
-	if(getStage()->getFrameNumber() % 12 == 0)
+	if(frameNumber % 12 == 0)
 		setTexture(Table[type_].texture);
 }
 

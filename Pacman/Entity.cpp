@@ -8,8 +8,8 @@ namespace
 }
 
 
-Entity::Entity(Stage * stage, Type type, int x, int y) :
-	GameObject(stage),
+Entity::Entity(GameSystems* systems, Type type, int x, int y) :
+	GameObject(systems),
 	type_(type),
 	nextMove_(0, 0),
 	speed_(0, 0),
@@ -17,7 +17,8 @@ Entity::Entity(Stage * stage, Type type, int x, int y) :
 	visionRange_(Table[type].visionRange),
 	hitpoints_(Table[type].hitpoints),
 	isVulnerable_(Table[type].isVulnerable),
-	animations_(this, Table[type].animations)
+	animations_(this, Table[type].animations),
+	teleported_(false)
 	
 {
 	setPosition(x, y);
@@ -26,13 +27,17 @@ Entity::Entity(Stage * stage, Type type, int x, int y) :
 
 }
 
-void Entity::update(sf::Time dt)
+void Entity::update(unsigned long frameNumber)
 {
 	move(nextMove_);
+	if (teleported_ && nextMove_ != sf::Vector2i(0, 0))
+	{
+		teleported_ = false;
+	}
 	nextMove_.x = 0;
 	nextMove_.y = 0;
 
-	if (defaultSpeed_ != 0 && getStage()->getFrameNumber() % defaultSpeed_ == 0)
+	if (defaultSpeed_ != 0 && frameNumber % defaultSpeed_ == 0)
 	{
 		if (speed_.x != 0)
 		{
@@ -44,7 +49,7 @@ void Entity::update(sf::Time dt)
 		}
 	}
 
-	if (vulnerbailityTimer_ == getStage()->getFrameNumber())
+	if (vulnerbailityTimer_ == frameNumber)
 	{
 		isVulnerable_ = Table[type_].isVulnerable;
 		
@@ -66,7 +71,7 @@ void Entity::update(sf::Time dt)
 	//
 	//}
 
-	animations_.update(getStage()->getFrameNumber());
+	animations_.update(frameNumber);
 	
 
 
@@ -123,7 +128,7 @@ bool Entity::isVulnerable()
 void Entity::setVulnerability(bool isVulnerable, int frames)
 {
 	if (frames != -1)
-		vulnerbailityTimer_ = getStage()->getFrameNumber() + frames;
+		vulnerbailityTimer_ = getSystems()->frameSystem->getFrameNumber() + frames;
 
 	isVulnerable_ = isVulnerable;
 
@@ -135,7 +140,16 @@ void Entity::setVulnerability(bool isVulnerable, int frames)
 
 bool Entity::isReadyToMove()
 {
-	return getStage()->getFrameNumber() % defaultSpeed_ == 0;
+	return getSystems()->frameSystem->getFrameNumber() % defaultSpeed_ == 0;
+}
+
+void Entity::teleport(sf::Vector2i location)
+{
+	if (teleported_ == false)
+	{
+		setPosition(location);
+		teleported_ = true;
+	}
 }
 
 Entity::~Entity()

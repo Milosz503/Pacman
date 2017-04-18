@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConsoleTypes.h"
-#include "Stage.h"
+#include "GameSystems.h"
 #include "Animation.h"
 
 class Stage;
@@ -9,17 +9,17 @@ class Stage;
 class GameObject : public ConsoleCharacter
 {
 public:
-	GameObject(Stage* stage);
+	GameObject(GameSystems* systems);
 
-	virtual void update(sf::Time dt) = 0;
+	virtual void update(unsigned long frameNumber) = 0;
 
 	~GameObject();
 
 protected:
-	Stage* getStage();
+	GameSystems* getSystems();
 
 private:
-	Stage* stage_;
+	GameSystems* systems_;
 
 protected:
 	

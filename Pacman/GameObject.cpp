@@ -3,8 +3,8 @@
 
 
 
-GameObject::GameObject(Stage * stage) :
-	stage_(stage)
+GameObject::GameObject(GameSystems* systems) :
+	systems_(systems)
 	//animations_(this)
 {
 }
@@ -13,7 +13,7 @@ GameObject::~GameObject()
 {
 }
 
-Stage * GameObject::getStage()
+GameSystems * GameObject::getSystems()
 {
-	return stage_;
+	return systems_;
 }

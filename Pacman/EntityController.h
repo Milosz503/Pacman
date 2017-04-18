@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Stage.h"
+#include "System.h"
 #include "Entity.h"
 #include <queue>
 #include <list>
@@ -9,11 +9,12 @@
 #include <cstdlib>
 
 
-class EntityController
+class EntityController : public System
 {
 public:
-	EntityController(Stage* stage);
+	EntityController(GameSystems systems);
 
+	virtual void update() override;
 	void update(Entity* entity);
 	void handleCollision(Entity* entity, Tile* tile);
 	void draw();
@@ -26,7 +27,7 @@ public:
 private:
 	
 
-	Stage* stage_;
+	Scene* scene_;
 
 	sf::Vector2f getDirectionToPlayer(sf::Vector2i position);
 	sf::Vector2i searchPath(sf::Vector2i start, sf::Vector2i target);

@@ -2,7 +2,8 @@
 
 
 
-PlayerController::PlayerController()
+PlayerController::PlayerController(GameSystems systems) :
+	System(systems)
 {
 }
 
@@ -11,7 +12,7 @@ PlayerController::~PlayerController()
 {
 }
 
-void PlayerController::update(sf::Time dt, Entity * player)
+void PlayerController::update()
 {
 
 	DirectionX::Move x = DirectionX::Zero;
@@ -33,9 +34,5 @@ void PlayerController::update(sf::Time dt, Entity * player)
 	{
 		x = DirectionX::Right;
 	}
-	player->setSpeed(x, y);
-}
-
-void PlayerController::handleEvent(sf::Event, Entity * player)
-{
+	getSystems().scene->getPlayer()->setSpeed(x, y);
 }

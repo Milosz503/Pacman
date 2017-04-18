@@ -1,21 +1,20 @@
 #pragma once
 
+#include "System.h"
 #include "GameObject.h"
 #include "Entity.h"
 
 class Entity;
 
-class PlayerController
+class PlayerController : public System
 {
 public:
-	PlayerController();
+	PlayerController(GameSystems systems);
 	~PlayerController();
 
-	void update(sf::Time dt, Entity* player);
-	void handleEvent(sf::Event, Entity* player);
+	virtual void update() override;
 
 
-private:
 
 
 };

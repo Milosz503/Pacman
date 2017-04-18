@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
+#include "Teleport.h"
 
 World::World(State::Context context) :
 	width_(40),
@@ -45,7 +46,18 @@ void World::update(sf::Time dt)
 	for (auto& entity : entities_)
 	{
 		entityController_.update(entity);
-		entity->update(dt);
+		entity->update(frameCounter_);
+
+		if (tiles_[entity->getX()][entity->getY()] != nullptr && tiles_[entity->getX()][entity->getY()]->getType() == Tile::Teleport)
+		{
+			if (entity->isReadyToMove())
+			{
+				Teleport* teleport = static_cast<Teleport*>(tiles_[entity->getX()][entity->getY()]);
+
+				entity->teleport(teleport->getTeleportLocation());
+
+			}
+		}
 	}
 
 	for (int x = 0; x < tiles_.size(); ++x)
@@ -53,9 +65,12 @@ void World::update(sf::Time dt)
 		for (int y = 0; y < tiles_[x].size(); ++y)
 		{
 			if(tiles_[x][y] != nullptr)
-				tiles_[x][y]->update(dt);
+				tiles_[x][y]->update(frameCounter_);
 		}
 	}
+
+
+
 	handleStaticCollisions();
 	handleDynamicCollisions();
 
@@ -113,8 +128,12 @@ void World::handleStaticCollisions()
 		switch (collision.second->getType())
 		{
 		case Tile::Point:
-			removeTile(collision.second->getX(), collision.second->getY());
-			score_++;
+			if (collision.first->getType() == Entity::Pacman)
+			{
+				removeTile(collision.second->getX(), collision.second->getY());
+				score_++;
+			}
+			
 			break;
 
 		default:
@@ -297,6 +316,14 @@ void World::prepareLevel(Level * level)
 		}
 
 	}
+	//addTile(Tile::Teleport, 2, height_ - 3);
+	addTile(Tile::Point, 3, 3);
+
+	addTeleport(0, 10, width_-2, 10);
+	addTeleport(1, 10, width_ - 2, 10);
+	addTeleport(width_ - 1, 10, 1, 10);
+	addTeleport(width_ - 2, 10, 1, 10);
+
 
 	addEntity(Entity::Pacman, 7, 7);
 	player_ = entities_.back();
@@ -308,12 +335,29 @@ void World::prepareLevel(Level * level)
 
 void World::addTile(Tile::Type type, int x, int y)
 {
+	if (type == Tile::Teleport)
+	{
+		Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
+		teleport->setTeleportLocation(3, 3);
+		tiles_[x][y] = teleport;
+	}
+	else
+	{
+		tiles_[x][y] = new Tile(this, type, offsetX_ + x, offsetY_ + y);
+	}
+	
+}
 
-	tiles_[x][y] = new Tile(this, type, offsetX_ + x, offsetY_ + y);
+void World::addTeleport(int x, int y, int targetX, int targetY)
+{
+	Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
+	teleport->setTeleportLocation(targetX, targetY);
+	tiles_[x][y] = teleport;
 }
 
 void World::addEntity(Entity::Type type, int x, int y)
 {
+	
 	entities_.push_back(new Entity(this, type, offsetX_ + x, offsetY_ + y));
 }
 

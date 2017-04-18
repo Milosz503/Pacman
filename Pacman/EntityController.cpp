@@ -3,14 +3,15 @@
 
 
 
-EntityController::EntityController(Stage * stage) :
-	stage_(stage)
+EntityController::EntityController(GameSystems systems) :
+	System(systems),
+	scene_(systems.scene)
 {
-	graph.resize(stage_->getBounds().width);
+	graph.resize(scene_->getWidth());
 
 	for (int i = 0; i < graph.size(); ++i)
 	{
-		graph[i].resize(stage_->getBounds().height);
+		graph[i].resize(scene_->getHeight());
 
 		for (int j = 0; j < graph[i].size(); ++j)
 		{
@@ -19,11 +20,11 @@ EntityController::EntityController(Stage * stage) :
 	}
 
 
-	distance.resize(stage_->getBounds().width);
+	distance.resize(scene_->getWidth());
 
 	for (int i = 0; i < distance.size(); ++i)
 	{
-		distance[i].resize(stage_->getBounds().height);
+		distance[i].resize(scene_->getHeight());
 
 		for (int j = 0; j < graph[i].size(); ++j)
 		{
@@ -31,6 +32,10 @@ EntityController::EntityController(Stage * stage) :
 		}
 	}
 
+}
+
+void EntityController::update()
+{
 }
 
 void EntityController::update(Entity * entity)
@@ -56,8 +61,8 @@ void EntityController::update(Entity * entity)
 		//sf::Vector2i dir = searchPath(entity->getPosition(), stage_->getPlayer()->getPosition());
 		//sf::Vector2i dir = searchPathWage(entity->getPosition(), stage_->getPlayer()->getPosition());
 
-		int playerX = stage_->getPlayer()->getPosition().x;
-		int playerY = stage_->getPlayer()->getPosition().y;
+		int playerX = scene_->getPlayer()->getPosition().x;
+		int playerY = scene_->getPlayer()->getPosition().y;
 
 		std::list<sf::Vector2i> path;
 
@@ -66,7 +71,7 @@ void EntityController::update(Entity * entity)
 		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX + 1, playerY)));
 		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX - 1, playerY)));
 
-		bool found = searchPathAStar(entity->getPosition(), stage_->getPlayer()->getPosition(), path, customCosts);
+		bool found = searchPathAStar(entity->getPosition(), scene_->getPlayer()->getPosition(), path, customCosts);
 		this->path = path;
 
 
@@ -123,7 +128,7 @@ void EntityController::draw()
 				character.setPosition(x, y);
 				character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
 
-				stage_->getConsole()->draw(character);
+				getSystems().console->draw(character);
 			}
 
 		}
@@ -133,7 +138,7 @@ void EntityController::draw()
 	{
 		character.setPosition(node);
 
-		stage_->getConsole()->draw(character);
+		getSystems().console->draw(character);
 	}
 	
 }
@@ -151,7 +156,7 @@ float length(sf::Vector2i vector)
 
 sf::Vector2f EntityController::getDirectionToPlayer(sf::Vector2i position)
 {
-	sf::Vector2i dif = stage_->getPlayer()->getPosition() - position;
+	sf::Vector2i dif = scene_->getPlayer()->getPosition() - position;
 	sf::Vector2f vec;
 	vec.x = dif.x;
 	vec.y = dif.y;
@@ -251,22 +256,22 @@ sf::Vector2i EntityController::searchPath(sf::Vector2i start, sf::Vector2i targe
 		}
 
 
-		if (graph[pos.x + 1][pos.y] == Unvisited && !stage_->isTileCollidable(pos.x + 1, pos.y))
+		if (graph[pos.x + 1][pos.y] == Unvisited && !scene_->isTilePhysical(pos.x + 1, pos.y))
 		{
 			nodes.push(sf::Vector2i(pos.x + 1, pos.y));
 			graph[pos.x + 1][pos.y] = Left;
 		}
-		if (graph[pos.x][pos.y+1] == Unvisited && !stage_->isTileCollidable(pos.x, pos.y + 1))
+		if (graph[pos.x][pos.y+1] == Unvisited && !scene_->isTilePhysical(pos.x, pos.y + 1))
 		{
 			nodes.push(sf::Vector2i(pos.x, pos.y + 1));
 			graph[pos.x][pos.y + 1] = Up;
 		}
-		if (graph[pos.x - 1][pos.y] == Unvisited && !stage_->isTileCollidable(pos.x - 1, pos.y))
+		if (graph[pos.x - 1][pos.y] == Unvisited && !scene_->isTilePhysical(pos.x - 1, pos.y))
 		{
 			nodes.push(sf::Vector2i(pos.x - 1, pos.y));
 			graph[pos.x - 1][pos.y] = Right;
 		}
-		if (graph[pos.x][pos.y - 1] == Unvisited && !stage_->isTileCollidable(pos.x, pos.y - 1))
+		if (graph[pos.x][pos.y - 1] == Unvisited && !scene_->isTilePhysical(pos.x, pos.y - 1))
 		{
 			nodes.push(sf::Vector2i(pos.x, pos.y - 1));
 			graph[pos.x][pos.y - 1] = Down;
@@ -396,7 +401,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 
 		priority = newCost + heuristic(target, newPos, start);
 
-		if (newCost < distance[newPos.x][newPos.y] && !stage_->isTileCollidable(newPos.x, newPos.y))
+		if (newCost < distance[newPos.x][newPos.y] && !scene_->isTilePhysical(newPos.x, newPos.y))
 		{
 			
 
@@ -408,7 +413,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 		newPos.x--;
 		newPos.y++;
 		priority = newCost + heuristic(target, newPos, start);
-		if (newCost < distance[newPos.x][newPos.y] && !stage_->isTileCollidable(newPos.x, newPos.y))
+		if (newCost < distance[newPos.x][newPos.y] && !scene_->isTilePhysical(newPos.x, newPos.y))
 		{
 			
 
@@ -421,7 +426,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 		newPos.x--;
 		newPos.y--;
 		priority = newCost + heuristic(target, newPos, start);
-		if (newCost < distance[newPos.x][newPos.y] && !stage_->isTileCollidable(newPos.x, newPos.y))
+		if (newCost < distance[newPos.x][newPos.y] && !scene_->isTilePhysical(newPos.x, newPos.y))
 		{
 			
 
@@ -433,7 +438,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 		newPos.x++;
 		newPos.y--;
 		priority = newCost + heuristic(target, newPos, start);
-		if (newCost < distance[newPos.x][newPos.y] && !stage_->isTileCollidable(newPos.x, newPos.y))
+		if (newCost < distance[newPos.x][newPos.y] && !scene_->isTilePhysical(newPos.x, newPos.y))
 		{
 			
 
@@ -539,7 +544,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 
 			float newCost = distance[pos.x][pos.y] + getCost(neighbor, customCosts);
 
-			if (!stage_->isTileCollidable(neighbor.x, neighbor.y) && distance[neighbor.x][neighbor.y] > newCost)
+			if (!scene_->isTilePhysical(neighbor.x, neighbor.y) && distance[neighbor.x][neighbor.y] > newCost)
 			{
 				float priority = newCost + heuristic(neighbor, goal, start);
 

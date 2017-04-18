@@ -11,6 +11,7 @@ class PlayerController;
 class GameObject;
 class Entity;
 class Tile;
+struct Context;
 
 class Stage
 {
@@ -32,6 +33,8 @@ public:
 	virtual bool isTileCollidable(int x, int y) = 0;
 	virtual bool isTileEmpty(int x, int y) = 0;
 	virtual bool isInside(int x, int y) = 0;
+
+
 
 };
 
