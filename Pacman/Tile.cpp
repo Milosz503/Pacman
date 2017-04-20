@@ -24,8 +24,10 @@ Tile::~Tile()
 }
 
 
-void Tile::update(unsigned long frameNumber)
+void Tile::update()
 {
+	unsigned long long frameNumber = getSystems()->frameSystem->getFrameNumber();
+
 	if(frameNumber % 12 == 0)
 		setTexture(Table[type_].texture);
 }

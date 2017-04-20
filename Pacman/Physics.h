@@ -4,6 +4,9 @@
 
 #include "System.h"
 
+
+class Entity;
+
 class Physics : public System
 {
 public:

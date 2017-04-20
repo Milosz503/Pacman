@@ -10,7 +10,7 @@ public:
 	Tile(GameSystems* systems, Type type, int x = 0, int y = 0);
 	~Tile();
 
-	virtual void update(unsigned long frameNumber) override;
+	virtual void update() override;
 
 	bool isPhysical();
 	void setPhysical(bool physical);

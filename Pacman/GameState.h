@@ -21,7 +21,7 @@ private:
 	GameSystems systems_;
 
 
-	World world_;
+	//World world_;
 
 	int posY;
 	int posX;
@@ -37,5 +37,6 @@ private:
 
 	float averageUpdate_;
 	
+
 };
 

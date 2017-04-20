@@ -11,13 +11,13 @@ World::World(State::Context context) :
 	offsetX_(0),
 	offsetY_(0),
 	score_(0),
-	spawnPoint_(2 + offsetX_, 2 + offsetY_),
-	console_(context.console),
+	spawnPoint_(2 + offsetX_, 2 + offsetY_)
+	/*console_(context.console),
 	textureManager_(context.textureManager),
 	playerController_(context.playerController),
 	physics_(this),
 	entityController_(this),
-	frameCounter_(0)
+	frameCounter_(0)*/
 	
 {
 
@@ -40,13 +40,13 @@ World::~World()
 
 void World::update(sf::Time dt)
 {
-	playerController_->update(dt, player_);
+	/*playerController_->update(dt, player_);
 	
 
 	for (auto& entity : entities_)
 	{
 		entityController_.update(entity);
-		entity->update(frameCounter_);
+		entity->update();
 
 		if (tiles_[entity->getX()][entity->getY()] != nullptr && tiles_[entity->getX()][entity->getY()]->getType() == Tile::Teleport)
 		{
@@ -65,7 +65,7 @@ void World::update(sf::Time dt)
 		for (int y = 0; y < tiles_[x].size(); ++y)
 		{
 			if(tiles_[x][y] != nullptr)
-				tiles_[x][y]->update(frameCounter_);
+				tiles_[x][y]->update();
 		}
 	}
 
@@ -74,34 +74,34 @@ void World::update(sf::Time dt)
 	handleStaticCollisions();
 	handleDynamicCollisions();
 
-	++frameCounter_;
+	++frameCounter_;*/
 }
 
 void World::handleEvent(sf::Event event)
 {
-	playerController_->handleEvent(event, entities_[0]);
+	//playerController_->handleEvent(event, entities_[0]);
 }
 
 void World::draw()
 {
-	for (int x = 0; x < tiles_.size(); ++x)
-	{
-		for (int y = 0; y < tiles_[x].size(); ++y)
-		{
-			if (tiles_[x][y] != nullptr)
-				console_->draw(*tiles_[x][y]);
-		}
-	}
-	entityController_.draw();
+	//for (int x = 0; x < tiles_.size(); ++x)
+	//{
+	//	for (int y = 0; y < tiles_[x].size(); ++y)
+	//	{
+	//		if (tiles_[x][y] != nullptr)
+	//			console_->draw(*tiles_[x][y]);
+	//	}
+	//}
+	//entityController_.draw();
 
 
-	for (auto& entity : entities_)
-	{
-		console_->draw(*entity);
-	}
-	console_->draw(*player_);
+	//for (auto& entity : entities_)
+	//{
+	//	console_->draw(*entity);
+	//}
+	//console_->draw(*player_);
 
-	
+	//
 	
 }
 
@@ -109,38 +109,38 @@ void World::draw()
 
 void World::handleStaticCollisions()
 {
-	std::list<Physics::StaticPair> collisions;
+	//std::list<Physics::StaticPair> collisions;
 
-	physics_.checkStaticCollisions(collisions);
+	//physics_.checkStaticCollisions(collisions);
 
-	for (auto& collision : collisions)
-	{
-		//collision.second->setTexture(textureManager_->getTexture(L'O', CharacterColor::Red));
+	//for (auto& collision : collisions)
+	//{
+	//	//collision.second->setTexture(textureManager_->getTexture(L'O', CharacterColor::Red));
 
-		std::cout << "KOLIZJA" << std::endl;
+	//	std::cout << "KOLIZJA" << std::endl;
 
-		if (collision.first->getType() == Entity::Ghost)
-		{
-			entityController_.handleCollision(collision.first, collision.second);
-		}
+	//	if (collision.first->getType() == Entity::Ghost)
+	//	{
+	//		entityController_.handleCollision(collision.first, collision.second);
+	//	}
 
 
-		switch (collision.second->getType())
-		{
-		case Tile::Point:
-			if (collision.first->getType() == Entity::Pacman)
-			{
-				removeTile(collision.second->getX(), collision.second->getY());
-				score_++;
-			}
-			
-			break;
+	//	switch (collision.second->getType())
+	//	{
+	//	case Tile::Point:
+	//		if (collision.first->getType() == Entity::Pacman)
+	//		{
+	//			removeTile(collision.second->getX(), collision.second->getY());
+	//			score_++;
+	//		}
+	//		
+	//		break;
 
-		default:
-			break;
-		}
+	//	default:
+	//		break;
+	//	}
 
-	}
+	//}
 
 }
 
@@ -335,30 +335,30 @@ void World::prepareLevel(Level * level)
 
 void World::addTile(Tile::Type type, int x, int y)
 {
-	if (type == Tile::Teleport)
-	{
-		Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
-		teleport->setTeleportLocation(3, 3);
-		tiles_[x][y] = teleport;
-	}
-	else
-	{
-		tiles_[x][y] = new Tile(this, type, offsetX_ + x, offsetY_ + y);
-	}
+	//if (type == Tile::Teleport)
+	//{
+	//	Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
+	//	teleport->setTeleportLocation(3, 3);
+	//	tiles_[x][y] = teleport;
+	//}
+	//else
+	//{
+	//	tiles_[x][y] = new Tile(this, type, offsetX_ + x, offsetY_ + y);
+	//}
 	
 }
 
 void World::addTeleport(int x, int y, int targetX, int targetY)
 {
-	Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
-	teleport->setTeleportLocation(targetX, targetY);
-	tiles_[x][y] = teleport;
+	//Teleport* teleport = new Teleport(this, offsetX_ + x, offsetY_ + y);
+	//teleport->setTeleportLocation(targetX, targetY);
+	//tiles_[x][y] = teleport;
 }
 
 void World::addEntity(Entity::Type type, int x, int y)
 {
 	
-	entities_.push_back(new Entity(this, type, offsetX_ + x, offsetY_ + y));
+//	entities_.push_back(new Entity(this, type, offsetX_ + x, offsetY_ + y));
 }
 
 void World::removeTile(int x, int y)

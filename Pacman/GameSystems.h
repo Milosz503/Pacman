@@ -23,7 +23,7 @@ struct GameSystems
 	TextureManager* textureManager;
 	ConsoleWindow* console;
 	Physics* physics;
-	EntityController* entityControoler;
+	EntityController* entityController;
 	PlayerController* playerController;
 	Scene* scene;
 

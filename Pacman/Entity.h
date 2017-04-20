@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Animation.h"
 
 
 
@@ -21,7 +22,7 @@ public:
 
 	Entity(GameSystems* systems, Type type, int x = 0, int y = 0);
 
-	virtual void update(unsigned long frameNumber) override;
+	virtual void update();// override;
 
 	void setSpeed(DirectionX::Move x, DirectionY::Move y);
 	sf::Vector2i getSpeed();

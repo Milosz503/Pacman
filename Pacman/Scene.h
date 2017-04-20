@@ -4,11 +4,15 @@
 #include "Entity.h"
 #include "Tile.h"
 #include "System.h"
+#include "LevelManager.h"
 
 class Scene : public System
 {
 public:
 	Scene(GameSystems systems);
+
+
+	void prepareLevel(Level * level);
 
 	unsigned addH(int x, unsigned offset);
 	unsigned addV(int y, unsigned offset);
@@ -39,7 +43,7 @@ public:
 
 	virtual void update() override;
 
-
+	void draw();
 
 	~Scene();
 

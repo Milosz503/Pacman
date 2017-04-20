@@ -4,7 +4,7 @@
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
-	world_(context),
+	//world_(context),
 	posY(0),
 	posX(5),
 	currentColor(CharacterColor::Grey),
@@ -21,104 +21,124 @@ GameState::GameState(StateStack & stack, Context context) :
 	levelManager.loadFromFile("level2.txt");
 	
 
-	world_.prepareLevel(getContext().level);
+	//world_.prepareLevel(getContext().level);
 
 
 	systems_.frameSystem = new FrameSystem(systems_);
+	systems_.textureManager = getContext().textureManager;
+	systems_.console = getContext().console;
+
+	systems_.scene = new Scene(systems_);
+	systems_.scene->prepareLevel(getContext().level);
+
+
+	systems_.physics = new Physics(systems_);
+	systems_.entityController = new EntityController(systems_);
+	systems_.playerController = new PlayerController(systems_);
+	
 
 
 
 
 }
 
+
 bool GameState::update(sf::Time dt)
 {
 	sf::Clock clock;
 	clock.restart();
 
-	world_.update(dt);
+	systems_.scene->update();
+	systems_.physics->update();
+	systems_.entityController->update();
+	systems_.playerController->update();
 
 
-	if (world_.getFrameNumber() % 20 == 0)
-		averageUpdate_ = 0;
 
-	averageUpdate_ += clock.getElapsedTime().asSeconds();
-	updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
-	L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
+	//world_.update(dt);
+
+
+	//if (world_.getFrameNumber() % 20 == 0)
+		//averageUpdate_ = 0;
+
+	//averageUpdate_ += clock.getElapsedTime().asSeconds();
+	//updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
+	//L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
 
 	if (dt.asSeconds() != 0)
 	{
 		fps = 1.0 / dt.asSeconds();
 	}
+	return true;
 
-	if (Mouse::isButtonPressed(Mouse::Button::Left))
-	{
-		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+	//if (Mouse::isButtonPressed(Mouse::Button::Left))
+	//{
+	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
 
-		pos.x /= 16;
-		pos.y /= 16;
+	//	pos.x /= 16;
+	//	pos.y /= 16;
 
-		sf::IntRect rect = world_.getBounds();
+	//	//sf::IntRect rect = world_.getBounds();
 
-		if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
-			pos.y >= rect.top && pos.y < rect.top + rect.height)
-		{
-			if (world_.getTile(pos.x, pos.y) == nullptr)
-			{
-				world_.addTile(Tile::Wall, pos.x, pos.y);
+	//	if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
+	//		pos.y >= rect.top && pos.y < rect.top + rect.height)
+	//	{
+	//		if (world_.getTile(pos.x, pos.y) == nullptr)
+	//		{
+	//			world_.addTile(Tile::Wall, pos.x, pos.y);
 
-				if (pos.x >= rect.left+1 && pos.x < rect.left + rect.width - 1 &&
-					pos.y >= rect.top+1 && pos.y < rect.top + rect.height - 1)
-				{
-					getContext().level->setTile(pos.x-1, pos.y-1, Tile::Wall);
-				}
-			}
-		}
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Q))
-	{
-		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+	//			if (pos.x >= rect.left+1 && pos.x < rect.left + rect.width - 1 &&
+	//				pos.y >= rect.top+1 && pos.y < rect.top + rect.height - 1)
+	//			{
+	//				getContext().level->setTile(pos.x-1, pos.y-1, Tile::Wall);
+	//			}
+	//		}
+	//	}
+	//}
+	//if (Keyboard::isKeyPressed(Keyboard::Q))
+	//{
+	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
 
-		pos.x /= 16;
-		pos.y /= 16;
+	//	pos.x /= 16;
+	//	pos.y /= 16;
 
-		sf::IntRect rect = world_.getBounds();
+	//	sf::IntRect rect = world_.getBounds();
 
-		if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
-			pos.y >= rect.top && pos.y < rect.top + rect.height)
-		{
-			if (world_.getTile(pos.x, pos.y) == nullptr)
-			{
-				world_.addTile(Tile::Point, pos.x, pos.y);
+	//	if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
+	//		pos.y >= rect.top && pos.y < rect.top + rect.height)
+	//	{
+	//		if (world_.getTile(pos.x, pos.y) == nullptr)
+	//		{
+	//			world_.addTile(Tile::Point, pos.x, pos.y);
 
-				if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
-					pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
-				{
-					getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::Point);
-				}
-			}
-		}
-	}
+	//			if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
+	//				pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
+	//			{
+	//				getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::Point);
+	//			}
+	//		}
+	//	}
+	//}
 
-	if (Mouse::isButtonPressed(Mouse::Button::Right))
-	{
-		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+	//if (Mouse::isButtonPressed(Mouse::Button::Right))
+	//{
+	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
 
-		pos.x /= 16;
-		pos.y /= 16;
+	//	pos.x /= 16;
+	//	pos.y /= 16;
 
-		sf::IntRect rect = world_.getBounds();
+	//	sf::IntRect rect = world_.getBounds();
 
-		if (world_.getTile(pos.x, pos.y) != nullptr)
-		{
-			world_.removeTile(pos.x, pos.y);
-			if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
-				pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
-			{
-				getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::None);
-			}
-		}
-	}
+	//	if (world_.getTile(pos.x, pos.y) != nullptr)
+	//	{
+	//		world_.removeTile(pos.x, pos.y);
+	//		if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
+	//			pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
+	//		{
+	//			getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::None);
+	//		}
+	//	}
+	//}
 
 
 	return true;
@@ -128,7 +148,7 @@ bool GameState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed)
 	{
-		world_.handleEvent(event);
+	//	world_.handleEvent(event);
 
 		if (event.key.code == Keyboard::Escape)
 		{
@@ -172,7 +192,7 @@ void GameState::draw()
 	text.setBackground(backgroundColor_);
 	text.setPosition(0, 45);
 
-	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
+//	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
 
 
 	getContext().console->draw(text);
@@ -180,7 +200,8 @@ void GameState::draw()
 	getContext().console->draw(updateTime_);
 	getContext().console->draw(drawTime_);
 
-	world_.draw();
+	//world_.draw();
+	systems_.scene->draw();
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
 

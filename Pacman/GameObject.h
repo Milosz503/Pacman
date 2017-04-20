@@ -11,7 +11,7 @@ class GameObject : public ConsoleCharacter
 public:
 	GameObject(GameSystems* systems);
 
-	virtual void update(unsigned long frameNumber) = 0;
+	virtual void update() = 0;
 
 	~GameObject();
 

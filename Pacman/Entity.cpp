@@ -27,8 +27,10 @@ Entity::Entity(GameSystems* systems, Type type, int x, int y) :
 
 }
 
-void Entity::update(unsigned long frameNumber)
+void Entity::update()
 {
+	unsigned long long frameNumber = getSystems()->frameSystem->getFrameNumber();
+
 	move(nextMove_);
 	if (teleported_ && nextMove_ != sf::Vector2i(0, 0))
 	{
