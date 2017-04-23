@@ -2,22 +2,26 @@
 
 #include "System.h"
 #include "Entity.h"
+#include "Tile.h"
 #include <queue>
 #include <list>
 #include <iostream>
 #include <array>
 #include <cstdlib>
 
+class World;
+class Scene;
+
 
 class EntityController : public System
 {
 public:
-	EntityController(GameSystems systems);
+	EntityController(SystemManager* systemManager, World* world);
 
 	virtual void update() override;
 	void update(Entity* entity);
 	void handleCollision(Entity* entity, Tile* tile);
-	void draw();
+	virtual void draw() override;
 
 	~EntityController();
 

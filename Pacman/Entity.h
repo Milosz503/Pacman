@@ -5,6 +5,8 @@
 
 
 
+class World;
+
 namespace DirectionX
 {
 	enum Move {Left = -1, Zero = 0, Right = 1};
@@ -20,7 +22,7 @@ public:
 	enum Type { Pacman, Ghost, SlowGhost, TypeCount };
 
 
-	Entity(GameSystems* systems, Type type, int x = 0, int y = 0);
+	Entity(World* world, Type type, int x = 0, int y = 0);
 
 	virtual void update();// override;
 

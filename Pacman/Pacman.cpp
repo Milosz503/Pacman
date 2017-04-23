@@ -1,4 +1,5 @@
 #include "ConsoleWindow.h"
+#include "GameObject.h"
 #include "StateStack.h"
 
 #include "GameState.h"
@@ -17,14 +18,13 @@ int main()
 	textureManager.loadTextures();
 	ConsoleWindow console(50, 50, &textureManager);
 
-	PlayerController controller;
 
 
 	Level level;
 
 	
 
-	State::Context context(&console, &textureManager, &controller, &level);
+	State::Context context(&console, &textureManager, &level);
 
 
 	StateStack stack(context);
@@ -86,38 +86,6 @@ int main()
 
 
 	
-	//TextureManager textureManager;
-	//textureManager.generateTileset();
-	//textureManager.loadTextures();
-
-	//ConsoleCharacter player(textureManager.getTexture(Textures::Player));
-	//player.setPosition(5, 5);
-
-	//ConsoleText text(L"Pacman", CharacterColor::Green);
-	//text.setPosition(5, 1);
-	//text.setBackground(sf::Color(100, 100, 100));
-
-	//ConsoleWindow window(20, 20, &textureManager);
-	//window.setFontSize(16);
-
-	//while (true)
-	//{
-	//	sf::Event event;
-	//	while (window.pollEvent(event))
-	//	{
-	//		if (event.type == Event::Closed)
-	//		{
-	//			return 0;
-	//		}
-	//	}
-
-	//	window.clear(sf::Color::Black);
-
-	//	window.draw(player);
-	//	window.draw(text);
-
-	//	window.show();
-	//}
 
 
 	return 0;

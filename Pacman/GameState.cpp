@@ -1,10 +1,18 @@
 #include "GameState.h"
 
+#include "TextureManager.h"
+#include "ConsoleWindow.h"
+#include "Physics.h"
+#include "EntityController.h"
+#include "PlayerController.h"
+#include "Scene.h"
+#include "GameLogic.h"
 
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
-	//world_(context),
+	world_(context),
+	systems_(&world_),
 	posY(0),
 	posX(5),
 	currentColor(CharacterColor::Grey),
@@ -21,20 +29,14 @@ GameState::GameState(StateStack & stack, Context context) :
 	levelManager.loadFromFile("level2.txt");
 	
 
-	//world_.prepareLevel(getContext().level);
+	world_.getScene()->prepareLevel(getContext().level);
 
 
-	systems_.frameSystem = new FrameSystem(systems_);
-	systems_.textureManager = getContext().textureManager;
-	systems_.console = getContext().console;
 
-	systems_.scene = new Scene(systems_);
-	systems_.scene->prepareLevel(getContext().level);
-
-
-	systems_.physics = new Physics(systems_);
-	systems_.entityController = new EntityController(systems_);
-	systems_.playerController = new PlayerController(systems_);
+	systems_.addSystem<Physics>();
+	systems_.addSystem<EntityController>();
+	systems_.addSystem<PlayerController>();
+	systems_.addSystem<GameLogic>();
 	
 
 
@@ -48,22 +50,19 @@ bool GameState::update(sf::Time dt)
 	sf::Clock clock;
 	clock.restart();
 
-	systems_.scene->update();
-	systems_.physics->update();
-	systems_.entityController->update();
-	systems_.playerController->update();
+
+	systems_.update();
+	world_.update();
+	
 
 
 
-	//world_.update(dt);
+	if (world_.getFrameNumber() % 20 == 0)
+		averageUpdate_ = 0;
 
-
-	//if (world_.getFrameNumber() % 20 == 0)
-		//averageUpdate_ = 0;
-
-	//averageUpdate_ += clock.getElapsedTime().asSeconds();
-	//updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
-	//L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
+	averageUpdate_ += clock.getElapsedTime().asSeconds();
+	updateTime_.setText(L"update time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
+	L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
 
 	if (dt.asSeconds() != 0)
 	{
@@ -148,7 +147,6 @@ bool GameState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed)
 	{
-	//	world_.handleEvent(event);
 
 		if (event.key.code == Keyboard::Escape)
 		{
@@ -192,7 +190,7 @@ void GameState::draw()
 	text.setBackground(backgroundColor_);
 	text.setPosition(0, 45);
 
-//	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
+	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
 
 
 	getContext().console->draw(text);
@@ -200,8 +198,10 @@ void GameState::draw()
 	getContext().console->draw(updateTime_);
 	getContext().console->draw(drawTime_);
 
-	//world_.draw();
-	systems_.scene->draw();
+	systems_.draw();
+	world_.draw();
+
+	
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
 

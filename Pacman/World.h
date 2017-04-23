@@ -9,46 +9,25 @@
 #include "Tile.h"
 #include "Physics.h"
 #include "EntityController.h"
+#include "Scene.h"
 
-
-class World : public Stage
+class World
 {
 public:
 	World(State::Context context);
 
-	int getScore();
-
-	void prepareLevel();
-	void prepareLevel(Level* level);
-
-	void update(sf::Time dt);
-	void handleEvent(sf::Event event);
+	void update();
 	void draw();
 
-	virtual ConsoleWindow* getConsole() override;
-	virtual TextureManager* getTextureManager() override;
-	virtual PlayerController* getPlayerController() override;
+	sf::IntRect getBounds();
 
-	virtual Tile* getTile(int x, int y) override;
-	virtual std::vector<Entity*>& getEntities() override;
-	virtual Entity* getPlayer() override;
+	unsigned long long getFrameNumber();
+	int getScore();
+	void addScore(unsigned score = 1);
 
-	virtual unsigned long long getFrameNumber() override;
-
-	virtual sf::IntRect getBounds() override;
-
-	virtual void moveTile(int x, int y, Vector2i offset) override;
-	virtual bool isTileCollidable(int x, int y) override;
-	virtual bool isTileEmpty(int x, int y) override;
-	virtual bool isInside(int x, int y) override;
-
-
-
-	void addTile(Tile::Type type, int x, int y);
-	void addTeleport(int x, int y, int targetX, int targetY);
-	void addEntity(Entity::Type type, int x, int y);
-
-	void removeTile(int x, int y);
+	ConsoleWindow* getConsole();
+	TextureManager* getTextureManager();
+	Scene* getScene();
 
 	~World();
 
@@ -65,25 +44,9 @@ private:
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
-	PlayerController* playerController_;
-
-	Physics physics_;
-	EntityController entityController_;
+	Scene* scene_;
 
 
-	std::vector<Entity*> entities_;
-	std::vector<std::vector<Tile*>> tiles_;
-
-	
-
-	
-
-	
-
-	Entity* player_;
-
-	void handleStaticCollisions();
-	void handleDynamicCollisions();
 
 	
 

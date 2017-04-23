@@ -2,10 +2,14 @@
 
 #include <list>
 
+#include "Entity.h"
+#include "Tile.h"
 #include "System.h"
 
-
+class Scene;
 class Entity;
+class Tile;
+class World;
 
 class Physics : public System
 {
@@ -13,7 +17,7 @@ public:
 	typedef std::pair<Entity*, Tile*> StaticPair;
 	typedef std::pair<Entity*, Entity*> DynamicPair;
 
-	Physics(GameSystems systems);
+	Physics(SystemManager* systemManager, World* world);
 
 	virtual void update() override;
 

@@ -1,27 +1,30 @@
 #pragma once
 
 #include "ConsoleTypes.h"
-#include "GameSystems.h"
 #include "Animation.h"
 
 class Stage;
+class World;
 
 class GameObject : public ConsoleCharacter
 {
 public:
-	GameObject(GameSystems* systems);
+	GameObject(World* world);
+
+	virtual bool isToRemove();
+	virtual void markToRemove();
 
 	virtual void update() = 0;
 
 	~GameObject();
 
 protected:
-	GameSystems* getSystems();
+	World* getWorld();
 
 private:
-	GameSystems* systems_;
+	World* world_;
+	bool isToRemove_;
 
-protected:
 	
 };
 

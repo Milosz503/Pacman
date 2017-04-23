@@ -1,8 +1,9 @@
 #pragma once
 
-
+#include "GameObject.h"
 #include "State.h"
 #include "World.h"
+#include "SystemManager.h"
 
 class GameState : public State
 {
@@ -18,8 +19,8 @@ public:
 
 private:
 
-	GameSystems systems_;
-
+	World world_;
+	SystemManager systems_;
 
 	//World world_;
 

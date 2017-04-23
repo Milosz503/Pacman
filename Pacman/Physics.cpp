@@ -1,22 +1,24 @@
 #include "Physics.h"
 
 #include "Entity.h"
+#include "WOrld.h"
 #include <iostream>
 
-Physics::Physics(GameSystems systems) :
-	System(systems),
-	scene_(systems.scene)
+using namespace sf;
+
+
+Physics::Physics(SystemManager* systemManager, World* world) :
+	System(systemManager, world),
+	scene_(world->getScene())
 {
 }
 
 void Physics::update()
 {
-	std::vector<Entity*> entities = scene_->getEntities();
+	checkStaticCollisions(std::list<StaticPair>());
+	checkDynamicCollisions(std::list<DynamicPair>());
 
-	for (auto& entity : entities)
-	{
-		//checkCollision(entity);
-	}
+
 
 }
 
@@ -137,6 +139,11 @@ void Physics::addPair(std::list<StaticPair>& collisions, Entity * entity, int ti
 	if (tile != nullptr)
 	{
 		collisions.push_back(StaticPair(entity, tile));
+
+		//std::cout << "COLLISION!" << std::endl;
+
+		StaticCollision event(entity, tile);
+		sendEvent(&event);
 	}
 
 }

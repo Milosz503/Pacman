@@ -1,11 +1,12 @@
 #include "EntityController.h"
+#include "World.h"
+#include "ConsoleWindow.h"
 
 
 
-
-EntityController::EntityController(GameSystems systems) :
-	System(systems),
-	scene_(systems.scene)
+EntityController::EntityController(SystemManager* systemManager, World* world) :
+	System(systemManager, world),
+	scene_(world->getScene())
 {
 	graph.resize(scene_->getWidth());
 
@@ -36,6 +37,12 @@ EntityController::EntityController(GameSystems systems) :
 
 void EntityController::update()
 {
+	std::vector<Entity*> entities = scene_->getEntities();
+
+	for (auto& e : entities)
+	{
+		update(e);
+	}
 }
 
 void EntityController::update(Entity * entity)
@@ -115,7 +122,7 @@ void EntityController::handleCollision(Entity * entity, Tile * tile)
 
 void EntityController::draw()
 {
-	return;
+	
 	ConsoleCharacter character(TextureManager::getTexture(L'.', CharacterColor::Red));
 
 
@@ -128,7 +135,7 @@ void EntityController::draw()
 				character.setPosition(x, y);
 				character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
 
-				getSystems().console->draw(character);
+				getWorld()->getConsole()->draw(character);
 			}
 
 		}
@@ -138,7 +145,7 @@ void EntityController::draw()
 	{
 		character.setPosition(node);
 
-		getSystems().console->draw(character);
+		getWorld()->getConsole()->draw(character);
 	}
 	
 }

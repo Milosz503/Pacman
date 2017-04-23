@@ -1,6 +1,7 @@
 #include "Tile.h"
 
 #include "DataTables.h"
+#include "World.h"
 
 namespace
 {
@@ -8,8 +9,8 @@ namespace
 }
 
 
-Tile::Tile(GameSystems* systems, Type type, int x, int y) :
-	GameObject(systems),
+Tile::Tile(World* world, Type type, int x, int y) :
+	GameObject(world),
 	isPhysical_(Table[type].isPhysical),
 	type_(type)
 {
@@ -26,7 +27,7 @@ Tile::~Tile()
 
 void Tile::update()
 {
-	unsigned long long frameNumber = getSystems()->frameSystem->getFrameNumber();
+	unsigned long long frameNumber = getWorld()->getFrameNumber();
 
 	if(frameNumber % 12 == 0)
 		setTexture(Table[type_].texture);

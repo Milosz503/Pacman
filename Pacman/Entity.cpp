@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include "DataTables.h"
+#include "World.h"
 
 namespace
 {
@@ -8,8 +9,8 @@ namespace
 }
 
 
-Entity::Entity(GameSystems* systems, Type type, int x, int y) :
-	GameObject(systems),
+Entity::Entity(World* world, Type type, int x, int y) :
+	GameObject(world),
 	type_(type),
 	nextMove_(0, 0),
 	speed_(0, 0),
@@ -29,7 +30,7 @@ Entity::Entity(GameSystems* systems, Type type, int x, int y) :
 
 void Entity::update()
 {
-	unsigned long long frameNumber = getSystems()->frameSystem->getFrameNumber();
+	unsigned long long frameNumber = getWorld()->getFrameNumber();
 
 	move(nextMove_);
 	if (teleported_ && nextMove_ != sf::Vector2i(0, 0))
@@ -130,7 +131,7 @@ bool Entity::isVulnerable()
 void Entity::setVulnerability(bool isVulnerable, int frames)
 {
 	if (frames != -1)
-		vulnerbailityTimer_ = getSystems()->frameSystem->getFrameNumber() + frames;
+		vulnerbailityTimer_ = getWorld()->getFrameNumber() + frames;
 
 	isVulnerable_ = isVulnerable;
 
@@ -142,7 +143,7 @@ void Entity::setVulnerability(bool isVulnerable, int frames)
 
 bool Entity::isReadyToMove()
 {
-	return getSystems()->frameSystem->getFrameNumber() % defaultSpeed_ == 0;
+	return getWorld()->getFrameNumber() % defaultSpeed_ == 0;
 }
 
 void Entity::teleport(sf::Vector2i location)

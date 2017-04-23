@@ -1,18 +1,51 @@
 #include "System.h"
+#include "SystemManager.h"
 
 
-
-System::System(GameSystems systems) :
-	systems_(systems)
+System::System(SystemManager* systemManager, World* world) :
+	//systems_(systems),
+	systemManager_(systemManager),
+	world_(world),
+	lastSentEvent_(nullptr)
 {
 }
 
+
+void System::draw()
+{
+}
+
+void System::handleSystemEvent(SystemEvent * event)
+{
+
+	if (event != lastSentEvent_)
+		onEvent(event);
+
+}
 
 System::~System()
 {
+
 }
 
-GameSystems & System::getSystems()
+
+World * System::getWorld()
 {
-	return systems_;
+	return world_;
+}
+
+void System::sendEvent(SystemEvent * event)
+{
+
+	lastSentEvent_ = event;
+
+	if (systemManager_ != nullptr)
+		systemManager_->handleSystemEvent(event);
+
+	event = nullptr;
+
+}
+
+void System::onEvent(SystemEvent * event)
+{
 }

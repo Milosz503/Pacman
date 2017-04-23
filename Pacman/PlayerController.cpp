@@ -1,9 +1,11 @@
 #include "PlayerController.h"
+#include <SFML\Graphics.hpp>
+#include "World.h"
 
+using namespace sf;
 
-
-PlayerController::PlayerController(GameSystems systems) :
-	System(systems)
+PlayerController::PlayerController(SystemManager* systemManager, World* world) :
+	System(systemManager, world)
 {
 }
 
@@ -34,5 +36,5 @@ void PlayerController::update()
 	{
 		x = DirectionX::Right;
 	}
-	getSystems().scene->getPlayer()->setSpeed(x, y);
+	getWorld()->getScene()->getPlayer()->setSpeed(x, y);
 }

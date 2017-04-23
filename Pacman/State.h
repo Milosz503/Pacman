@@ -32,11 +32,10 @@ public:
 
 	struct Context
 	{
-		Context(ConsoleWindow* console, TextureManager* textureManager, PlayerController* playerController, Level* level);
+		Context(ConsoleWindow* console, TextureManager* textureManager, Level* level);
 
 		ConsoleWindow* console;
 		TextureManager* textureManager;
-		PlayerController* playerController;
 
 		Level* level;
 	};

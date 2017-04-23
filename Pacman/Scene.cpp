@@ -1,9 +1,12 @@
 #include "Scene.h"
 #include "Teleport.h"
+#include "ConsoleWindow.h"
+#include "World.h"
+#include "LevelManager.h"
 
 
-Scene::Scene(GameSystems systems) :
-	System(systems),
+Scene::Scene(World* world) :
+	world_(world),
 	player_(nullptr)
 {
 }
@@ -87,8 +90,8 @@ void Scene::prepareLevel(Level * level)
 	player_ = entities_.back();
 
 	addEntity(Entity::Ghost, 1, 1);
-	addEntity(Entity::SlowGhost, 1, height_ - 2);
-	addEntity(Entity::SlowGhost, width_ - 2, 1);
+	//addEntity(Entity::SlowGhost, 1, height_ - 2);
+	//addEntity(Entity::SlowGhost, width_ - 2, 1);
 }
 
 
@@ -210,7 +213,7 @@ unsigned Scene::getHeight()
 
 void Scene::addEntity(Entity::Type type, int x, int y)
 {
-	entities_.push_back(new Entity(&getSystems(), type, x,  y));
+	entities_.push_back(new Entity(world_, type, x,  y));
 
 	if (type == Entity::Pacman)
 		player_ = entities_.back();
@@ -220,19 +223,19 @@ void Scene::addTile(Tile::Type type, int x, int y)
 {
 	if (type == Tile::Teleport)
 	{
-		Teleport* teleport = new Teleport(&getSystems(), x, y);
+		Teleport* teleport = new Teleport(world_, x, y);
 		teleport->setTeleportLocation(3, 3);
 		tiles_[x][y] = teleport;
 	}
 	else
 	{
-		tiles_[x][y] = new Tile(&getSystems(), type,  x, y);
+		tiles_[x][y] = new Tile(world_, type,  x, y);
 	}
 }
 
 void Scene::addTeleport(int x, int y, int targetX, int targetY)
 {
-	Teleport* teleport = new Teleport(&getSystems(), x, y);
+	Teleport* teleport = new Teleport(world_, x, y);
 	teleport->setTeleportLocation(targetX, targetY);
 	tiles_[x][y] = teleport;
 }
@@ -242,22 +245,13 @@ void Scene::addTeleport(int x, int y, int targetX, int targetY)
 void Scene::update()
 {
 
-	unsigned long long frameNumber = getSystems().frameSystem->getFrameNumber();
+	unsigned long long frameNumber = world_->getFrameNumber();
 
 	for (auto& entity : entities_)
 	{
 		entity->update();
 
-		if (tiles_[entity->getX()][entity->getY()] != nullptr && tiles_[entity->getX()][entity->getY()]->getType() == Tile::Teleport)
-		{
-			if (entity->isReadyToMove())
-			{
-				Teleport* teleport = static_cast<Teleport*>(tiles_[entity->getX()][entity->getY()]);
-
-				entity->teleport(teleport->getTeleportLocation());
-
-			}
-		}
+		
 	}
 
 	for (int x = 0; x < tiles_.size(); ++x)
@@ -265,7 +259,20 @@ void Scene::update()
 		for (int y = 0; y < tiles_[x].size(); ++y)
 		{
 			if (tiles_[x][y] != nullptr)
-				tiles_[x][y]->update();
+			{
+				if (tiles_[x][y]->isToRemove())
+				{
+					delete tiles_[x][y];
+					tiles_[x][y] = nullptr;
+				}
+				else
+				{
+					tiles_[x][y]->update();
+
+				}
+				
+			}
+				
 		}
 	}
 
@@ -278,16 +285,16 @@ void Scene::draw()
 		for (int y = 0; y < tiles_[x].size(); ++y)
 		{
 			if (tiles_[x][y] != nullptr)
-				getSystems().console->draw(*tiles_[x][y]);
+				world_->getConsole()->draw(*tiles_[x][y]);
 		}
 	}
 
 
 	for (auto& entity : entities_)
 	{
-		getSystems().console->draw(*entity);
+		world_->getConsole()->draw(*entity);
 	}
-	getSystems().console->draw(*player_);
+	world_->getConsole()->draw(*player_);
 
 }
 

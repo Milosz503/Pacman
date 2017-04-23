@@ -4,7 +4,7 @@ class Teleport :
 	public Tile
 {
 public:
-	Teleport(GameSystems* systems, int x, int y);
+	Teleport(World* world, int x, int y);
 	void setTeleportLocation(int x, int y);
 
 	sf::Vector2i getTeleportLocation();

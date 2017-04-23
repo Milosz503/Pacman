@@ -3,17 +3,29 @@
 
 
 
-GameObject::GameObject(GameSystems* systems) :
-	systems_(systems)
-	//animations_(this)
+GameObject::GameObject(World* world) :
+	world_(world),
+	isToRemove_(false)
 {
+}
+
+bool GameObject::isToRemove()
+{
+	return isToRemove_;
+}
+
+void GameObject::markToRemove()
+{
+	isToRemove_ = true;
 }
 
 GameObject::~GameObject()
 {
 }
 
-GameSystems * GameObject::getSystems()
+World * GameObject::getWorld()
 {
-	return systems_;
+	return world_;
 }
+
+

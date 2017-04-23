@@ -5,11 +5,12 @@
 #include "Entity.h"
 
 class Entity;
+class World;
 
 class PlayerController : public System
 {
 public:
-	PlayerController(GameSystems systems);
+	PlayerController(SystemManager* systemManager, World* world);
 	~PlayerController();
 
 	virtual void update() override;

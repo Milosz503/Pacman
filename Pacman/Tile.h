@@ -2,12 +2,14 @@
 
 #include "GameObject.h"
 
+class World;
+
 class Tile : public GameObject
 {
 public:
 	enum Type {None, Wall, Border, Point, Teleport, TypeCount };
 
-	Tile(GameSystems* systems, Type type, int x = 0, int y = 0);
+	Tile(World* world, Type type, int x = 0, int y = 0);
 	~Tile();
 
 	virtual void update() override;

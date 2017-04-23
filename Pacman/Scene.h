@@ -3,13 +3,15 @@
 #include <vector>
 #include "Entity.h"
 #include "Tile.h"
-#include "System.h"
-#include "LevelManager.h"
 
-class Scene : public System
+
+class Level;
+class World;
+
+class Scene
 {
 public:
-	Scene(GameSystems systems);
+	Scene(World* world);
 
 
 	void prepareLevel(Level * level);
@@ -41,13 +43,15 @@ public:
 	void addTile(Tile::Type type, int x, int y);
 	void addTeleport(int x, int y, int targetX, int targetY);
 
-	virtual void update() override;
+	void update();
 
 	void draw();
 
 	~Scene();
 
 private:
+	World* world_;
+
 	std::vector<Entity*> entities_;
 	std::vector<std::vector<Tile*>> tiles_;
 

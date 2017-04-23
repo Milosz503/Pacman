@@ -1,22 +1,45 @@
 #pragma once
 
-#include "GameSystems.h"
+
+#include "SystemEvent.h"
+
+class GameSystems;
+class World;
+class SystemManager;
 
 class System
 {
 public:
-	System(GameSystems systems);
+	enum Type{GameLogic, Physics, PlayerController, EntityController};
+
+
+	System(SystemManager* systemManager, World* world);
 
 	virtual void update() = 0;
+
+	virtual void draw();
+
+	void handleSystemEvent(SystemEvent* event);
 
 
 	~System();
 
 private:
-	GameSystems systems_;
+	//GameSystems systems_;
+	SystemManager* systemManager_;
+	World* world_;
+	SystemEvent* lastSentEvent_;
+	
 
 protected:
-	GameSystems& getSystems();
+	//GameSystems& getSystems();
+	World* getWorld();
+
+	void sendEvent(SystemEvent* event);
+	virtual void onEvent(SystemEvent* event);
+
 
 };
+
+
 

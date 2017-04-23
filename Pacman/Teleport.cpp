@@ -3,8 +3,8 @@
 
 
 
-Teleport::Teleport(GameSystems* systems, int x, int y) :
-	Tile(systems, Tile::Teleport, x, y),
+Teleport::Teleport(World* world, int x, int y) :
+	Tile(world, Tile::Teleport, x, y),
 	teleportX_(0),
 	teleportY_(0)
 {
