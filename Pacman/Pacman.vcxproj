@@ -160,6 +160,7 @@
     <ClInclude Include="ConsoleTypes.h" />
     <ClInclude Include="ConsoleWindow.h" />
     <ClInclude Include="DataTables.h" />
+    <ClInclude Include="EditState.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityController.h" />
     <ClInclude Include="GameLogic.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="ConsoleTypes.cpp" />
     <ClCompile Include="ConsoleWindow.cpp" />
     <ClCompile Include="DataTables.cpp" />
+    <ClCompile Include="EditState.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityController.cpp" />
     <ClCompile Include="GameLogic.cpp" />

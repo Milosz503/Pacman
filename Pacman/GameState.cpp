@@ -25,8 +25,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	drawTime_.setPosition(0, 48);
 
 
-	LevelManager levelManager(getContext().level);
-	levelManager.loadFromFile("level2.txt");
+	
 	
 
 	world_.getScene()->prepareLevel(getContext().level);

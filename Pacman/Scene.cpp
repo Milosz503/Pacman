@@ -160,12 +160,12 @@ sf::Vector2i Scene::normalize(sf::Vector2i position)
 	if (position.x >= width_)
 		position.x -= width_;
 	if (position.x < 0)
-		position.x = width_ - position.x;
+		position.x = width_ + position.x;
 
 	if (position.y >= height_)
 		position.y -= height_;
 	if (position.y < 0)
-		position.y = height_ - position.y;
+		position.y = height_ + position.y;
 
 	return position;
 }
@@ -178,17 +178,32 @@ bool Scene::isInside(unsigned x, unsigned y)
 	return false;
 }
 
-bool Scene::isTilePhysical(unsigned x, unsigned y)
+bool Scene::isTilePhysical(int x, int y)
 {
-	if (tiles_[x][y] == nullptr)
+	
+
+	sf::Vector2i pos = normalize(sf::Vector2i(x, y));
+
+
+	if (tiles_[pos.x][pos.y] == nullptr)
 		return false;
 
-	return tiles_[x][y]->isPhysical();
+	return tiles_[pos.x][pos.y]->isPhysical();
 }
 
-Tile * Scene::getTile(unsigned x, unsigned y)
+bool Scene::isTilePhysicalF(sf::Vector2i & pos)
 {
-	return tiles_[x][y];
+	if (tiles_[pos.x][pos.y] == nullptr)
+		return false;
+
+	return tiles_[pos.x][pos.y]->isPhysical();
+}
+
+Tile * Scene::getTile(int x, int y)
+{
+	sf::Vector2i pos = normalize(sf::Vector2i(x, y));
+
+	return tiles_[pos.x][pos.y];
 }
 
 std::vector<Entity*>& Scene::getEntities()
@@ -238,6 +253,15 @@ void Scene::addTeleport(int x, int y, int targetX, int targetY)
 	Teleport* teleport = new Teleport(world_, x, y);
 	teleport->setTeleportLocation(targetX, targetY);
 	tiles_[x][y] = teleport;
+}
+
+void Scene::moveEntity(Entity * entity, sf::Vector2i & move)
+{
+
+	entity->move(move);
+
+	entity->setPosition(normalize(entity->getPosition()));
+
 }
 
 

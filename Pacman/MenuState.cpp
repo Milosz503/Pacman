@@ -47,8 +47,13 @@ bool MenuState::handleEvent(sf::Event event)
 
 			break;
 		}
-		
+
 		case Keyboard::Num3:
+			requestStackPop();
+			requestStackPush(States::Editor);
+			break;
+		
+		case Keyboard::Num4:
 			requestStackPop();
 			break;
 		}
@@ -63,17 +68,20 @@ void MenuState::draw()
 
 	ConsoleText optionPlay(L"1. Play", CharacterColor::White);
 	ConsoleText optionSettings(L"2. Settings", CharacterColor::White);
-	ConsoleText optionExit(L"3. Exit", CharacterColor::White);
+	ConsoleText optionEditor(L"3. Editor", CharacterColor::White);
+	ConsoleText optionExit(L"4. Exit", CharacterColor::White);
 
 	info.setPosition(0, 1);
 
 	optionPlay.setPosition(2, 3);
 	optionSettings.setPosition(2, 4);
-	optionExit.setPosition(2, 5);
+	optionEditor.setPosition(2, 5);
+	optionExit.setPosition(2, 6);
 
 	getContext().console->draw(info);
 	getContext().console->draw(optionPlay);
 	getContext().console->draw(optionSettings);
+	getContext().console->draw(optionEditor);
 	getContext().console->draw(optionExit);
 }
 

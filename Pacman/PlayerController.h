@@ -16,7 +16,10 @@ public:
 	virtual void update() override;
 
 
+private:
 
+	DirectionX::Move newDirX;
+	DirectionY::Move newDirY;
 
 };
 

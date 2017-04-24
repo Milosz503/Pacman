@@ -88,8 +88,8 @@ void EntityController::update(Entity * entity)
 		{
 			dir = path.front();
 
-			dir.x = -(entity->getPosition().x - dir.x);
-			dir.y = -(entity->getPosition().y - dir.y);
+			//dir.x = -(entity->getPosition().x - dir.x);
+			//dir.y = -(entity->getPosition().y - dir.y);
 		}
 			
 
@@ -141,9 +141,15 @@ void EntityController::draw()
 		}
 	}
 	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
+
+	sf::Vector2i pos = start;
+
 	for (auto& node : path)
 	{
-		character.setPosition(node);
+		pos.x += node.x;
+		pos.y += node.y;
+		pos = scene_->normalize(pos);
+		character.setPosition(pos);
 
 		getWorld()->getConsole()->draw(character);
 	}
@@ -475,6 +481,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 			distance[i][j] = INF;
 		}
 	}
+	this->start = start;
 	std::swap(start, goal);
 
 	std::array<sf::Vector2i, 4> neighbors;
@@ -492,6 +499,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 	distance[start.x][start.y] = 0;
 
 	nodes.push(NodePair(0, start));
+	
 
 	int iterations = 0;
 
@@ -509,26 +517,31 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 			
 			while (graph[pos.x][pos.y] != Visited)
 			{
+				sf::Vector2i dir(0, 0);
 				switch (graph[pos.x][pos.y])
 				{
 				case Left:
 					pos.x--;
+					dir.x--;
 					break;
 
 				case Up:
 					pos.y--;
+					dir.y--;
 					break;
 
 				case Right:
 					pos.x++;
+					dir.x++;
 					break;
 
 				case Down:
 					pos.y++;
+					dir.y++;
 					break;
 				}
-
-				path.push_back(pos);
+				pos = scene_->normalize(pos);
+				path.push_back(dir);
 			}
 
 			return true;
@@ -547,7 +560,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 
 		for (int i = 0; i < 4; ++i)
 		{
-			sf::Vector2i neighbor = neighbors[i];
+			sf::Vector2i neighbor = scene_->normalize(neighbors[i]);
 
 			float newCost = distance[pos.x][pos.y] + getCost(neighbor, customCosts);
 
@@ -626,6 +639,19 @@ bool EntityController::isInsideGraph(sf::Vector2f point)
 	return false;
 }
 
+sf::Vector2i EntityController::getDistance(sf::Vector2i& start, sf::Vector2i& goal)
+{
+	sf::Vector2i distance(abs(start.x - goal.x), abs(start.y - goal.y));
+
+	if (distance.x >= scene_->getWidth()/2)
+		distance.x = scene_->getWidth() - distance.x;
+
+	if (distance.y >= scene_->getHeight() / 2)
+		distance.y = scene_->getHeight() - distance.y;
+
+	return distance;
+}
+
 float EntityController::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start)
 {
 	float dx1 = current.x - goal.x;
@@ -634,6 +660,8 @@ float EntityController::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::V
 	float dy2 = start.y - goal.y;
 	float cross = abs(dx1*dy2 - dx2*dy1);
 
+	sf::Vector2i distance = getDistance(current, goal);
 
-	return cross*0.0000001 +(1.00001)*(abs(current.x - goal.x) + abs(current.y - goal.y));
+	//return 0;
+	return cross*0.0000001 + (1.00001)*(distance.x + distance.y);//(abs(current.x - goal.x) + abs(current.y - goal.y));
 }

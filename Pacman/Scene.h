@@ -28,8 +28,9 @@ public:
 	sf::Vector2i normalize(sf::Vector2i position);
 
 	bool isInside(unsigned x, unsigned y);
-	bool isTilePhysical(unsigned x, unsigned y);
-	Tile* getTile(unsigned x, unsigned y);
+	bool isTilePhysical(int x, int y);
+	bool isTilePhysicalF(sf::Vector2i& pos);
+	Tile* getTile(int x, int y);
 
 	std::vector<Entity*>& getEntities();
 
@@ -42,6 +43,8 @@ public:
 	void addEntity(Entity::Type type, int x, int y);
 	void addTile(Tile::Type type, int x, int y);
 	void addTeleport(int x, int y, int targetX, int targetY);
+
+	void moveEntity(Entity* entity, sf::Vector2i& move);
 
 	void update();
 
@@ -57,7 +60,7 @@ private:
 
 	Entity* player_;
 
-	unsigned width_;
-	unsigned height_;
+	int width_;
+	int height_;
 };
 

@@ -43,6 +43,7 @@ private:
 	void clearGraph(sf::Vector2i start);
 	bool isInsideGraph(sf::Vector2f point);
 
+	sf::Vector2i getDistance(sf::Vector2i& start, sf::Vector2i& goal);
 	float heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start);
 
 
@@ -51,6 +52,7 @@ private:
 	std::vector<std::vector<NodeState>> graph;
 	std::vector<std::vector<int>> distance;
 	std::list<sf::Vector2i> path;
+	sf::Vector2i start;
 
 };
 

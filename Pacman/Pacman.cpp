@@ -5,6 +5,7 @@
 #include "GameState.h"
 #include "MenuState.h"
 #include "LevelManager.h"
+#include "EditState.h"
 
 
 //Po setPosition entity moze przeskoczyc przez sciane
@@ -19,8 +20,10 @@ int main()
 	ConsoleWindow console(50, 50, &textureManager);
 
 
-
 	Level level;
+
+	LevelManager levelManager(&level);
+	levelManager.loadFromFile("level2.txt");
 
 	
 
@@ -31,6 +34,7 @@ int main()
 
 	stack.registerState<GameState>(States::Game);
 	stack.registerState<MenuState>(States::Menu);
+	stack.registerState<EditState>(States::Editor);
 
 	stack.pushState(States::Menu);
 

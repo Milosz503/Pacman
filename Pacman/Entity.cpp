@@ -31,8 +31,9 @@ Entity::Entity(World* world, Type type, int x, int y) :
 void Entity::update()
 {
 	unsigned long long frameNumber = getWorld()->getFrameNumber();
+	getWorld()->getScene()->moveEntity(this, nextMove_);
 
-	move(nextMove_);
+	//move(nextMove_);
 	if (teleported_ && nextMove_ != sf::Vector2i(0, 0))
 	{
 		teleported_ = false;

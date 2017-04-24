@@ -18,6 +18,7 @@ namespace States
 		None,
 		Menu,
 		Settings,
+		Editor,
 		Game,
 		Pause,
 		GameOver
