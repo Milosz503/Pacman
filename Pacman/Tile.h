@@ -7,7 +7,7 @@ class World;
 class Tile : public GameObject
 {
 public:
-	enum Type {None, Wall, Border, Point, Teleport, TypeCount };
+	enum Type {None, Wall, Point, Border, Teleport, TypeCount };
 
 	Tile(World* world, Type type, int x = 0, int y = 0);
 	~Tile();

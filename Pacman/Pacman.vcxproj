@@ -89,13 +89,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Biblioteki\SFML-2.4.2-VS14\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Biblioteki\LuaBridge;C:\Biblioteki\lua-5.3.3-VS14-32-bit\include;C:\Biblioteki\SFML-2.4.2-VS14\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Biblioteki\lua-5.3.3-VS14-32-bit;C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua53.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,15 +122,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Biblioteki\SFML-2.4.2-VS14\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Biblioteki\LuaBridge;C:\Biblioteki\lua-5.3.3-VS14-32-bit\include;C:\Biblioteki\SFML-2.4.2-VS14\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Biblioteki\lua-5.3.3-VS14-32-bit;C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua53.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

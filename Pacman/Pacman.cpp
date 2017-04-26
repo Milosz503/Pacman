@@ -23,7 +23,8 @@ int main()
 	Level level;
 
 	LevelManager levelManager(&level);
-	levelManager.loadFromFile("level2.txt");
+	//levelManager.loadFromFile("level2.txt");
+	levelManager.loadFromLua("data/level.lua");
 
 	
 

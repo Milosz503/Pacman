@@ -46,6 +46,7 @@ public:
 
 
 	void loadFromFile(std::string fileName);
+	void loadFromLua(std::string fileName);
 	void saveFile(std::string fileName);
 
 	~LevelManager();

@@ -27,7 +27,7 @@ std::array<EntityTable, Entity::TypeCount> initializeEntityData()
 	std::array<EntityTable, Entity::TypeCount> table;
 
 	table[Entity::Pacman].texture = TextureManager::getTexture(L'P', CharacterColor::White);
-	table[Entity::Pacman].speed = 6;
+	table[Entity::Pacman].speed = 10;
 	table[Entity::Pacman].hitpoints = 5;
 	table[Entity::Pacman].isVulnerable = true;
 	table[Entity::Pacman].secondTexture = TextureManager::getTexture(L'p', CharacterColor::White);

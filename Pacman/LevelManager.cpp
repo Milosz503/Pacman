@@ -1,7 +1,14 @@
 #include "LevelManager.h"
 
+extern "C" {
+# include <lua.h>
+# include <lauxlib.h>
+# include <lualib.h>
+}
 
-using namespace std;
+#include <LuaBridge.h>
+
+using namespace luabridge;
 
 LevelManager::LevelManager(Level * level) :
 	level_(level)
@@ -13,8 +20,8 @@ void LevelManager::loadFromFile(std::string fileName)
 
 	
 
-	string line;
-	ifstream levelFile(fileName);
+	std::string line;
+	std::ifstream levelFile(fileName);
 
 
 
@@ -41,7 +48,7 @@ void LevelManager::loadFromFile(std::string fileName)
 
 				if (!levelFile.good())
 				{
-					cout << "ERROR reading file: " << fileName << " x, y: " << x << ", " << y << endl;
+					std::cout << "ERROR reading file: " << fileName << " x, y: " << x << ", " << y << std::endl;
 					return;
 				}
 					
@@ -54,13 +61,76 @@ void LevelManager::loadFromFile(std::string fileName)
 		levelFile.close();
 	}
 
-	else cout << "Unable to open file";
+	else std::cout << "Unable to open file";
 
+}
+
+void LevelManager::loadFromLua(std::string fileName)
+{
+	lua_State* L = luaL_newstate();
+	luaL_dofile(L, fileName.c_str());
+
+	if (luaL_loadfile(L, fileName.c_str()) ||
+		lua_pcall(L, 0, 0, 0)) 
+	{
+
+		std::cout << "Error loading level or tiles table!" << std::endl;
+		return;
+	}
+
+	//luaL_openlibs(L);
+
+	LuaRef level = getGlobal(L, "level");
+	LuaRef tiles = getGlobal(L, "tiles");
+
+	if (level.isNil() || tiles.isNil())
+	{
+		std::cout << "Error loading level or tiles table!" << std::endl;
+		return;
+	}
+	
+
+	int width = level["width"].cast<int>();
+	int height = level["height"].cast<int>();
+
+
+	if (width == 0 || height == 0)
+	{
+		std::cout << "width or height = 0" << std::endl;
+		return;
+	}
+
+	level_->setSize(width, height);
+
+	
+
+	for (int y = 1; y <= height; ++y)
+	{
+		LuaRef column = level[y];
+		if (column.isNil())
+		{
+			std::cout << "Error parsing level! y = " << y << std::endl;
+			return;
+		}
+
+		for (int x = 1; x <= width; ++x)
+		{
+			LuaRef tile = column[x];
+			if (tile.isNil())
+			{
+				std::cout << "Error parsing level x!" << std::endl;
+				return;
+			}
+
+			int tileID = tile.cast<int>();
+			level_->setTile(x-1, y-1, static_cast<Tile::Type>(tileID));
+		}
+	}
 }
 
 void LevelManager::saveFile(std::string fileName)
 {
-	ofstream levelFile;
+	std::ofstream levelFile;
 	levelFile.open(fileName);
 
 	
@@ -72,7 +142,7 @@ void LevelManager::saveFile(std::string fileName)
 		levelFile << width;
 		levelFile << " ";
 		levelFile << height;
-		levelFile << endl;
+		levelFile << std::endl;
 
 		for (int y = 0; y < height; ++y)
 		{
@@ -81,7 +151,7 @@ void LevelManager::saveFile(std::string fileName)
 				levelFile << level_->getTile(x, y);
 				levelFile << " ";
 			}
-			levelFile << endl;
+			levelFile << std::endl;
 		}
 
 		levelFile.close();
