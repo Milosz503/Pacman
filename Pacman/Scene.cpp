@@ -7,8 +7,16 @@
 
 Scene::Scene(World* world) :
 	world_(world),
-	player_(nullptr)
+	player_(nullptr),
+	width_(0),
+	height_(0)
 {
+	addEntity(Entity::Pacman, 1, 1);
+	player_ = entities_.back();
+
+	setSize(20, 20);
+
+
 }
 
 
@@ -72,8 +80,7 @@ void Scene::prepareLevel(Level * level)
 	//addTeleport(width_ - 2, 10, 1, 10);
 
 
-	addEntity(Entity::Pacman, 1, 1);
-	player_ = entities_.back();
+	
 
 	addEntity(Entity::Ghost, 2, 1);
 	//addEntity(Entity::SlowGhost, 1, height_ - 2);
@@ -212,6 +219,30 @@ unsigned Scene::getHeight()
 	return height_;
 }
 
+void Scene::setSize(int width, int height)
+{
+	int lastW = width_;
+	int lastH = height_;
+
+	width_ = width;
+	height_ = height;
+
+	tiles_.resize(width_);
+
+	for (int x = lastW; x < tiles_.size(); ++x)
+	{
+		tiles_[x].resize(height_);
+	}
+
+	for (int x = lastW; x < width_; ++x)
+	{
+		for (int y = lastH; y < height_; ++y)
+		{
+			tiles_[x][y] = nullptr;
+		}
+	}
+}
+
 void Scene::addEntity(Entity::Type type, int x, int y)
 {
 	entities_.push_back(new Entity(world_, type, x,  y));
@@ -239,6 +270,18 @@ void Scene::addTeleport(int x, int y, int targetX, int targetY)
 	Teleport* teleport = new Teleport(world_, x, y);
 	teleport->setTeleportLocation(targetX, targetY);
 	tiles_[x][y] = teleport;
+}
+
+void Scene::removeTile(int x, int y)
+{
+	if (tiles_[x][y] == nullptr)
+	{
+		std::cout << "ERROR cant remove tile, it doesn't exist" << std::endl;
+		return;
+	}
+
+	delete tiles_[x][y];
+	tiles_[x][y] = nullptr;
 }
 
 void Scene::moveEntity(Entity * entity, sf::Vector2i & move)

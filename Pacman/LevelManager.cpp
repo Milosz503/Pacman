@@ -1,4 +1,5 @@
 #include "LevelManager.h"
+#include "Scene.h"
 
 extern "C" {
 # include <lua.h>
@@ -158,6 +159,141 @@ void LevelManager::saveFile(std::string fileName)
 	}
 
 	
+
+}
+
+
+void LevelManager::loadLevel(Scene * scene, std::string fileName)
+{
+	lua_State* L = luaL_newstate();
+	if (luaL_dofile(L, fileName.c_str()) != 0)
+	{
+		std::cout << "Error loading file " << fileName << "  " << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+	luaL_openlibs(L);
+	lua_pcall(L, 0, 0, 0);
+
+
+	LuaRef level = getGlobal(L, "level");
+	LuaRef tiles = getGlobal(L, "tiles");
+
+	if (level.isNil() )//|| tiles.isNil())
+	{
+		std::cout << "Error loading level or tiles table!" << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+	if (level["width"].isNil() || level["height"].isNil())
+	{
+		std::cout << "Error width, height level!" << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+
+	int width = level["width"].cast<int>();
+	int height = level["height"].cast<int>();
+
+
+	if (width == 0 || height == 0)
+	{
+		std::cout << "width or height = 0" << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+
+	scene->setSize(width, height);
+
+
+
+
+
+	for (int y = 1; y <= height; ++y)
+	{
+		LuaRef column = level[y];
+		if (column.isNil())
+		{
+			std::cout << "Error parsing level! y = " << y << std::endl;
+			return;
+		}
+
+		for (int x = 1; x <= width; ++x)
+		{
+			LuaRef tile = column[x];
+			if (tile.isNil())
+			{
+				std::cout << "Error parsing level x!" << std::endl;
+				return;
+			}
+
+			int tileID = tile.cast<int>();
+			scene->addTile(static_cast<Tile::Type>(tileID), x - 1, y - 1);
+		}
+	}
+	lua_close(L);
+}
+
+void LevelManager::saveLevel(Scene * scene, std::string fileName)
+{
+	lua_State* L = luaL_newstate();
+	luaL_openlibs(L);
+	if (luaL_dofile(L, "data/scripts/data_generator.lua") != 0)
+	{
+		std::cout << "ERROR dofile data/scripts/data_generator.lua! " << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+	
+	lua_pcall(L, 0, 0, 0);
+
+
+	LuaRef level = newTable(L);
+
+
+	int width = scene->getWidth();
+	int height = scene->getHeight();
+
+	level["width"] = width;
+	level["height"] = height;
+
+
+
+
+
+	for (int y = 1; y <= height; ++y)
+	{
+		LuaRef row = newTable(L);
+
+		for (int x = 1; x <= width; ++x)
+		{
+			Tile* tile = scene->getTile(x - 1, y - 1);
+
+			if (tile != nullptr)
+			{
+				row[x] = static_cast<int>(tile->getType());
+			}
+			else
+			{
+				row[x] = 0;
+			}
+			
+		}
+		level[y] = row;
+	}
+
+	LuaRef generator = getGlobal(L, "generator");
+
+	if (generator.isNil() || !generator["openFile"].isFunction() ||
+		!generator["generate"].isFunction() || !generator["closeFile"].isFunction())
+	{
+		std::cout << "ERROR file generator! " << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+
+	generator["openFile"](fileName);
+	generator["generate"]("level", level);
+	generator["closeFile"]();
+
+	/*LuaRef block = getGlobal(L, "serpent")["block"];
+	LuaRef ans = block(level);
+
+	std::cout << ans.cast<std::string>();*/
 
 }
 

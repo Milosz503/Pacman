@@ -4,6 +4,9 @@ std::array<TileTable, Tile::TypeCount> initializeTileData()
 {
 	std::array<TileTable, Tile::TypeCount> table;
 
+	table[Tile::None].texture = TextureManager::getTexture(L' ', CharacterColor::White);
+	table[Tile::None].isPhysical = false;
+
 	table[Tile::Wall].texture = TextureManager::getTexture(L'#', CharacterColor::White);
 	table[Tile::Wall].isPhysical = true;
 

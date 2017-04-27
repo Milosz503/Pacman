@@ -32,8 +32,6 @@ public:
 	~World();
 
 private:
-	unsigned width_;
-	unsigned height_;
 
 	int offsetX_;
 	int offsetY_;

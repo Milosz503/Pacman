@@ -218,7 +218,7 @@ sf::Vector2i EntityController::searchPath(sf::Vector2i start, sf::Vector2i targe
 
 		if (pos == target)
 		{
-			std::cout << "JEST!" << std::endl;
+
 
 			switch (graph[pos.x][pos.y])
 			{
@@ -291,7 +291,7 @@ sf::Vector2i EntityController::searchPath(sf::Vector2i start, sf::Vector2i targe
 		}
 	}
 	//clearGraph(start);
-	std::cout << "FAIL!" << std::endl;
+
 	return dir;
 }
 
@@ -354,7 +354,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 
 		if (pos == target)
 		{
-			std::cout << "JEST!" << std::endl;
+
 
 			switch (graph[pos.x][pos.y])
 			{
@@ -464,7 +464,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 
 	}
 	//clearGraph(start);
-	std::cout << "FAIL!" << std::endl;
+
 	return dir;
 }
 
@@ -513,7 +513,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 
 		if (pos == goal)
 		{
-			std::cout << "Found!" << std::endl;
+
 			
 			while (graph[pos.x][pos.y] != Visited)
 			{

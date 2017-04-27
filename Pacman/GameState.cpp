@@ -7,6 +7,7 @@
 #include "PlayerController.h"
 #include "Scene.h"
 #include "GameLogic.h"
+#include "EditSystem.h"
 
 
 GameState::GameState(StateStack & stack, Context context) :
@@ -28,7 +29,8 @@ GameState::GameState(StateStack & stack, Context context) :
 	
 	
 
-	world_.getScene()->prepareLevel(getContext().level);
+	//world_.getScene()->prepareLevel(getContext().level);
+	LevelManager::loadLevel(world_.getScene(), "data/level.lua");
 
 
 
@@ -36,6 +38,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<GameLogic>();
+	systems_.addSystem<EditSystem>();
 	
 
 
@@ -69,74 +72,7 @@ bool GameState::update(sf::Time dt)
 	}
 	return true;
 
-	//if (Mouse::isButtonPressed(Mouse::Button::Left))
-	//{
-	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
-
-	//	pos.x /= 16;
-	//	pos.y /= 16;
-
-	//	//sf::IntRect rect = world_.getBounds();
-
-	//	if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
-	//		pos.y >= rect.top && pos.y < rect.top + rect.height)
-	//	{
-	//		if (world_.getTile(pos.x, pos.y) == nullptr)
-	//		{
-	//			world_.addTile(Tile::Wall, pos.x, pos.y);
-
-	//			if (pos.x >= rect.left+1 && pos.x < rect.left + rect.width - 1 &&
-	//				pos.y >= rect.top+1 && pos.y < rect.top + rect.height - 1)
-	//			{
-	//				getContext().level->setTile(pos.x-1, pos.y-1, Tile::Wall);
-	//			}
-	//		}
-	//	}
-	//}
-	//if (Keyboard::isKeyPressed(Keyboard::Q))
-	//{
-	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
-
-	//	pos.x /= 16;
-	//	pos.y /= 16;
-
-	//	sf::IntRect rect = world_.getBounds();
-
-	//	if (pos.x >= rect.left && pos.x < rect.left + rect.width &&
-	//		pos.y >= rect.top && pos.y < rect.top + rect.height)
-	//	{
-	//		if (world_.getTile(pos.x, pos.y) == nullptr)
-	//		{
-	//			world_.addTile(Tile::Point, pos.x, pos.y);
-
-	//			if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
-	//				pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
-	//			{
-	//				getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::Point);
-	//			}
-	//		}
-	//	}
-	//}
-
-	//if (Mouse::isButtonPressed(Mouse::Button::Right))
-	//{
-	//	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
-
-	//	pos.x /= 16;
-	//	pos.y /= 16;
-
-	//	sf::IntRect rect = world_.getBounds();
-
-	//	if (world_.getTile(pos.x, pos.y) != nullptr)
-	//	{
-	//		world_.removeTile(pos.x, pos.y);
-	//		if (pos.x >= rect.left + 1 && pos.x < rect.left + rect.width - 1 &&
-	//			pos.y >= rect.top + 1 && pos.y < rect.top + rect.height - 1)
-	//		{
-	//			getContext().level->setTile(pos.x - 1, pos.y - 1, Tile::None);
-	//		}
-	//	}
-	//}
+	
 
 
 	return true;
@@ -151,6 +87,8 @@ bool GameState::handleEvent(sf::Event event)
 		{
 			LevelManager levelManager(getContext().level);
 			levelManager.saveFile("level2.txt");
+
+			LevelManager::saveLevel(world_.getScene(), "data/level.lua");
 
 			requestStackPop();
 			requestStackPush(States::Menu);

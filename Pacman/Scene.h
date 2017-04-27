@@ -38,11 +38,14 @@ public:
 
 	unsigned getWidth();
 	unsigned getHeight();
+	void setSize(int width, int height);
 
 
 	void addEntity(Entity::Type type, int x, int y);
 	void addTile(Tile::Type type, int x, int y);
 	void addTeleport(int x, int y, int targetX, int targetY);
+
+	void removeTile(int x, int y);
 
 	void moveEntity(Entity* entity, sf::Vector2i& move);
 

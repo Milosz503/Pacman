@@ -6,8 +6,6 @@
 #include "Teleport.h"
 
 World::World(State::Context context) :
-	width_(40),
-	height_(40),
 	offsetX_(0),
 	offsetY_(0),
 	score_(0),
@@ -18,6 +16,7 @@ World::World(State::Context context) :
 	
 {
 	scene_ = new Scene(this);
+
 
 }
 
@@ -37,7 +36,7 @@ void World::draw()
 
 sf::IntRect World::getBounds()
 {
-	return sf::IntRect(offsetX_, offsetY_, width_, height_);
+	return sf::IntRect(offsetX_, offsetY_, scene_->getWidth(), scene_->getHeight());
 }
 
 unsigned long long World::getFrameNumber()

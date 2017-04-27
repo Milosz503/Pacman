@@ -7,6 +7,8 @@
 #include <fstream>
 #include <SFML\Graphics.hpp>
 
+class Scene;
+
 class Level
 {
 public:
@@ -48,6 +50,9 @@ public:
 	void loadFromFile(std::string fileName);
 	void loadFromLua(std::string fileName);
 	void saveFile(std::string fileName);
+
+	static void loadLevel(Scene* scene, std::string fileName);
+	static void saveLevel(Scene* scene, std::string fileName);
 
 	~LevelManager();
 

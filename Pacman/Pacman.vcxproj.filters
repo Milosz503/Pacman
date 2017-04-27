@@ -126,6 +126,9 @@
     <ClInclude Include="EditState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EditSystem.h">
+      <Filter>Header Files\Game\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="EditState.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditSystem.cpp">
+      <Filter>Source Files\Game\Systems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
