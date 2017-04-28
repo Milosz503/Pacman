@@ -1,5 +1,6 @@
 #include "LevelManager.h"
 #include "Scene.h"
+#include "EntityManager.h"
 
 extern "C" {
 # include <lua.h>
@@ -163,8 +164,11 @@ void LevelManager::saveFile(std::string fileName)
 }
 
 
-void LevelManager::loadLevel(Scene * scene, std::string fileName)
+void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::string fileName)
 {
+	
+
+
 	lua_State* L = luaL_newstate();
 	if (luaL_dofile(L, fileName.c_str()) != 0)
 	{
@@ -178,7 +182,7 @@ void LevelManager::loadLevel(Scene * scene, std::string fileName)
 	LuaRef level = getGlobal(L, "level");
 	LuaRef tiles = getGlobal(L, "tiles");
 
-	if (level.isNil() )//|| tiles.isNil())
+	if (level.isNil() || tiles.isNil())
 	{
 		std::cout << "Error loading level or tiles table!" << lua_tostring(L, -1) << std::endl;
 		return;
@@ -203,8 +207,6 @@ void LevelManager::loadLevel(Scene * scene, std::string fileName)
 
 
 
-
-
 	for (int y = 1; y <= height; ++y)
 	{
 		LuaRef column = level[y];
@@ -224,27 +226,91 @@ void LevelManager::loadLevel(Scene * scene, std::string fileName)
 			}
 
 			int tileID = tile.cast<int>();
-			scene->addTile(static_cast<Tile::Type>(tileID), x - 1, y - 1);
+
+			LuaRef data = tiles[tileID];
+			if (data.isNil())
+			{
+				std::cout << "Error data is nil! " << tileID << " " << lua_tostring(L, -1) << std::endl;
+				return;
+			}
+			if (!data["name"].isNil())
+			{
+
+				scene->addTile(data["name"].cast<std::string>(), x - 1, y - 1);
+			}
+
+			
 		}
 	}
+
+	LuaRef objects = getGlobal(L, "objects");
+
+	if (!objects.isNil())
+	{
+		for (int i = 1; !objects[i].isNil(); ++i)
+		{
+
+
+			LuaRef object = objects[i];
+
+			if (!object["name"].isNil() && !object["x"].isNil() && object["x"].isNumber() &&
+				!object["y"].isNil() && object["y"].isNumber())
+			{
+				Entity* entity = entityManager->createEntity(object["name"].cast<std::string>());
+
+				entity->setPosition(object["x"].cast<int>(), object["y"].cast<int>());
+
+				scene->addEntity(entity);
+			}
+			else
+			{
+				std::cout << "Error loading object!" << std::endl;
+			}
+		}
+	}
+	else
+	{
+		std::cout << "Objects not found!" << std::endl;
+	}
+
+
 	lua_close(L);
 }
 
-void LevelManager::saveLevel(Scene * scene, std::string fileName)
+static bool generateFile(lua_State* L, std::string fileName, std::vector<std::pair<std::string, LuaRef>>& data)
 {
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
 	if (luaL_dofile(L, "data/scripts/data_generator.lua") != 0)
 	{
 		std::cout << "ERROR dofile data/scripts/data_generator.lua! " << lua_tostring(L, -1) << std::endl;
-		return;
+		return false;
 	}
-	
+
 	lua_pcall(L, 0, 0, 0);
 
+	LuaRef generator = getGlobal(L, "generator");
 
-	LuaRef level = newTable(L);
+	if (generator.isNil() || !generator["openFile"].isFunction() ||
+		!generator["generate"].isFunction() || !generator["closeFile"].isFunction())
+	{
+		std::cout << "ERROR file generator! " << lua_tostring(L, -1) << std::endl;
+		return false;
+	}
 
+	generator["openFile"](fileName);
+
+	for (auto& pair : data)
+	{
+		generator["generate"](pair.first.c_str(), pair.second);
+	}
+
+	
+	generator["closeFile"]();
+
+	return true;
+}
+
+static void fillLevelTable(lua_State* L, Scene * scene, LuaRef& level)
+{
 
 	int width = scene->getWidth();
 	int height = scene->getHeight();
@@ -272,10 +338,37 @@ void LevelManager::saveLevel(Scene * scene, std::string fileName)
 			{
 				row[x] = 0;
 			}
-			
+
 		}
 		level[y] = row;
 	}
+}
+
+
+void LevelManager::saveLevel(Scene * scene, std::string fileName)
+{
+	lua_State* L = luaL_newstate();
+	luaL_openlibs(L);
+	
+
+
+	LuaRef level = newTable(L);
+	fillLevelTable(L, scene, level);
+
+
+	LuaRef tiles = newTable(L);
+
+
+
+	
+
+	if (luaL_dofile(L, "data/scripts/data_generator.lua") != 0)
+	{
+		std::cout << "ERROR dofile data/scripts/data_generator.lua! " << lua_tostring(L, -1) << std::endl;
+		return;
+	}
+
+	lua_pcall(L, 0, 0, 0);
 
 	LuaRef generator = getGlobal(L, "generator");
 
@@ -287,7 +380,9 @@ void LevelManager::saveLevel(Scene * scene, std::string fileName)
 	}
 
 	generator["openFile"](fileName);
+
 	generator["generate"]("level", level);
+
 	generator["closeFile"]();
 
 	/*LuaRef block = getGlobal(L, "serpent")["block"];

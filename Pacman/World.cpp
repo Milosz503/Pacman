@@ -15,8 +15,11 @@ World::World(State::Context context) :
 	frameCounter_(0)
 	
 {
+	luaHandle_ = new LuaGameHandle(this);
 	scene_ = new Scene(this);
-
+	entityManager_ = new EntityManager(this);
+	
+	
 
 }
 
@@ -26,6 +29,7 @@ void World::update()
 
 	++frameCounter_;
 
+	std::cout << "Entities: " << scene_->getEntities().size() << std::endl;
 	
 }
 
@@ -67,6 +71,16 @@ TextureManager * World::getTextureManager()
 Scene * World::getScene()
 {
 	return scene_;
+}
+
+EntityManager * World::getEntityManager()
+{
+	return entityManager_;
+}
+
+LuaGameHandle * World::getLuaGameHandle()
+{
+	return luaHandle_;
 }
 
 

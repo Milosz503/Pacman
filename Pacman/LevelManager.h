@@ -7,7 +7,11 @@
 #include <fstream>
 #include <SFML\Graphics.hpp>
 
+class EntityManager;
 class Scene;
+namespace luabridge {
+	class LuaRef;
+}
 
 class Level
 {
@@ -51,7 +55,7 @@ public:
 	void loadFromLua(std::string fileName);
 	void saveFile(std::string fileName);
 
-	static void loadLevel(Scene* scene, std::string fileName);
+	static void loadLevel(Scene* scene, EntityManager* entityManager, std::string fileName);
 	static void saveLevel(Scene* scene, std::string fileName);
 
 	~LevelManager();
@@ -59,5 +63,7 @@ public:
 
 private:
 	Level* level_;
+
+
 };
 

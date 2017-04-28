@@ -48,7 +48,8 @@ void GameLogic::onEvent(SystemEvent * event)
 
 	switch (event->type)
 	{
-	case SystemEvent::staticCollision:{
+	case SystemEvent::staticCollision:
+	{
 		StaticCollision* collision = static_cast<StaticCollision*>(event);
 
 		if (collision->tile->getType() == Tile::Point)
@@ -60,9 +61,13 @@ void GameLogic::onEvent(SystemEvent * event)
 		{
 			collision->tile->markToRemove();
 		}
+
+		collision->tile->collision();
 			
 
-		break;}
+		break;
+	}
+
 	}
 }
 

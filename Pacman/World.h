@@ -10,6 +10,11 @@
 #include "Physics.h"
 #include "EntityController.h"
 #include "Scene.h"
+#include "EntityManager.h"
+#include "LuaGameHandle.h"
+
+class EntityManager;
+class LuaGameHandle;
 
 class World
 {
@@ -28,6 +33,8 @@ public:
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
 	Scene* getScene();
+	EntityManager* getEntityManager();
+	LuaGameHandle* getLuaGameHandle();
 
 	~World();
 
@@ -43,7 +50,8 @@ private:
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
 	Scene* scene_;
-
+	EntityManager* entityManager_;
+	LuaGameHandle* luaHandle_;
 
 
 	

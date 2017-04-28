@@ -11,8 +11,8 @@ Scene::Scene(World* world) :
 	width_(0),
 	height_(0)
 {
-	addEntity(Entity::Pacman, 1, 1);
-	player_ = entities_.back();
+	//addEntity(Entity::Pacman, 1, 1);
+	//player_ = entities_.back();
 
 	setSize(20, 20);
 
@@ -243,6 +243,16 @@ void Scene::setSize(int width, int height)
 	}
 }
 
+void Scene::addEntity(Entity * entity)
+{
+	entities_.push_back(entity);
+
+	if (entity->getType() == Entity::Pacman)
+	{
+		player_ = entity;
+	}
+}
+
 void Scene::addEntity(Entity::Type type, int x, int y)
 {
 	entities_.push_back(new Entity(world_, type, x,  y));
@@ -265,6 +275,25 @@ void Scene::addTile(Tile::Type type, int x, int y)
 	}
 }
 
+void Scene::addTile(luabridge::LuaRef & data, int x, int y)
+{
+	tiles_[x][y] = new Tile(world_, data, x, y);
+
+}
+
+void Scene::addTile(std::string tileName, int x, int y)
+{
+	Tile* tile = world_->getEntityManager()->createTile(tileName);
+	tile->setPosition(x, y);
+
+	tiles_[x][y] = tile;
+}
+
+void Scene::addTile(Tile * tile)
+{
+	tiles_[tile->getX()][tile->getY()] = tile;
+}
+
 void Scene::addTeleport(int x, int y, int targetX, int targetY)
 {
 	Teleport* teleport = new Teleport(world_, x, y);
@@ -279,9 +308,10 @@ void Scene::removeTile(int x, int y)
 		std::cout << "ERROR cant remove tile, it doesn't exist" << std::endl;
 		return;
 	}
-
-	delete tiles_[x][y];
-	tiles_[x][y] = nullptr;
+	tiles_[x][y]->markToRemove();
+	//delete tiles_[x][y];
+	//tiles_[x][y] = nullptr;
+	std::cout << "Tile removed" << std::endl;
 }
 
 void Scene::moveEntity(Entity * entity, sf::Vector2i & move)

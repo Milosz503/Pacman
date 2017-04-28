@@ -4,6 +4,13 @@
 #include "Entity.h"
 #include "Tile.h"
 
+extern "C" {
+# include <lua.h>
+# include <lauxlib.h>
+# include <lualib.h>
+}
+
+#include <LuaBridge.h>
 
 class Level;
 class World;
@@ -41,8 +48,13 @@ public:
 	void setSize(int width, int height);
 
 
+	void addEntity(Entity* entity);
 	void addEntity(Entity::Type type, int x, int y);
+
 	void addTile(Tile::Type type, int x, int y);
+	void addTile(luabridge::LuaRef& data, int x, int y);
+	void addTile(std::string tileName, int x, int y);
+	void addTile(Tile* tile);
 	void addTeleport(int x, int y, int targetX, int targetY);
 
 	void removeTile(int x, int y);

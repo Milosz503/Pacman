@@ -30,7 +30,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	
 
 	//world_.getScene()->prepareLevel(getContext().level);
-	LevelManager::loadLevel(world_.getScene(), "data/level.lua");
+	LevelManager::loadLevel(world_.getScene(), world_.getEntityManager(), "data/level.lua");
 
 
 
@@ -88,7 +88,7 @@ bool GameState::handleEvent(sf::Event event)
 			LevelManager levelManager(getContext().level);
 			levelManager.saveFile("level2.txt");
 
-			LevelManager::saveLevel(world_.getScene(), "data/level.lua");
+			//LevelManager::saveLevel(world_.getScene(), "data/level.lua");
 
 			requestStackPop();
 			requestStackPush(States::Menu);

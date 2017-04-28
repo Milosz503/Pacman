@@ -53,16 +53,16 @@ void Entity::update()
 		}
 	}
 
-	if (vulnerbailityTimer_ == frameNumber)
-	{
-		isVulnerable_ = Table[type_].isVulnerable;
-		
-		if (isVulnerable_)
-			animations_.play(Animation::Vulnerable);
-		else
-			animations_.play(Animation::Invulnerable);
+	//if (vulnerbailityTimer_ == frameNumber)
+	//{
+	//	isVulnerable_ = Table[type_].isVulnerable;
+	//	
+	//	if (isVulnerable_)
+	//		animations_.play(Animation::Vulnerable);
+	//	else
+	//		animations_.play(Animation::Invulnerable);
 
-	}
+	//}
 
 
 	//if (isVulnerable_ != Table[type_].isVulnerable)
@@ -75,7 +75,7 @@ void Entity::update()
 	//
 	//}
 
-	animations_.update(frameNumber);
+	//animations_.update(frameNumber);
 	
 
 
@@ -92,6 +92,11 @@ void Entity::setSpeed(DirectionX::Move x, DirectionY::Move y)
 sf::Vector2i Entity::getSpeed()
 {
 	return speed_;
+}
+
+void Entity::setDefaultSpeed(int speed)
+{
+	defaultSpeed_ = speed;
 }
 
 sf::Vector2i Entity::getNextMove()

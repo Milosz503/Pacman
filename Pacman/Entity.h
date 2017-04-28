@@ -29,6 +29,8 @@ public:
 	void setSpeed(DirectionX::Move x, DirectionY::Move y);
 	sf::Vector2i getSpeed();
 
+	void setDefaultSpeed(int speed);
+
 	sf::Vector2i getNextMove();
 	void setNextMove(sf::Vector2i nextMove);
 
