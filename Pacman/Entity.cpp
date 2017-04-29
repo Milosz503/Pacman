@@ -3,33 +3,33 @@
 #include "DataTables.h"
 #include "World.h"
 
-namespace
-{
-	const std::array<EntityTable, Entity::TypeCount> Table = initializeEntityData();
-}
+//namespace
+//{
+//	const std::array<EntityTable, Entity::TypeCount> Table = initializeEntityData();
+//}
 
 
-Entity::Entity(World* world, Type type, int x, int y) :
-	GameObject(world),
-	type_(type),
+Entity::Entity(World* world, int x, int y) :
+	GameObject(world, GameObject::Entity),
 	nextMove_(0, 0),
 	speed_(0, 0),
-	defaultSpeed_(Table[type].speed),
-	visionRange_(Table[type].visionRange),
-	hitpoints_(Table[type].hitpoints),
-	isVulnerable_(Table[type].isVulnerable),
-	animations_(this, Table[type].animations),
+	defaultSpeed_(20),
+	visionRange_(5),
+	hitpoints_(1),
+	isVulnerable_(true),
 	teleported_(false)
 	
 {
 	setPosition(x, y);
-	setTexture(Table[type].texture);
+	setTexture(TextureManager::getTexture(L'?', CharacterColor::Yellow));
 
 
 }
 
 void Entity::update()
 {
+	GameObject::update();
+
 	unsigned long long frameNumber = getWorld()->getFrameNumber();
 	getWorld()->getScene()->moveEntity(this, nextMove_);
 
@@ -114,10 +114,7 @@ sf::Vector2i Entity::getNextPosition()
 	return getPosition() + nextMove_;
 }
 
-Entity::Type Entity::getType()
-{
-	return type_;
-}
+
 
 int Entity::getHitpoints()
 {
@@ -136,15 +133,15 @@ bool Entity::isVulnerable()
 
 void Entity::setVulnerability(bool isVulnerable, int frames)
 {
-	if (frames != -1)
-		vulnerbailityTimer_ = getWorld()->getFrameNumber() + frames;
+	//if (frames != -1)
+	//	vulnerbailityTimer_ = getWorld()->getFrameNumber() + frames;
 
-	isVulnerable_ = isVulnerable;
+	//isVulnerable_ = isVulnerable;
 
-	if (isVulnerable_)
-		animations_.play(Animation::Vulnerable);
-	else
-		animations_.play(Animation::Invulnerable);
+	//if (isVulnerable_)
+	//	animations_.play(Animation::Vulnerable);
+	//else
+	//	animations_.play(Animation::Invulnerable);
 }
 
 bool Entity::isReadyToMove()

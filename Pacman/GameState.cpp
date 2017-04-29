@@ -85,8 +85,8 @@ bool GameState::handleEvent(sf::Event event)
 
 		if (event.key.code == Keyboard::Escape)
 		{
-			LevelManager levelManager(getContext().level);
-			levelManager.saveFile("level2.txt");
+			//LevelManager levelManager(getContext().level);
+			//levelManager.saveFile("level2.txt");
 
 			//LevelManager::saveLevel(world_.getScene(), "data/level.lua");
 

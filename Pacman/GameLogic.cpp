@@ -17,7 +17,7 @@ void GameLogic::update()
 	{
 		Tile* tile = scene_->getTile(entity->getX(), entity->getY());
 
-		if (tile != nullptr && tile->getType() == Tile::Teleport)
+		/*if (tile != nullptr && tile->getType() == Tile::Teleport)
 		{
 			if (entity->isReadyToMove())
 			{
@@ -26,20 +26,20 @@ void GameLogic::update()
 				entity->teleport(teleport->getTeleportLocation());
 
 			}
-		}
+		}*/
 	}
 
 	
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
 	{
-		getWorld()->getScene()->addTile(Tile::Wall,
-			getWorld()->getScene()->getPlayer()->getX(), getWorld()->getScene()->getPlayer()->getY());
+		//getWorld()->getScene()->addTile(Tile::Wall,
+		//	getWorld()->getScene()->getPlayer()->getX(), getWorld()->getScene()->getPlayer()->getY());
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
-		getWorld()->getScene()->addTile(Tile::Point,
-			getWorld()->getScene()->getPlayer()->getX(), getWorld()->getScene()->getPlayer()->getY());
+		//getWorld()->getScene()->addTile(Tile::Point,
+		//	getWorld()->getScene()->getPlayer()->getX(), getWorld()->getScene()->getPlayer()->getY());
 	}
 }
 
@@ -52,17 +52,18 @@ void GameLogic::onEvent(SystemEvent * event)
 	{
 		StaticCollision* collision = static_cast<StaticCollision*>(event);
 
-		if (collision->tile->getType() == Tile::Point)
+		/*if (collision->tile->getType() == Tile::Point)
 		{
 			collision->tile->markToRemove();
 			getWorld()->addScore();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		else */if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		{
 			collision->tile->markToRemove();
 		}
 
-		collision->tile->collision();
+		collision->tile->collide(collision->entity);
+		collision->entity->collide(collision->tile);
 			
 
 		break;

@@ -7,8 +7,7 @@
 EditState::EditState(StateStack & stack, Context context) :
 	State(stack, context),
 	textureManager_(context.textureManager),
-	console_(context.console),
-	level_(context.level)
+	console_(context.console)
 {
 }
 
@@ -18,7 +17,7 @@ EditState::~EditState()
 
 bool EditState::update(sf::Time dt)
 {
-	if (Mouse::isButtonPressed(Mouse::Button::Left))
+	/*if (Mouse::isButtonPressed(Mouse::Button::Left))
 	{
 		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
 
@@ -51,7 +50,7 @@ bool EditState::update(sf::Time dt)
 
 			level_->setTile(pos.x, pos.y, Tile::None);
 		}
-	}
+	}*/
 	/*if (Keyboard::isKeyPressed(Keyboard::Q))
 	{
 		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
@@ -105,7 +104,7 @@ bool EditState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
-		LevelManager levelManager(level_);
+		LevelManager levelManager;
 		levelManager.saveFile("level2.txt");
 
 		requestStackPop();
@@ -117,7 +116,7 @@ bool EditState::handleEvent(sf::Event event)
 
 void EditState::draw()
 {
-	ConsoleCharacter tile(textureManager_->getTexture('#', CharacterColor::White));
+	/*ConsoleCharacter tile(textureManager_->getTexture('#', CharacterColor::White));
 
 
 	for (int x = 0; x < level_->getSize().x; ++x)
@@ -131,6 +130,6 @@ void EditState::draw()
 			}
 			
 		}
-	}
+	}*/
 
 }

@@ -4,8 +4,7 @@
 using namespace sf;
 
 EditSystem::EditSystem(SystemManager * systemManager, World * world) :
-	System(systemManager, world),
-	selectedTile(Tile::Wall)
+	System(systemManager, world)
 {
 	window_ = getWorld()->getConsole()->getWindow();
 	scene_ = getWorld()->getScene();
@@ -23,7 +22,7 @@ void EditSystem::update()
 
 		if (isInsideScene(pos))
 		{
-			addTile(Tile::Point, pos);
+			//addTile(Tile::Point, pos);
 		}
 	}
 
@@ -34,7 +33,7 @@ void EditSystem::update()
 
 		if (isInsideScene(pos))
 		{
-			addTile(Tile::Wall, pos);
+			//addTile(Tile::Wall, pos);
 		}
 	}
 
@@ -92,12 +91,12 @@ void EditSystem::removeTile(sf::Vector2i position)
 	}
 }
 
-void EditSystem::addTile(Tile::Type type, sf::Vector2i position)
-{
-	if (scene_->getTile(position.x, position.y) == nullptr || scene_->getTile(position.x, position.y)->getType() == Tile::None)
-	{
-		scene_->addTile(type, position.x, position.y);
-
-
-	}
-}
+//void EditSystem::addTile(Tile::Type type, sf::Vector2i position)
+//{
+//	if (scene_->getTile(position.x, position.y) == nullptr || scene_->getTile(position.x, position.y)->getType() == Tile::None)
+//	{
+////		scene_->addTile(type, position.x, position.y);
+//
+//
+//	}
+//}

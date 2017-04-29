@@ -20,15 +20,15 @@ int main()
 	ConsoleWindow console(50, 50, &textureManager);
 
 
-	Level level;
+	//Level level;
 
-	LevelManager levelManager(&level);
+	LevelManager levelManager;
 	//levelManager.loadFromFile("level2.txt");
 	levelManager.loadFromLua("data/level.lua");
 
 	
 
-	State::Context context(&console, &textureManager, &level);
+	State::Context context(&console, &textureManager);
 
 
 	StateStack stack(context);

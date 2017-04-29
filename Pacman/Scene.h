@@ -12,7 +12,7 @@ extern "C" {
 
 #include <LuaBridge.h>
 
-class Level;
+
 class World;
 
 class Scene
@@ -21,7 +21,7 @@ public:
 	Scene(World* world);
 
 
-	void prepareLevel(Level * level);
+	//void prepareLevel(Level * level);
 
 	unsigned addH(int x, unsigned offset);
 	unsigned addV(int y, unsigned offset);
@@ -32,12 +32,12 @@ public:
 	unsigned normalizeH(int x);
 	unsigned normalizeV(int y);
 
-	sf::Vector2i normalize(sf::Vector2i position);
+	sf::Vector2i normalize(sf::Vector2i position) const;
 
 	bool isInside(unsigned x, unsigned y);
 	bool isTilePhysical(int x, int y);
 	bool isTilePhysicalF(sf::Vector2i& pos);
-	Tile* getTile(int x, int y);
+	Tile* getTile(int x, int y) const;
 
 	std::vector<Entity*>& getEntities();
 
@@ -49,13 +49,13 @@ public:
 
 
 	void addEntity(Entity* entity);
-	void addEntity(Entity::Type type, int x, int y);
+	//void addEntity(Entity::Type type, int x, int y);
 
-	void addTile(Tile::Type type, int x, int y);
-	void addTile(luabridge::LuaRef& data, int x, int y);
+	//void addTile(Tile::Type type, int x, int y);
+	//void addTile(luabridge::LuaRef& data, int x, int y);
 	void addTile(std::string tileName, int x, int y);
 	void addTile(Tile* tile);
-	void addTeleport(int x, int y, int targetX, int targetY);
+	//void addTeleport(int x, int y, int targetX, int targetY);
 
 	void removeTile(int x, int y);
 

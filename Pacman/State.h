@@ -33,12 +33,12 @@ public:
 
 	struct Context
 	{
-		Context(ConsoleWindow* console, TextureManager* textureManager, Level* level);
+		Context(ConsoleWindow* console, TextureManager* textureManager);
 
 		ConsoleWindow* console;
 		TextureManager* textureManager;
 
-		Level* level;
+		//Level* level;
 	};
 
 

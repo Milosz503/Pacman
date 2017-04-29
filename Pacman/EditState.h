@@ -16,7 +16,7 @@ private:
 
 	TextureManager* textureManager_;
 	ConsoleWindow* console_;
-	Level* level_;
+	//Level* level_;
 
 
 };

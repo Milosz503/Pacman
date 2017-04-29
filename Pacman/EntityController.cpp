@@ -47,7 +47,7 @@ void EntityController::update()
 
 void EntityController::update(Entity * entity)
 {
-	if ((entity->getType() == Entity::Ghost || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
+	if (entity->getName() != "player")// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
 	{
 		/*sf::IntRect rect = stage_->getBounds();
 
@@ -114,10 +114,10 @@ void EntityController::update(Entity * entity)
 
 void EntityController::handleCollision(Entity * entity, Tile * tile)
 {
-	if (entity->getType() == Entity::Ghost)
+	/*if (entity->getType() == Entity::Ghost)
 	{
 		entity->setSpeed((DirectionX::Move)(-entity->getSpeed().x), (DirectionY::Move)(-entity->getSpeed().y));
-	}
+	}*/
 }
 
 void EntityController::draw()
@@ -333,7 +333,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 	graph[start.x][start.y] = Visited;
 	distance[start.x][start.y] = 0;
 
-	nodes.push(NodePair(0, start));
+	nodes.push(NodePair(0.f, start));
 
 	int iterations = 0;
 
@@ -404,7 +404,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 			return dir;
 		}
 
-		int priority;
+		float priority;
 		int newCost;
 
 		sf::Vector2i newPos = pos;
@@ -498,7 +498,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 	graph[start.x][start.y] = Visited;
 	distance[start.x][start.y] = 0;
 
-	nodes.push(NodePair(0, start));
+	nodes.push(NodePair(0.f, start));
 	
 
 	int iterations = 0;

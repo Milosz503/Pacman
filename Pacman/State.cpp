@@ -35,10 +35,9 @@ State::Context State::getContext() const
 	return context_;
 }
 
-State::Context::Context(ConsoleWindow * console, TextureManager * textureManager, Level* level) :
+State::Context::Context(ConsoleWindow * console, TextureManager * textureManager) :
 
 	console(console),
-	textureManager(textureManager),
-	level(level)
+	textureManager(textureManager)
 {
 }

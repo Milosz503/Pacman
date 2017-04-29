@@ -135,6 +135,9 @@
     <ClInclude Include="LuaGameHandle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LuaObjectHandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -225,6 +228,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LuaGameHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaObjectHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

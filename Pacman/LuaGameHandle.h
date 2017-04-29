@@ -2,6 +2,19 @@
 
 #include "World.h"
 
+extern "C" {
+# include <lua.h>
+# include <lauxlib.h>
+# include <lualib.h>
+}
+
+#include <LuaBridge.h>
+
+struct ObjectEvent
+{
+
+};
+
 class LuaGameHandle
 {
 public:
@@ -9,6 +22,14 @@ public:
 
 	void addScore(int score);
 	int getScore();
+
+	LuaObjectHandle* getTile(int x, int y) const;
+
+	void removeTile(int x, int y);
+	void removeObject(LuaObjectHandle& objectHandle);
+
+
+
 
 
 	~LuaGameHandle();

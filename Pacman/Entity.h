@@ -19,10 +19,10 @@ namespace DirectionY
 class Entity : public GameObject
 {
 public:
-	enum Type { Pacman, Ghost, SlowGhost, TypeCount };
+	//enum Type { Pacman, Ghost, SlowGhost, TypeCount };
 
 
-	Entity(World* world, Type type, int x = 0, int y = 0);
+	Entity(World* world, int x = 0, int y = 0);
 
 	virtual void update();// override;
 
@@ -36,7 +36,6 @@ public:
 
 	sf::Vector2i getNextPosition();
 
-	Type getType();
 
 	int getHitpoints();
 	void setHitpoints(int hitpoints);
@@ -51,7 +50,7 @@ public:
 	~Entity();
 
 private:
-	Type type_;
+	//Type type_;
 
 	sf::Vector2i nextMove_;
 	sf::Vector2i speed_;
@@ -62,7 +61,7 @@ private:
 	bool isVulnerable_;
 
 	unsigned long long vulnerbailityTimer_;
-	AnimationPlayer animations_;
+	//AnimationPlayer animations_;
 
 	bool teleported_;
 	

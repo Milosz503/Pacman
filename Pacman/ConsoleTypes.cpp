@@ -29,12 +29,12 @@ sf::Vector2i ConsoleObject::getPosition()
 	return position_;
 }
 
-int ConsoleObject::getX()
+int ConsoleObject::getX() const
 {
 	return position_.x;
 }
 
-int ConsoleObject::getY()
+int ConsoleObject::getY() const
 {
 	return position_.y;
 }

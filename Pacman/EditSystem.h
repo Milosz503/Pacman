@@ -20,11 +20,11 @@ public:
 private:
 	sf::RenderWindow* window_;
 	Scene* scene_;
-	Tile::Type selectedTile;
+	//Tile::Type selectedTile;
 
 	sf::Vector2i getSelectedTile();
 	bool isInsideScene(sf::Vector2i position);
 	void removeTile(sf::Vector2i position);
-	void addTile(Tile::Type type, sf::Vector2i position);
+	//void addTile(Tile::Type type, sf::Vector2i position);
 };
 

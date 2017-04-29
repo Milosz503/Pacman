@@ -34,6 +34,7 @@ void TextureManager::loadTextures()
 	if (!tileset_.loadFromFile("tileset.png"))
 		std::cout << "ERROR LOAD TEXTURE" << std::endl;
 
+
 }
 
 TextureCharacter TextureManager::getTexture(wchar_t c, CharacterColor::Color color)

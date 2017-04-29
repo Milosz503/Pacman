@@ -19,8 +19,8 @@ public:
 	void move(const sf::Vector2i& offset);
 
 	sf::Vector2i getPosition();
-	int getX();
-	int getY();
+	int getX() const;
+	int getY() const;
 
 private:
 	

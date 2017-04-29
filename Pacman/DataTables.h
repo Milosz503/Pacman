@@ -19,29 +19,29 @@ namespace Category
 
 
 
-struct TileTable
-{
-	TextureCharacter texture;
-
-	bool isPhysical;
-};
-
-
-struct EntityTable
-{
-	unsigned speed;
-	unsigned visionRange;
-	int hitpoints;
-	bool isVulnerable;
+//struct TileTable
+//{
+//	TextureCharacter texture;
+//
+//	bool isPhysical;
+//};
 
 
-	TextureCharacter texture;
-	TextureCharacter secondTexture;
-	std::map<Animation::ID, Animation> animations;
-	
+//struct EntityTable
+//{
+//	unsigned speed;
+//	unsigned visionRange;
+//	int hitpoints;
+//	bool isVulnerable;
+//
+//
+//	TextureCharacter texture;
+//	TextureCharacter secondTexture;
+//	std::map<Animation::ID, Animation> animations;
+//	
+//
+//};
 
-};
 
-
-std::array<TileTable, Tile::TypeCount> initializeTileData();
-std::array<EntityTable, Entity::TypeCount> initializeEntityData();
+//std::array<TileTable, Tile::TypeCount> initializeTileData();
+//std::array<EntityTable, Entity::TypeCount> initializeEntityData();
