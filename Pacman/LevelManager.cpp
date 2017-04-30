@@ -10,6 +10,8 @@ extern "C" {
 
 #include <LuaBridge.h>
 
+#include "sol.hpp"
+
 using namespace luabridge;
 
 LevelManager::LevelManager()
@@ -167,9 +169,99 @@ void LevelManager::saveFile(std::string fileName)
 void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::string fileName)
 {
 	
+	sol::state lua;
+	lua.open_libraries(sol::lib::base);
+	auto result = lua.script_file(fileName, &sol::simple_on_error);
+	if (!result.valid())
+	{
+		sol::error e = result;
+		std::cout << "Error loading level: " << e.what() << std::endl;
+		return;
+	}
+
+	sol::table level = lua["level"];
+	sol::table tiles = lua["tiles"];
+
+	if (!level.valid() || !tiles.valid())
+	{
+		std::cout << "Error loading level or tiles!" << std::endl;
+		return;
+	}
+
+	int width = level["width"].get_or(0);
+	int height = level["height"].get_or(0);
+
+	scene->setSize(width, height);
 
 
-	lua_State* L = luaL_newstate();
+
+	for (int y = 1; y <= height; ++y)
+	{
+		sol::table row = level[y];
+		if (!level.valid())
+		{
+			std::cout << "Error parsing level! y = " << y << std::endl;
+			return;
+		}
+
+		for (int x = 1; x <= width; ++x)
+		{
+			int tileID = row[x].get_or(0);
+
+			sol::table tileData = tiles[tileID];
+			if (tileData.valid())
+			{
+				sol::optional<std::string> tileName = tileData["name"];
+				if (tileName)
+				{
+					scene->addTile(tileName.value(), x - 1, y - 1);
+				}
+			}
+
+		}
+	}
+
+	sol::table objects = lua["objects"];
+
+	if (!objects.valid())
+	{
+		std::cout << "Error loading objects!" << std::endl;
+	}
+	else
+	{
+		for (auto& cell : objects)
+		{
+
+			if (cell.second.get_type() == sol::type::table)
+			{
+				sol::table object = cell.second;
+
+				sol::optional<std::string> name = object["name"];
+				if (name)
+				{
+					int x = object["x"].get_or(0);
+					int y = object["y"].get_or(0);
+
+					Entity* entity = entityManager->createEntity(name.value());
+					entity->setPosition(x, y);
+
+					scene->addEntity(entity);
+				}
+			}
+			else
+			{
+				std::cout << "Object isnt table!" << std::endl;
+			}
+			
+
+			
+		}
+	}
+
+
+
+
+	/*lua_State* L = luaL_newstate();
 	if (luaL_dofile(L, fileName.c_str()) != 0)
 	{
 		std::cout << "Error loading file " << fileName << "  " << lua_tostring(L, -1) << std::endl;
@@ -177,9 +269,9 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 	}
 	luaL_openlibs(L);
 	lua_pcall(L, 0, 0, 0);
+*/
 
-
-	LuaRef level = getGlobal(L, "level");
+	/*LuaRef level = getGlobal(L, "level");
 	LuaRef tiles = getGlobal(L, "tiles");
 
 	if (level.isNil() || tiles.isNil())
@@ -241,9 +333,9 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 
 			
 		}
-	}
+	}*/
 
-	LuaRef objects = getGlobal(L, "objects");
+	/*LuaRef objects = getGlobal(L, "objects");
 
 	if (!objects.isNil())
 	{
@@ -274,7 +366,7 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 	}
 
 
-	lua_close(L);
+	lua_close(L);*/
 }
 
 static bool generateFile(lua_State* L, std::string fileName, std::vector<std::pair<std::string, LuaRef>>& data)

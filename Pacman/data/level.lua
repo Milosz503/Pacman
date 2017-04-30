@@ -51,6 +51,8 @@ objects = {
 		name = "redGhost",
 		x = 5,
 		y = 4,
-	}
+	},
+	
+	var = "Dw"
 
 }

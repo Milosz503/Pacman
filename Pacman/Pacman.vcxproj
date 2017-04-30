@@ -170,6 +170,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="LuaGameHandle.h" />
     <ClInclude Include="LuaObjectHandle.h" />
+    <ClInclude Include="sol.hpp" />
     <ClInclude Include="SystemEvent.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuState.h" />

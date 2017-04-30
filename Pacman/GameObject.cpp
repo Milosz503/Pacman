@@ -21,7 +21,9 @@ GameObject::GameObject(World* world, Type type) :
 	isToRemove_(false),
 	name_(""),
 	type_(type),
-	luaHandle_(this)
+	luaHandle_(this),
+	collisionFunction_(nullptr),
+	updateFunction_(nullptr)
 {
 }
 

@@ -11,6 +11,8 @@ extern "C" {
 
 #include <LuaBridge.h>
 
+#include "sol.hpp"
+
 class EntityManager
 {
 public:
@@ -19,17 +21,17 @@ public:
 
 	Tile* createTile(std::string tileName);
 	Entity* createEntity(std::string entityName);
-	Entity* createPlayer();
 
 
 	~EntityManager();
 
 private:
+	sol::state lua_;
 	lua_State* L;
 	World* world_;
 	std::map<std::string, Tile*> tileTemplates_;
 	std::map<std::string, Entity*> entityTemplates_;
-	Entity* playerTemplate_;
+
 
 
 	void addTile(luabridge::LuaRef data);

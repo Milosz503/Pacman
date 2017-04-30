@@ -18,6 +18,68 @@ using namespace luabridge;
 EntityManager::EntityManager(World* world) :
 	world_(world)
 {
+	lua_.open_libraries(sol::lib::base);
+	auto result = lua_.script_file("data/entities.lua", &sol::simple_on_error);
+	if (!result.valid())
+	{
+		sol::error e = result;
+		std::cout << "Error loading script: " << e.what() << std::endl;
+		return;
+	}
+
+	sol::table tiles = lua_["tiles"];
+	if (!tiles.valid())
+	{
+		std::cout << "Error parsing tiles: " << std::endl;
+		return;
+	}
+
+	for (auto& tilePair : tiles)
+	{
+		if (tilePair.second.get_type() == sol::type::table)
+		{
+			sol::table tile = tilePair.second;
+
+			sol::optional<std::string> name = tile["name"];
+			if (name)
+			{
+				bool isPhysical = tile["isPhysical"].get_or(false);
+				sol::table texture = tile["texture"];
+				int x = 0;
+				int y = 0;
+
+				if (texture.valid())
+				{
+					x = texture["x"].get_or(0);
+					y = texture["y"].get_or(0);
+				}
+
+				Tile* newTile = new Tile(world_);
+				newTile->setPhysical(isPhysical);
+
+				TextureCharacter textureCharacter;
+				textureCharacter.rect.x = x;
+				textureCharacter.rect.y = y;
+
+				newTile->setTexture(textureCharacter);
+
+
+				tileTemplates_.insert(std::pair<std::string, Tile*>(name.value(), newTile));
+
+
+			}
+			else
+			{
+				std::cout << "Error tile name" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Error parsing tile" << std::endl;
+		}
+	}
+
+
 
 	L = luaL_newstate();
 	luaL_openlibs(L);
@@ -31,46 +93,46 @@ EntityManager::EntityManager(World* world) :
 
 
 
-	getGlobalNamespace(L).
-		beginClass<LuaObjectHandle>("LuaObjectHandle").
-			addProperty("x", &LuaObjectHandle::getX).
-			addProperty("y", &LuaObjectHandle::getY).
-			addProperty("name", &LuaObjectHandle::getName).
-			addProperty("type", &LuaObjectHandle::getType).
-			addFunction("setPosition", &LuaObjectHandle::setPosition).
-			addFunction("setColor", &LuaObjectHandle::setColor).
-			addFunction("setTexture", &LuaObjectHandle::setTexture).
-		endClass();
+	//getGlobalNamespace(L).
+	//	beginClass<LuaObjectHandle>("LuaObjectHandle").
+	//		addProperty("x", &LuaObjectHandle::getX).
+	//		addProperty("y", &LuaObjectHandle::getY).
+	//		addProperty("name", &LuaObjectHandle::getName).
+	//		addProperty("type", &LuaObjectHandle::getType).
+	//		addFunction("setPosition", &LuaObjectHandle::setPosition).
+	//		addFunction("setColor", &LuaObjectHandle::setColor).
+	//		addFunction("setTexture", &LuaObjectHandle::setTexture).
+	//	endClass();
 
-	getGlobalNamespace(L).
-		beginClass<LuaGameHandle>("LuaGameHandle").
-			addFunction("addScore", &LuaGameHandle::addScore).
-			addFunction("getScore", &LuaGameHandle::getScore).
-			addFunction("removeTile", &LuaGameHandle::removeTile).
-			addFunction("removeObject", &LuaGameHandle::removeObject).
-			addFunction("getTile", &LuaGameHandle::getTile).
-		endClass();
+	//getGlobalNamespace(L).
+	//	beginClass<LuaGameHandle>("LuaGameHandle").
+	//		addFunction("addScore", &LuaGameHandle::addScore).
+	//		addFunction("getScore", &LuaGameHandle::getScore).
+	//		addFunction("removeTile", &LuaGameHandle::removeTile).
+	//		addFunction("removeObject", &LuaGameHandle::removeObject).
+	//		addFunction("getTile", &LuaGameHandle::getTile).
+	//	endClass();
 
-	LuaRef handle(L);
-	handle = *world_->getLuaGameHandle();
+	//LuaRef handle(L);
+	//handle = *world_->getLuaGameHandle();
 
-	setGlobal(L, *world_->getLuaGameHandle(), "world");
+//	setGlobal(L, *world_->getLuaGameHandle(), "world");
 
 	//getGlobalNamespace(L).addVariable("world", &handle, false);
 	
 
-	LuaRef tiles = getGlobal(L, "tiles");
+	//LuaRef tiles = getGlobal(L, "tiles");
 
-	if (tiles.isNil())
+	/*if (tiles.isNil())
 	{
 		std::cout << "Error loading tiles!" << lua_tostring(L, -1) << std::endl;
 		return;
-	}
+	}*/
 
-	for (int i = 1; !tiles[i].isNil(); ++i)
+	/*for (int i = 1; !tiles[i].isNil(); ++i)
 	{
 		addTile(tiles[i]);
-	}
+	}*/
 
 
 
@@ -87,33 +149,7 @@ EntityManager::EntityManager(World* world) :
 	}
 
 
-	playerTemplate_ = new Entity(world_);
-	playerTemplate_->setName("player");
-	
-	LuaRef playerData = getGlobal(L, "player");
-	if (playerData.isNil())
-	{
-		std::cout << "Error loading player!" << lua_tostring(L, -1) << std::endl;
-		return;
-	}
-	else
-	{
-		playerTemplate_->setLuaFunctions(playerData);
-	}
-	if (!playerData["texture"].isNil())
-	{
-		luabridge::LuaRef texture = playerData["texture"];
 
-		if (!texture["x"].isNil() && texture["x"].isNumber() &&
-			!texture["y"].isNil() && texture["y"].isNumber())
-		{
-			TextureCharacter textureCharacter;
-			textureCharacter.rect.x = texture["x"].cast<int>();
-			textureCharacter.rect.y = texture["y"].cast<int>();
-
-			playerTemplate_->setTexture(textureCharacter);
-		}
-	}
 
 
 	//lua_close(L);
@@ -125,7 +161,7 @@ void EntityManager::addTile(luabridge::LuaRef data)
 	{
 		Tile* tile = new Tile(world_);
 
-		tile->setLuaFunctions(data);
+		//tile->setLuaFunctions(data);
 		
 		tile->setName(data["name"].cast<std::string>());
 
@@ -147,7 +183,7 @@ void EntityManager::addTile(luabridge::LuaRef data)
 				tile->setTexture(textureCharacter);
 			}
 		}
-		tile->setLuaData(newTable(L));
+		//tile->setLuaData(newTable(L));
 
 		tileTemplates_.insert(std::pair<std::string, Tile*>(data["name"].cast<std::string>(), tile));
 
@@ -159,7 +195,7 @@ void EntityManager::addEntity(luabridge::LuaRef data)
 	if (!data["name"].isNil() && data["name"].isString())
 	{
 		Entity* entity = new Entity(world_);
-		entity->setLuaFunctions(data);
+		//entity->setLuaFunctions(data);
 
 		entity->setName(data["name"].cast<std::string>());
 
@@ -210,10 +246,7 @@ Entity * EntityManager::createEntity(std::string entityName)
 	return new Entity(*entityTemplates_.at(entityName));
 }
 
-Entity * EntityManager::createPlayer()
-{
-	return new Entity(*playerTemplate_);
-}
+
 
 
 EntityManager::~EntityManager()

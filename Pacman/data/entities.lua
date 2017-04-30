@@ -36,7 +36,7 @@
 
 }
 
-vars = {};
+
 
 tiles = {
 	
@@ -45,7 +45,7 @@ tiles = {
 		isPhysical = false,
 		texture = {
 			x = 5,
-			y = 10+(color.RED*16),
+			y = 10,--+(color.RED*16),
 		},
 		
 	},
@@ -59,8 +59,8 @@ tiles = {
 		},
 		
 		collide = function(self, object)
-			print("TELEPORT")
-			object:setPosition(3, 4)
+			-- print("TELEPORT")
+			-- object:setPosition(3, 4)
 			
 		end,
 	},
@@ -74,13 +74,13 @@ tiles = {
 		},
 		
 		collide = function(self, object)
-			tile = world:getTile(6, 4)
-			if tile then
-				print("tile ")
-				print(tile)
-				tile:setColor(color.LIGHTGREY)
-				tile:setTexture(2, 2)
-			end
+			-- tile = world:getTile(6, 4)
+			-- if tile then
+				-- print("tile ")
+				-- print(tile)
+				-- tile:setColor(color.LIGHTGREY)
+				-- tile:setTexture(2, 2)
+			--end
 		end
 		
 	},
@@ -95,17 +95,15 @@ tiles = {
 		
 		
 		update = function(self, data)
-			if vars[1] == nil then vars[1] = 1; end
-			vars[1] = vars[1] + 1;
-			print(vars[1])
+			
 		end,
 		
 		collide = function(self, object)
 			--print("KOLIZJA")
-			if object.name == "player" then
-				world:removeObject(self)
-				world:addScore(1)
-			end
+			-- if object.name == "player" then
+				-- world:removeObject(self)
+				-- world:addScore(1)
+			--end
 			
 
 			
