@@ -24,9 +24,11 @@ public:
 	int getScore();
 
 	LuaObjectHandle* getTile(int x, int y) const;
+	LuaObjectHandle* findEntity(sol::function condition);
 
 	void removeTile(int x, int y);
 	void removeObject(LuaObjectHandle& objectHandle);
+
 
 
 

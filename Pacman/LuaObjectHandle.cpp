@@ -32,6 +32,11 @@ std::string LuaObjectHandle::getType() const
 	return "tile";
 }
 
+std::string LuaObjectHandle::getCategory() const
+{
+	return object_->getCategory();
+}
+
 GameObject * LuaObjectHandle::getObject()
 {
 	return object_;
@@ -78,6 +83,64 @@ void LuaObjectHandle::setTexture(int x, int y)
 	}
 
 	object_->setTexture(texture);
+}
+
+void LuaObjectHandle::setSpeed(int x, int y)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		static_cast<Entity*>(object_)->setSpeed(
+			static_cast<Direction::X>(x), static_cast<Direction::Y>(y));
+	}
+	else
+	{
+		std::cout << "Error can not set speed to 'tile'!" << std::endl;
+	}
+}
+
+void LuaObjectHandle::setDefaultSpeed(int speed)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		static_cast<Entity*>(object_)->setDefaultSpeed(speed);
+	}
+	else
+	{
+		std::cout << "Error can not set speed to 'tile'!" << std::endl;
+	}
+}
+
+int LuaObjectHandle::getDefaultSpeed()
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		return static_cast<Entity*>(object_)->getDefaultSpeed();
+	}
+	else
+	{
+		std::cout << "Error 'tile' doesn't have speed!" << std::endl;
+	}
+	return 0;
+}
+
+int LuaObjectHandle::getHp()
+{
+	return object_->getHp();
+}
+
+void LuaObjectHandle::heal(unsigned hp)
+{
+	object_->setHp(object_->getHp() + hp);
+}
+
+void LuaObjectHandle::damage(unsigned dmg)
+{
+	object_->setHp(object_->getHp() - dmg);
+}
+
+void LuaObjectHandle::remove()
+{
+	object_->markToRemove();
 }
 
 

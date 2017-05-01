@@ -14,18 +14,30 @@ public:
 
 	std::string getName() const;
 	std::string getType() const;
-
-	GameObject* getObject();
+	std::string getCategory() const;
+	
 
 	void setPosition(int x, int y);
 
 	void setColor(int color);
 	void setTexture(int x, int y);
 
-	
+	void setSpeed(int x, int y);
+	void setDefaultSpeed(int speed);
+	int getDefaultSpeed();
+
+	int getHp();
+	void heal(unsigned hp);
+	void damage(unsigned dmg);
+
+
+	void remove();
 
 
 
+
+
+	GameObject* getObject();
 
 	~LuaObjectHandle();
 

@@ -7,14 +7,13 @@
 
 class World;
 
-namespace DirectionX
+namespace Direction
 {
-	enum Move {Left = -1, Zero = 0, Right = 1};
+	enum X { Left = -1, ZeroX = 0, Right = 1 };
+	enum Y { Up = -1, ZeroY = 0, Down = 1 };
 }
-namespace DirectionY
-{
-	enum Move { Up = -1, Zero = 0, Down = 1};
-}
+
+
 
 class Entity : public GameObject
 {
@@ -26,10 +25,12 @@ public:
 
 	virtual void update();// override;
 
-	void setSpeed(DirectionX::Move x, DirectionY::Move y);
+
+	void setSpeed(Direction::X x, Direction::Y y);
 	sf::Vector2i getSpeed();
 
 	void setDefaultSpeed(int speed);
+	int getDefaultSpeed();
 
 	sf::Vector2i getNextMove();
 	void setNextMove(sf::Vector2i nextMove);

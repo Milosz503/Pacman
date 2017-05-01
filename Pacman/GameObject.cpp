@@ -85,6 +85,16 @@ GameObject::Type GameObject::getType()
 	return type_;
 }
 
+void GameObject::setHp(int hp)
+{
+	hp_ = hp;
+}
+
+int GameObject::getHp() const
+{
+	return hp_;
+}
+
 void GameObject::setLuaFunctions(sol::table data)
 {
 	sol::optional<sol::protected_function> update = data["update"];

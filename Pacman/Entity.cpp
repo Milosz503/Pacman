@@ -81,10 +81,25 @@ void Entity::update()
 
 }
 
-void Entity::setSpeed(DirectionX::Move x, DirectionY::Move y)
+
+
+void Entity::setSpeed(Direction::X x, Direction::Y y)
 {
-	speed_.x = x;
-	speed_.y = y;
+	if (x == 0)
+		speed_.x = 0;
+	else if (x < 0)
+		speed_.x = -1;
+	else
+		speed_.x = 1;
+
+	if (y == 0)
+		speed_.y = 0;
+	else if (y < 0)
+		speed_.y = -1;
+	else
+		speed_.y = 1;
+
+
 }
 
 sf::Vector2i Entity::getSpeed()
@@ -95,6 +110,11 @@ sf::Vector2i Entity::getSpeed()
 void Entity::setDefaultSpeed(int speed)
 {
 	defaultSpeed_ = speed;
+}
+
+int Entity::getDefaultSpeed()
+{
+	return defaultSpeed_;
 }
 
 sf::Vector2i Entity::getNextMove()

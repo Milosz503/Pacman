@@ -9,7 +9,7 @@
 EntityManager::EntityManager(World* world) :
 	world_(world)
 {
-	lua_.open_libraries(sol::lib::base);
+	lua_.open_libraries(sol::lib::base, sol::lib::math);
 	auto result = lua_.script_file("data/entities.lua", &sol::simple_on_error);
 	if (!result.valid())
 	{
@@ -31,12 +31,29 @@ EntityManager::EntityManager(World* world) :
 		"y", sol::property(&LuaObjectHandle::getY),
 		"name", sol::property(&LuaObjectHandle::getName),
 		"type", sol::property(&LuaObjectHandle::getType),
+		"category", sol::property(&LuaObjectHandle::getCategory),
 		"setColor", &LuaObjectHandle::setColor,
-		"setTexture", &LuaObjectHandle::setTexture
+		"setTexture", &LuaObjectHandle::setTexture,
+		"setSpeed", &LuaObjectHandle::setSpeed,
+		"defaultSpeed", sol::property(&LuaObjectHandle::getDefaultSpeed, &LuaObjectHandle::setDefaultSpeed),
+		"hp", sol::property(&LuaObjectHandle::getHp),
+		"heal", &LuaObjectHandle::heal,
+		"damage", &LuaObjectHandle::damage,
+		"remove", &LuaObjectHandle::remove
 
 		);
 
+	lua_.new_usertype<LuaGameHandle>("LuaGameHandle",
+		"score", sol::property(&LuaGameHandle::getScore),
+		"addScore", &LuaGameHandle::addScore,
+		"getTile", &LuaGameHandle::getTile,
+		"removeTile", &LuaGameHandle::removeTile,
+		"removeObject", &LuaGameHandle::removeObject,
+		"findEntity", &LuaGameHandle::findEntity
+		);
 
+
+	lua_["world"] = LuaGameHandle(world);
 
 
 

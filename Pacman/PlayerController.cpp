@@ -6,8 +6,8 @@ using namespace sf;
 
 PlayerController::PlayerController(SystemManager* systemManager, World* world) :
 	System(systemManager, world),
-	newDirX(DirectionX::Zero),
-	newDirY(DirectionY::Zero)
+	newDirX(Direction::ZeroX),
+	newDirY(Direction::ZeroY)
 {
 }
 
@@ -19,27 +19,27 @@ PlayerController::~PlayerController()
 void PlayerController::update()
 {
 
-	DirectionX::Move x = DirectionX::Zero;
-	DirectionY::Move y = DirectionY::Zero;
+	Direction::X x = Direction::ZeroX;
+	Direction::Y y = Direction::ZeroY;
 
 	if (Keyboard::isKeyPressed(Keyboard::Up))
 	{
-		y = DirectionY::Up;
+		y = Direction::Up;
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Down))
 	{
-		y = DirectionY::Down;
+		y = Direction::Down;
 
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
-		x = DirectionX::Left;
+		x = Direction::Left;
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
-		x = DirectionX::Right;
+		x = Direction::Right;
 	}
-	if (x == DirectionX::Zero && y == DirectionY::Zero)
+	if (x == Direction::ZeroX && y == Direction::ZeroY)
 	{
 		x = newDirX;
 		y = newDirY;
@@ -51,7 +51,7 @@ void PlayerController::update()
 	}
 
 
-	if (x != DirectionX::Zero || y != DirectionY::Zero)
+	if (x != Direction::ZeroX || y != Direction::ZeroY)
 	{
 		
 
@@ -64,12 +64,12 @@ void PlayerController::update()
 		{
 			
 
-			x = DirectionX::Zero;
-			y = DirectionY::Zero;
+			x = Direction::ZeroX;
+			y = Direction::ZeroY;
 		}
 
 	}
 
-	if(x != DirectionX::Zero || y != DirectionY::Zero)
+	if(x != Direction::ZeroX || y != Direction::ZeroY)
 		getWorld()->getScene()->getPlayer()->setSpeed(x, y);
 }

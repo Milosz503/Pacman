@@ -18,8 +18,8 @@ public:
 
 private:
 
-	DirectionX::Move newDirX;
-	DirectionY::Move newDirY;
+	Direction::X newDirX;
+	Direction::Y newDirY;
 
 };
 

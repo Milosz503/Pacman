@@ -94,18 +94,18 @@ void EntityController::update(Entity * entity)
 			
 
 
-		DirectionX::Move x;
-		DirectionY::Move y;
+		Direction::X x;
+		Direction::Y y;
 
-		if (dir.x > 0) x = DirectionX::Right;
-		else if (dir.x < 0) x = DirectionX::Left;
-		else x = DirectionX::Zero;
+		if (dir.x > 0) x = Direction::Right;
+		else if (dir.x < 0) x = Direction::Left;
+		else x = Direction::ZeroX;
 
-		if (dir.y > 0) y = DirectionY::Down;
-		else if (dir.y < 0) y = DirectionY::Up;
-		else y = DirectionY::Zero;
+		if (dir.y > 0) y = Direction::Down;
+		else if (dir.y < 0) y = Direction::Up;
+		else y = Direction::ZeroY;
 
-		entity->setSpeed(x, y);
+		//entity->setSpeed(x, y);
 
 		
 

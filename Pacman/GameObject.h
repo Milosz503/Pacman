@@ -35,6 +35,9 @@ public:
 
 	Type getType();
 
+	void setHp(int hp);
+	int getHp() const;
+
 	
 
 	void collide(GameObject* collidingObject);
@@ -53,13 +56,15 @@ private:
 	World* world_;
 	bool isToRemove_;
 
-	std::string name_;
-	Type type_;
-	std::string category_;
-
 	LuaObjectHandle luaHandle_;
 	std::shared_ptr<sol::protected_function> collisionFunction_;
 	std::shared_ptr<sol::protected_function> updateFunction_;
+
+	std::string name_;
+	Type type_;
+	std::string category_;
+	
+	int hp_;
 
 
 	void setLuaFunctions(sol::table data);
