@@ -104,8 +104,7 @@ bool EditState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
-		LevelManager levelManager;
-		levelManager.saveFile("level2.txt");
+
 
 		requestStackPop();
 		requestStackPush(States::Menu);

@@ -1,104 +1,77 @@
 
- 
- -- player = 
- -- {
-	-- texture = {
-		-- x = 0,
-		-- y = 2,
-	-- }
- -- }
- color = dofile("data/colors.lua")
+Colors = dofile("data/colors.lua")
  
  
- entities = {
  
-	{
-		name = "redGhost",
-		texture = {
-			x = 5,
-			y = 2,
-		},
+ 
+ 
+entities = {
+ 
+	RedGhost = {
+		type = "entity";
+		category = "ghost";
 		
-		speed = 20,
-		visionRange = 4,
+		speed = 20;
+		visionRange = 4;
+		texture = {x = 5, y = 2, color = Colors.red};
 	},
 	
-	{
-		name = "player",
-		texture = {
-			x = 0,
-			y = 2,
-		},
+	
+	Player = {
+		type = "entity";
+		category = "player";
 		
-		speed = 10,
-		visionRange = 4,
-	}
+		speed = 10;
+		texture = {x = 0, y = 2, color = Colors.yellow};
+		
+	},
+ 
 
 }
 
 
 
 tiles = {
-	
-	{ 
-		name = "floor",
-		isPhysical = false,
-		texture = {
-			x = 5,
-			y = 10,--+(color.RED*16),
-		},
-		
-	},
-	
-	{
-		name = "teleport",
-		isPhysical = false,
-		texture = {
-			x = 5,
-			y = 74,
-		},
-		
-		collide = function()
-			
-		end,
-	},
-	
-	{
-		name = "wall",
-		isPhysical = true,
-		texture = {
-			x = 4,
-			y = 3,
-		},
-		
-		collide = function()
-			print("WALL COL")
-		end
-		
-	},
-	
-	{
-		name = "point",
-		isPhysical = false,
-		texture = {
-			x = 10,
-			y = 44,
-		},
-		
-		
-		update = function()
-			
-		end,
-		
-		collide = function()
 
+	Wall = {
+		type = "tile";
+		category = "wall";
+		
+		isPhysical = true;
+		texture = {x = 4, y = 3; color = Colors.blue};
+		
+		collide = function (self)
+			print("collide wall ".. self.x .. " " .. self.y .. " " .. self.name .. " " .. self.type)
 			
-		end,
-		
-		onEvent = function(tile, event)
-		
+			self:setColor(Colors.red)
+			
 		end
 		
 	},
+	
+	Point = {
+		type = "tile";
+		category = "point";
+		
+		isPhysical = false;
+		texture = {x = 10, y = 12; color = Colors.green};
+	},
+	
+	Teleport = {
+		type = "tile";
+		category = "teleport";
+		
+		isPhysical = false;
+		texture = {x = 5, y = 74};
+	},
+	
+	Floor = { 
+		type = "tile";
+		category = "none";
+		
+		isPhysical = false;
+		texture = {x = 5, y = 10, color = Colors.darkGrey};
+	},
+
 
 }

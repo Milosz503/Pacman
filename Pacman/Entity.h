@@ -22,7 +22,7 @@ public:
 	//enum Type { Pacman, Ghost, SlowGhost, TypeCount };
 
 
-	Entity(World* world, int x = 0, int y = 0);
+	Entity(World* world, sol::table& data);
 
 	virtual void update();// override;
 

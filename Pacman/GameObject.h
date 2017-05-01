@@ -6,14 +6,6 @@
 #include "Animation.h"
 #include "LuaObjectHandle.h"
 
-extern "C" {
-# include <lua.h>
-# include <lauxlib.h>
-# include <lualib.h>
-}
-
-#include <LuaBridge.h>
-
 #include "sol.hpp"
 
 class Stage;
@@ -27,9 +19,8 @@ public:
 	enum Type {Tile, Entity};
 
 	GameObject(const GameObject& obj);
-	GameObject(World* world, Type type);
+	GameObject(World* world, Type type, sol::table& data);
 
-	void setLuaData(luabridge::LuaRef luaData);
 
 	virtual bool isToRemove();
 	virtual void markToRemove();
@@ -39,9 +30,12 @@ public:
 	void setName(std::string name);
 	std::string getName();
 
+	void setCategory(std::string category);
+	std::string getCategory();
+
 	Type getType();
 
-	void setLuaFunctions(sol::table data);
+	
 
 	void collide(GameObject* collidingObject);
 	LuaObjectHandle& getHandle();
@@ -57,17 +51,21 @@ protected:
 
 private:
 	World* world_;
-	luabridge::LuaRef* luaData_;
 	bool isToRemove_;
 
 	std::string name_;
 	Type type_;
+	std::string category_;
+
 	LuaObjectHandle luaHandle_;
+	std::shared_ptr<sol::protected_function> collisionFunction_;
+	std::shared_ptr<sol::protected_function> updateFunction_;
 
 
+	void setLuaFunctions(sol::table data);
 
-	std::shared_ptr<sol::function> collisionFunction_;
-	std::shared_ptr<sol::function> updateFunction_;
+	bool callFunction(std::shared_ptr<sol::protected_function>& func, std::string name);
+
 	
 	
 };

@@ -5,32 +5,43 @@
 
 GameObject::GameObject(const GameObject & obj) :
 	ConsoleCharacter(obj),
-	luaData_(obj.luaData_),
 	world_(obj.world_),
 	isToRemove_(obj.isToRemove_),
 	name_(obj.name_),
 	type_(obj.type_),
+	category_(obj.category_),
 	luaHandle_(this),
 	collisionFunction_(obj.collisionFunction_),
 	updateFunction_(obj.updateFunction_)
 {
 }
 
-GameObject::GameObject(World* world, Type type) :
+GameObject::GameObject(World* world, Type type, sol::table& data) :
 	world_(world),
 	isToRemove_(false),
 	name_(""),
 	type_(type),
+	category_("none"),
 	luaHandle_(this),
 	collisionFunction_(nullptr),
 	updateFunction_(nullptr)
 {
+
+	int textureY = data["texture"]["y"].get_or(0);
+	int color = data["texture"]["color"].get_or(0);
+	TextureCharacter textureCharacter;
+	textureCharacter.rect.x = data["texture"]["x"].get_or(0);
+	textureCharacter.rect.y = color * 16 + textureY;
+
+	std::string category = data["category"].get_or<std::string>("none");
+
+	setTexture(textureCharacter);
+	setCategory(category);
+
+	setLuaFunctions(data);
 }
 
-void GameObject::setLuaData(luabridge::LuaRef luaData)
-{
-	luaData_ = new luabridge::LuaRef(luaData);
-}
+
 
 
 
@@ -46,12 +57,7 @@ void GameObject::markToRemove()
 
 void GameObject::update()
 {
-	if (updateFunction_ != nullptr)
-	{
-
-		(*updateFunction_)();
-
-	}
+	callFunction(updateFunction_, "update");
 }
 
 void GameObject::setName(std::string name)
@@ -64,6 +70,16 @@ std::string GameObject::getName()
 	return name_;
 }
 
+void GameObject::setCategory(std::string category)
+{
+	category_ = category;
+}
+
+std::string GameObject::getCategory()
+{
+	return category_;
+}
+
 GameObject::Type GameObject::getType()
 {
 	return type_;
@@ -71,44 +87,43 @@ GameObject::Type GameObject::getType()
 
 void GameObject::setLuaFunctions(sol::table data)
 {
-	sol::optional<sol::function> update = data["update"];
+	sol::optional<sol::protected_function> update = data["update"];
 	if (update)
 	{
-		updateFunction_ = std::make_shared<sol::function>(update.value());
+		updateFunction_ = std::make_shared<sol::protected_function>(update.value());
 	}
 
-	sol::optional<sol::function> collide = data["collide"];
+	sol::optional<sol::protected_function> collide = data["collide"];
 	if (collide)
 	{
-		collisionFunction_ = std::make_shared<sol::function>(collide.value());
+		collisionFunction_ = std::make_shared<sol::protected_function>(collide.value());
 	}
-
-	//if(!object["collide"].isNil() && object["collide"].isFunction())
-	//	collisionFunction_ = std::make_shared<luabridge::LuaRef>(object["collide"]);
-
-	//if (!object["update"].isNil() && object["update"].isFunction())
-	//	updateFunction_ = std::make_shared<luabridge::LuaRef>(object["update"]);
 }
 
 void GameObject::collide(GameObject * collidingObject)
 {
-	if (collisionFunction_ != nullptr)
-	{
-
-
-			(*collisionFunction_)();
-
-
-	}
-
-	else
-	{
-		//std::cout << "Func doesn't exist" << std::endl;
-	}
+	callFunction(collisionFunction_, "colide");
 }
 
 GameObject::~GameObject()
 {
+}
+
+bool GameObject::callFunction(std::shared_ptr<sol::protected_function>& func, std::string name)
+{
+	if (func != nullptr)
+	{
+		auto result = (*func)(luaHandle_);
+
+		if (!result.valid())
+		{
+			sol::error e = result;
+			std::cout << "ERROR entity " << name_ << " in " << name << " function: " << e.what() << std::endl;
+		}
+
+	}
+
+	return true;
 }
 
 World * GameObject::getWorld()

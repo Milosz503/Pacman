@@ -21,38 +21,38 @@ level = {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
  height = 20, width = 20}
 tiles = {
 	[0] = {
-		type = "point",
-		name = "point"
+		type = "Point",
+		name = "Point"
 	},
 	[1] = {
-		type = "wall",
-		name = "wall",
+		type = "Wall",
+		name = "Wall",
 		texture = "T",
 		textureX = 2,
 		textureY = 4
 	},
 	[2] = {
-		name = "floor",
+		name = "Floor",
 	},
 	
 	[3] = {
-		name = "teleport",
+		name = "Teleport",
 	},
 }
 
 objects = {
 	{
-		name = "player",
+		name = "Player",
 		x = 2,
 		y = 3,
 	},
 	
 	{
-		name = "redGhost",
+		name = "RedGhost",
 		x = 5,
 		y = 4,
 	},
 	
-	var = "Dw"
+
 
 }

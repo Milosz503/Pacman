@@ -47,7 +47,7 @@ void EntityController::update()
 
 void EntityController::update(Entity * entity)
 {
-	if (entity->getName() != "player")// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
+	if (entity->getCategory() == "ghost")// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
 	{
 		/*sf::IntRect rect = stage_->getBounds();
 

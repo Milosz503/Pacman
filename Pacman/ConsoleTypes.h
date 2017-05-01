@@ -10,7 +10,7 @@ class ConsoleObject
 {
 public:
 
-	
+	ConsoleObject();
 
 	void setPosition(const sf::Vector2i& position);
 	void setPosition(int x, int y);

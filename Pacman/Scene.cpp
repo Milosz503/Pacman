@@ -250,7 +250,8 @@ void Scene::addEntity(Entity * entity)
 {
 	entities_.push_back(entity);
 
-	if (entity->getName() == "player")
+
+	if (entity->getCategory() == "player")
 	{
 		player_ = entity;
 	}

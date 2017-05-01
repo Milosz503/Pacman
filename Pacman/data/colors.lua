@@ -12,12 +12,14 @@ colors = {
 }
 
 return {
-	WHITE = 0;
-	RED = 1;
-	GREEN = 2;
-	BLUE = 3;
-	YELLOW = 4;
-	GREY = 5;
-	DARKGREY = 6;
-	LIGHTGREY = 7;
+	white = 0;
+	red = 1;
+	green = 2;
+	blue = 3;
+	yellow = 4;
+	grey = 5;
+	darkgrey = 6;
+	lightgrey = 7;
 }
+
+

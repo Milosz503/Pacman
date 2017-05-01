@@ -18,6 +18,28 @@ EntityManager::EntityManager(World* world) :
 		return;
 	}
 
+	lua_["errorHandler"].set_function([](std::string err) {
+		//std::cout << "Error calling lua function: " + err << std::endl;
+		return err; 
+	});
+
+	sol::protected_function::set_default_handler(lua_["errorHandler"]);
+
+
+	lua_.new_usertype<LuaObjectHandle>("LuaObjectHandle",
+		"x", sol::property(&LuaObjectHandle::getX),
+		"y", sol::property(&LuaObjectHandle::getY),
+		"name", sol::property(&LuaObjectHandle::getName),
+		"type", sol::property(&LuaObjectHandle::getType),
+		"setColor", &LuaObjectHandle::setColor,
+		"setTexture", &LuaObjectHandle::setTexture
+
+		);
+
+
+
+
+
 	sol::table tiles = lua_["tiles"];
 	if (!tiles.valid())
 	{
@@ -34,9 +56,11 @@ EntityManager::EntityManager(World* world) :
 
 	for (auto& tilePair : tiles)
 	{
-		if (tilePair.second.get_type() == sol::type::table)
+		if (tilePair.first.get_type() == sol::type::string && tilePair.second.get_type() == sol::type::table)
 		{
-			addTile(tilePair.second);
+			std::string name = tilePair.first.as<std::string>();
+
+			addTile(name, tilePair.second);
 		}
 		else
 		{
@@ -47,9 +71,11 @@ EntityManager::EntityManager(World* world) :
 
 	for (auto& entityPair : entities)
 	{
-		if (entityPair.second.get_type() == sol::type::table)
+		if (entityPair.first.get_type() == sol::type::string && entityPair.second.get_type() == sol::type::table)
 		{
-			addEntity(entityPair.second);
+			std::string name = entityPair.first.as<std::string>();
+
+			addEntity(name, entityPair.second);
 		}
 		else
 		{
@@ -59,53 +85,27 @@ EntityManager::EntityManager(World* world) :
 
 }
 
-void EntityManager::addTile(sol::table data)
+void EntityManager::addTile(std::string name, sol::table data)
 {
-	sol::optional<std::string> hasName = data["name"];
+	std::string category = data["category"].get_or<std::string>("none");
 
-	if (hasName)
-	{
-		TextureCharacter textureCharacter;
-		textureCharacter.rect.x = data["texture"]["x"].get_or(0);
-		textureCharacter.rect.y = data["texture"]["y"].get_or(0);
-		bool isPhysical = data["isPhysical"].get_or(false);
 
-		Tile* tile = new Tile(world_);
-		tile->setName(hasName.value());
-		tile->setPhysical(isPhysical);
-		tile->setTexture(textureCharacter);
-		tile->setLuaFunctions(data);
+	Tile* tile = new Tile(world_, data);
+	tile->setName(name);
 
-		tileTemplates_.insert(std::pair<std::string, Tile*>(hasName.value(), tile));
-	}
-	else
-	{
-		std::cout << "Error tile name" << std::endl;
-	}
+
+	tileTemplates_.insert(std::pair<std::string, Tile*>(name, tile));
 }
 
-void EntityManager::addEntity(sol::table data)
+void EntityManager::addEntity(std::string name, sol::table data)
 {
-	sol::optional<std::string> hasName = data["name"];
+	std::string category = data["category"].get_or<std::string>("none");
 
-	if (hasName)
-	{
-		TextureCharacter textureCharacter;
-		textureCharacter.rect.x = data["texture"]["x"].get_or(0);
-		textureCharacter.rect.y = data["texture"]["y"].get_or(0);
-		int speed = data["speed"].get_or(20);
 
-		Entity* entity = new Entity(world_);
-		entity->setName(hasName.value());
-		entity->setTexture(textureCharacter);
-		entity->setDefaultSpeed(speed);
+	Entity* entity = new Entity(world_, data);
+	entity->setName(name);
 
-		entityTemplates_.insert(std::pair<std::string, Entity*>(hasName.value(), entity));
-	}
-	else
-	{
-		std::cout << "Error entity doesn't have a name!" << std::endl;
-	}
+	entityTemplates_.insert(std::pair<std::string, Entity*>(name, entity));
 
 }
 

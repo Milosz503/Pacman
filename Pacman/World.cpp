@@ -29,7 +29,7 @@ void World::update()
 
 	++frameCounter_;
 
-	std::cout << "Entities: " << scene_->getEntities().size() << std::endl;
+	//std::cout << "Entities: " << scene_->getEntities().size() << std::endl;
 	
 }
 

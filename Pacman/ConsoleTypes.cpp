@@ -2,6 +2,11 @@
 
 
 
+ConsoleObject::ConsoleObject() :
+	position_(0, 0)
+{
+}
+
 void ConsoleObject::setPosition(const sf::Vector2i& position)
 {
 	position_ = position;

@@ -3,14 +3,11 @@
 #include "DataTables.h"
 #include "World.h"
 
-//namespace
-//{
-//	const std::array<EntityTable, Entity::TypeCount> Table = initializeEntityData();
-//}
 
 
-Entity::Entity(World* world, int x, int y) :
-	GameObject(world, GameObject::Entity),
+
+Entity::Entity(World* world, sol::table& data) :
+	GameObject(world, GameObject::Entity, data),
 	nextMove_(0, 0),
 	speed_(0, 0),
 	defaultSpeed_(20),
@@ -20,8 +17,9 @@ Entity::Entity(World* world, int x, int y) :
 	teleported_(false)
 	
 {
-	setPosition(x, y);
-	setTexture(TextureManager::getTexture(L'?', CharacterColor::Yellow));
+	int speed = data["speed"].get_or(20);
+
+	setDefaultSpeed(speed);
 
 
 }
