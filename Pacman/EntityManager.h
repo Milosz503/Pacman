@@ -34,8 +34,8 @@ private:
 
 
 
-	void addTile(luabridge::LuaRef data);
-	void addEntity(luabridge::LuaRef data);
+	void addTile(sol::table data);
+	void addEntity(sol::table data);
 
 };
 

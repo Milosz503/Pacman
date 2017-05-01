@@ -14,6 +14,8 @@ extern "C" {
 
 #include <LuaBridge.h>
 
+#include "sol.hpp"
+
 class Stage;
 class World;
 
@@ -39,7 +41,7 @@ public:
 
 	Type getType();
 
-	void setLuaFunctions(luabridge::LuaRef& object);
+	void setLuaFunctions(sol::table data);
 
 	void collide(GameObject* collidingObject);
 	LuaObjectHandle& getHandle();
@@ -64,8 +66,8 @@ private:
 
 
 
-	std::shared_ptr<luabridge::LuaRef> collisionFunction_;
-	std::shared_ptr<luabridge::LuaRef> updateFunction_;
+	std::shared_ptr<sol::function> collisionFunction_;
+	std::shared_ptr<sol::function> updateFunction_;
 	
 	
 };

@@ -247,10 +247,14 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 
 					scene->addEntity(entity);
 				}
+				else
+				{
+					std::cout << "Object doesn't have a name!" << std::endl;
+				}
 			}
 			else
 			{
-				std::cout << "Object isnt table!" << std::endl;
+				std::cout << "Object isn't a table!" << std::endl;
 			}
 			
 

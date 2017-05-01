@@ -58,9 +58,7 @@ tiles = {
 			y = 74,
 		},
 		
-		collide = function(self, object)
-			-- print("TELEPORT")
-			-- object:setPosition(3, 4)
+		collide = function()
 			
 		end,
 	},
@@ -73,14 +71,8 @@ tiles = {
 			y = 3,
 		},
 		
-		collide = function(self, object)
-			-- tile = world:getTile(6, 4)
-			-- if tile then
-				-- print("tile ")
-				-- print(tile)
-				-- tile:setColor(color.LIGHTGREY)
-				-- tile:setTexture(2, 2)
-			--end
+		collide = function()
+			print("WALL COL")
 		end
 		
 	},
@@ -94,17 +86,11 @@ tiles = {
 		},
 		
 		
-		update = function(self, data)
+		update = function()
 			
 		end,
 		
-		collide = function(self, object)
-			--print("KOLIZJA")
-			-- if object.name == "player" then
-				-- world:removeObject(self)
-				-- world:addScore(1)
-			--end
-			
+		collide = function()
 
 			
 		end,

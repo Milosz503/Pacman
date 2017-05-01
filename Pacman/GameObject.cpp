@@ -49,14 +49,7 @@ void GameObject::update()
 	if (updateFunction_ != nullptr)
 	{
 
-		try
-		{
-			(*updateFunction_)(getHandle(), *luaData_);
-		}
-		catch (luabridge::LuaException e)
-		{
-			std::cout << "LUA ERROR: update! " << e.what() << std::endl;
-		}
+		(*updateFunction_)();
 
 	}
 }
@@ -76,13 +69,25 @@ GameObject::Type GameObject::getType()
 	return type_;
 }
 
-void GameObject::setLuaFunctions(luabridge::LuaRef & object)
+void GameObject::setLuaFunctions(sol::table data)
 {
-	if(!object["collide"].isNil() && object["collide"].isFunction())
-		collisionFunction_ = std::make_shared<luabridge::LuaRef>(object["collide"]);
+	sol::optional<sol::function> update = data["update"];
+	if (update)
+	{
+		updateFunction_ = std::make_shared<sol::function>(update.value());
+	}
 
-	if (!object["update"].isNil() && object["update"].isFunction())
-		updateFunction_ = std::make_shared<luabridge::LuaRef>(object["update"]);
+	sol::optional<sol::function> collide = data["collide"];
+	if (collide)
+	{
+		collisionFunction_ = std::make_shared<sol::function>(collide.value());
+	}
+
+	//if(!object["collide"].isNil() && object["collide"].isFunction())
+	//	collisionFunction_ = std::make_shared<luabridge::LuaRef>(object["collide"]);
+
+	//if (!object["update"].isNil() && object["update"].isFunction())
+	//	updateFunction_ = std::make_shared<luabridge::LuaRef>(object["update"]);
 }
 
 void GameObject::collide(GameObject * collidingObject)
@@ -90,14 +95,8 @@ void GameObject::collide(GameObject * collidingObject)
 	if (collisionFunction_ != nullptr)
 	{
 
-		try
-		{
-			(*collisionFunction_)(getHandle(), collidingObject->getHandle());
-		}
-		catch (luabridge::LuaException e)
-		{
-			std::cout << "LUA ERROR: collision! " << e.what() << std::endl;
-		}
+
+			(*collisionFunction_)();
 
 
 	}
