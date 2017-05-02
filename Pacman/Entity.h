@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 
-
+#include <forward_list>
 
 class World;
 
@@ -25,9 +25,14 @@ public:
 
 	virtual void update();// override;
 
+	virtual void draw() override;
+
 
 	void setSpeed(Direction::X x, Direction::Y y);
 	sf::Vector2i getSpeed();
+
+	void setPath(std::forward_list<sf::Vector2i>& path);
+	bool isPathEmpty();
 
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
@@ -65,6 +70,8 @@ private:
 	//AnimationPlayer animations_;
 
 	bool teleported_;
+
+	std::forward_list<sf::Vector2i> path_;
 	
 };
 

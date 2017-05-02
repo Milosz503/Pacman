@@ -1,7 +1,7 @@
 #include "EntityController.h"
 #include "World.h"
 #include "ConsoleWindow.h"
-
+#include <forward_list>
 
 
 EntityController::EntityController(SystemManager* systemManager, World* world) :
@@ -71,7 +71,7 @@ void EntityController::update(Entity * entity)
 		int playerX = scene_->getPlayer()->getPosition().x;
 		int playerY = scene_->getPlayer()->getPosition().y;
 
-		std::list<sf::Vector2i> path;
+		std::vector<sf::Vector2i> path;
 
 		std::vector<NodeCost> customCosts;
 		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX, playerY - 1)));
@@ -105,8 +105,17 @@ void EntityController::update(Entity * entity)
 		else if (dir.y < 0) y = Direction::Up;
 		else y = Direction::ZeroY;
 
+		
 		//entity->setSpeed(x, y);
+		if (path.size() > 0)
+		{
+			int pathLength = 5 < path.size() ? 5 : path.size() - 1;
 
+			if (entity->isPathEmpty())
+				entity->setPath(std::forward_list<sf::Vector2i>(path.begin(), path.begin() + pathLength));
+
+		}
+		
 		
 
 	}
@@ -123,36 +132,36 @@ void EntityController::handleCollision(Entity * entity, Tile * tile)
 void EntityController::draw()
 {
 	
-	ConsoleCharacter character(TextureManager::getTexture(L'.', CharacterColor::Red));
+	//ConsoleCharacter character(TextureManager::getTexture(L'.', CharacterColor::Red));
 
 
-	for (int x = 0; x < distance.size(); ++x)
-	{
-		for (int y = 0; y < distance[x].size(); ++y)
-		{
-			if (distance[x][y] < 100000)
-			{
-				character.setPosition(x, y);
-				character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
+	//for (int x = 0; x < distance.size(); ++x)
+	//{
+	//	for (int y = 0; y < distance[x].size(); ++y)
+	//	{
+	//		if (distance[x][y] < 100000)
+	//		{
+	//			character.setPosition(x, y);
+	//			character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
 
-				getWorld()->getConsole()->draw(character);
-			}
+	//			getWorld()->getConsole()->draw(character);
+	//		}
 
-		}
-	}
-	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
+	//	}
+	//}
+	//character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
 
-	sf::Vector2i pos = start;
+	//sf::Vector2i pos = start;
 
-	for (auto& node : path)
-	{
-		pos.x += node.x;
-		pos.y += node.y;
-		pos = scene_->normalize(pos);
-		character.setPosition(pos);
+	//for (auto& node : path)
+	//{
+	//	pos.x += node.x;
+	//	pos.y += node.y;
+	//	pos = scene_->normalize(pos);
+	//	character.setPosition(pos);
 
-		getWorld()->getConsole()->draw(character);
-	}
+	//	getWorld()->getConsole()->draw(character);
+	//}
 	
 }
 
@@ -469,7 +478,7 @@ sf::Vector2i EntityController::searchPathWage(sf::Vector2i start, sf::Vector2i t
 }
 
 bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
-	std::list<sf::Vector2i>& path, std::vector<NodeCost>& customCosts)
+	std::vector<sf::Vector2i>& path, std::vector<NodeCost>& customCosts)
 {
 	const int INF = 1000000000;
 	for (int i = 0; i < graph.size(); ++i)

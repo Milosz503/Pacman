@@ -22,6 +22,8 @@ public:
 	int getX() const;
 	int getY() const;
 
+	virtual void draw();
+
 private:
 	
 	sf::Vector2i position_;

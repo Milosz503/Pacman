@@ -128,7 +128,11 @@ void EntityManager::addEntity(std::string name, sol::table data)
 
 Tile * EntityManager::createTile(std::string tileName)
 {
-	return new Tile(*tileTemplates_.at(tileName));
+	auto it = tileTemplates_.find(tileName);
+	if(it != tileTemplates_.end())
+		return new Tile(*it->second);
+
+	return nullptr;
 }
 
 Entity * EntityManager::createEntity(std::string entityName)

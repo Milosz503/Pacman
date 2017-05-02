@@ -38,7 +38,7 @@ private:
 	sf::Vector2i searchPathWage(sf::Vector2i start, sf::Vector2i target);
 
 	bool searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
-		std::list<sf::Vector2i>& path, std::vector<NodeCost>& customCosts = std::vector<NodeCost>());
+		std::vector<sf::Vector2i>& path, std::vector<NodeCost>& customCosts = std::vector<NodeCost>());
 
 	void clearGraph(sf::Vector2i start);
 	bool isInsideGraph(sf::Vector2f point);
@@ -51,7 +51,7 @@ private:
 
 	std::vector<std::vector<NodeState>> graph;
 	std::vector<std::vector<int>> distance;
-	std::list<sf::Vector2i> path;
+	std::vector<sf::Vector2i> path;
 	sf::Vector2i start;
 
 };

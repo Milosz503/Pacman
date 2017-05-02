@@ -51,6 +51,12 @@ void Entity::update()
 		}
 	}
 
+	if (!path_.empty())
+	{
+		speed_ = path_.front();
+		path_.pop_front();
+	}
+
 	//if (vulnerbailityTimer_ == frameNumber)
 	//{
 	//	isVulnerable_ = Table[type_].isVulnerable;
@@ -81,6 +87,24 @@ void Entity::update()
 
 }
 
+void Entity::draw()
+{
+	ConsoleCharacter character;
+	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
+
+	sf::Vector2i pos = getPosition();
+
+	for (auto& node : path_)
+	{
+		pos.x += node.x;
+		pos.y += node.y;
+		pos = getWorld()->getScene()->normalize(pos);
+		character.setPosition(pos);
+
+		getWorld()->getConsole()->draw(character);
+	}
+}
+
 
 
 void Entity::setSpeed(Direction::X x, Direction::Y y)
@@ -105,6 +129,16 @@ void Entity::setSpeed(Direction::X x, Direction::Y y)
 sf::Vector2i Entity::getSpeed()
 {
 	return speed_;
+}
+
+void Entity::setPath(std::forward_list<sf::Vector2i>& path)
+{
+	path_ = path;
+}
+
+bool Entity::isPathEmpty()
+{
+	return path_.empty();
 }
 
 void Entity::setDefaultSpeed(int speed)

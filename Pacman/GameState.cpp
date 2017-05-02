@@ -25,6 +25,8 @@ GameState::GameState(StateStack & stack, Context context) :
 	updateTime_.setPosition(0, 47);
 	drawTime_.setPosition(0, 48);
 
+	character_.setTexture(TextureManager::getTexture(L'P', CharacterColor::Green));
+	character_.setPosition(0, 0);
 
 	
 	
@@ -56,8 +58,11 @@ bool GameState::update(sf::Time dt)
 	systems_.update();
 	world_.update();
 	
+	if (world_.getFrameNumber() % 7 == 0)
+		character_.move(0, 1);
 
-
+	if (world_.getFrameNumber() % 7 == 0)
+		character_.move(1, 0);
 
 	if (world_.getFrameNumber() % 20 == 0)
 		averageUpdate_ = 0;
@@ -141,7 +146,7 @@ void GameState::draw()
 	
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
-
+	getContext().console->draw(character_);
 }
 
 GameState::~GameState()

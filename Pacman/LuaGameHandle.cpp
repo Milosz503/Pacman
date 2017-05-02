@@ -1,6 +1,6 @@
 #include "LuaGameHandle.h"
 
-
+#include <cmath>
 
 
 LuaGameHandle::LuaGameHandle(World * world) :
@@ -53,6 +53,16 @@ void LuaGameHandle::removeObject(LuaObjectHandle & objectHandle)
 {
 	objectHandle.getObject()->markToRemove();
 	std::cout << "REMOVED " << objectHandle.getX() << " " << objectHandle.getY() << std::endl;
+}
+
+int LuaGameHandle::getDistance(LuaObjectHandle & object1, LuaObjectHandle & object2)
+{
+	Vector2i pos1 = object1.getObject()->getPosition();
+	Vector2i pos2 = object2.getObject()->getPosition();
+
+
+
+	return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
 }
 
 

@@ -22,7 +22,7 @@ level = {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
 tiles = {
 	[0] = {
 		type = "Point",
-		name = "Point"
+		name = "None"
 	},
 	[1] = {
 		type = "Wall",

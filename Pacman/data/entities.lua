@@ -30,7 +30,7 @@ entities = {
 			if player.y < self.y then speedY = -1
 			elseif player.y > self.y then speedY = 1 end
 			
-			self:setSpeed(speedX, speedY)
+			--self:setSpeed(speedX, speedY)
 		end
 	},
 	

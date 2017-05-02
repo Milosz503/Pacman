@@ -69,7 +69,14 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 				sol::optional<std::string> tileName = tileData["name"];
 				if (tileName)
 				{
-					scene->addTile(tileName.value(), x - 1, y - 1);
+					Tile* tile = entityManager->createTile(tileName.value());
+
+					if (tile != nullptr)
+					{
+						tile->setPosition(x, y);
+						scene->addTile(tileName.value(), x - 1, y - 1);
+					}
+					
 				}
 			}
 

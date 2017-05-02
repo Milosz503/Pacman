@@ -139,6 +139,8 @@ void ConsoleWindow::draw(ConsoleCharacter & character)
 		textures_[y][x] = character.getTexture().rect;
 		background_[y][x] = character.getTexture().backgroundColor;
 	}
+
+	character.draw();
 }
 
 void ConsoleWindow::draw(ConsoleText & consoleText)
@@ -158,6 +160,8 @@ void ConsoleWindow::draw(ConsoleText & consoleText)
 			background_[y][i + x] = consoleText.getBackground();
 		}
 	}
+
+	consoleText.draw();
 
 }
 
