@@ -138,6 +138,42 @@ void LuaObjectHandle::damage(unsigned dmg)
 	object_->setHp(object_->getHp() - dmg);
 }
 
+void LuaObjectHandle::guideTo(LuaObjectHandle & destination)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		Entity* entity = static_cast<Entity*>(object_);
+
+		entity->guideTo(destination.getObject());
+
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
+	}
+}
+
+LuaObjectHandle* LuaObjectHandle::getDestination()
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		Entity* entity = static_cast<Entity*>(object_);
+
+		return &entity->getDestination()->getHandle();
+
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not guide 'tile', it have not destination" << std::endl;
+	}
+	return nullptr;
+}
+
+bool LuaObjectHandle::isGuided()
+{
+	return false;
+}
+
 void LuaObjectHandle::remove()
 {
 	object_->markToRemove();

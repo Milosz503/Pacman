@@ -75,13 +75,17 @@ int main()
 			{
 				console.close();
 			}
+
+			console.clear(sf::Color::Black);
+			stack.draw();
+			console.show();
 		}
 
 	
 
-		console.clear(sf::Color::Black);
+		/*console.clear(sf::Color::Black);
 		stack.draw();
-		console.show();
+		console.show();*/
 
 	}
 

@@ -39,6 +39,9 @@ EntityManager::EntityManager(World* world) :
 		"hp", sol::property(&LuaObjectHandle::getHp),
 		"heal", &LuaObjectHandle::heal,
 		"damage", &LuaObjectHandle::damage,
+		"guideTo", &LuaObjectHandle::guideTo,
+		"getDestination", &LuaObjectHandle::getDestination,
+		"isGuided", &LuaObjectHandle::isGuided,
 		"remove", &LuaObjectHandle::remove
 
 		);
@@ -47,9 +50,10 @@ EntityManager::EntityManager(World* world) :
 		"score", sol::property(&LuaGameHandle::getScore),
 		"addScore", &LuaGameHandle::addScore,
 		"getTile", &LuaGameHandle::getTile,
+		"findEntity", &LuaGameHandle::findEntity,
 		"removeTile", &LuaGameHandle::removeTile,
 		"removeObject", &LuaGameHandle::removeObject,
-		"findEntity", &LuaGameHandle::findEntity
+		"getDistance", &LuaGameHandle::getDistance
 		);
 
 

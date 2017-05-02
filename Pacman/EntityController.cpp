@@ -47,74 +47,48 @@ void EntityController::update()
 
 void EntityController::update(Entity * entity)
 {
-	if (entity->getCategory() == "ghost")// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
+	if (entity->getCategory() == "ghost" && entity->isGuided() && entity->isPathEmpty() && entity->isReadyToMove())// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
 	{
-		/*sf::IntRect rect = stage_->getBounds();
-
-		if (entity->getX() < rect.left + 3)
+		sf::Vector2i destination = entity->getDestination()->getPosition();
+		if (entity->getDestination()->getType() == GameObject::Entity)
 		{
-			entity->setSpeed(DirectionX::Right, DirectionY::Zero);
+			Entity* e = static_cast<Entity*>(entity->getDestination());
+			destination += e->getNextMove();
 		}
-		else if (entity->getX() > rect.left + rect.width - 3)
-		{
-			entity->setSpeed(DirectionX::Left, DirectionY::Zero);
-		}
-		else if (entity->getSpeed().x == 0 && entity->getSpeed().y == 0)
-		{
-			entity->setSpeed(DirectionX::Left, DirectionY::Zero);
-		}*/
+		
 
-		//sf::Vector2f dir = getDirectionToPlayer(entity->getPosition());
-		//sf::Vector2i dir = searchPath(entity->getPosition(), stage_->getPlayer()->getPosition());
-		//sf::Vector2i dir = searchPathWage(entity->getPosition(), stage_->getPlayer()->getPosition());
+		sf::Vector2i start = entity->getPosition() + entity->getNextMove();
 
-		int playerX = scene_->getPlayer()->getPosition().x;
-		int playerY = scene_->getPlayer()->getPosition().y;
+
+		if (start == destination)
+			return;
+
 
 		std::vector<sf::Vector2i> path;
-
 		std::vector<NodeCost> customCosts;
-		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX, playerY - 1)));
-		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX + 1, playerY)));
-		//customCosts.push_back(NodeCost(20, sf::Vector2i(playerX - 1, playerY)));
 
-		bool found = searchPathAStar(entity->getPosition(), scene_->getPlayer()->getPosition(), path, customCosts);
-		this->path = path;
+		bool found = searchPathAStar(start,
+			destination, path, customCosts);
 
+		//this->path = path;
 
-		sf::Vector2i dir(0, 0);
 
 		if (path.size() > 0)
 		{
-			dir = path.front();
+			if (entity->getDestination()->getType() == GameObject::Entity)
+			{
+				int pathLength = 2 < path.size() ? 2 : path.size();
 
-			//dir.x = -(entity->getPosition().x - dir.x);
-			//dir.y = -(entity->getPosition().y - dir.y);
+				entity->setPath(std::list<sf::Vector2i>(path.begin(), path.begin() + pathLength), destination);
+
+			}
+			else
+			{
+				entity->setPath(std::list<sf::Vector2i>(path.begin(), path.end()), destination);
+			}
 		}
-			
-
-
-		Direction::X x;
-		Direction::Y y;
-
-		if (dir.x > 0) x = Direction::Right;
-		else if (dir.x < 0) x = Direction::Left;
-		else x = Direction::ZeroX;
-
-		if (dir.y > 0) y = Direction::Down;
-		else if (dir.y < 0) y = Direction::Up;
-		else y = Direction::ZeroY;
 
 		
-		//entity->setSpeed(x, y);
-		if (path.size() > 0)
-		{
-			int pathLength = 5 < path.size() ? 5 : path.size() - 1;
-
-			if (entity->isPathEmpty())
-				entity->setPath(std::forward_list<sf::Vector2i>(path.begin(), path.begin() + pathLength));
-
-		}
 		
 		
 
@@ -552,7 +526,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 				pos = scene_->normalize(pos);
 				path.push_back(dir);
 			}
-
+			//std::cout << "Itt: " << iterations << std::endl;
 			return true;
 		}
 
@@ -588,7 +562,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 
 		iterations++;
 	}
-
+//	std::cout << "Itf: " << iterations << std::endl;
 	return false;
 
 	

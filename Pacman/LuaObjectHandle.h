@@ -30,6 +30,10 @@ public:
 	void heal(unsigned hp);
 	void damage(unsigned dmg);
 
+	void guideTo(LuaObjectHandle& destination);
+	LuaObjectHandle* getDestination();
+	bool isGuided();
+
 
 	void remove();
 

@@ -14,7 +14,9 @@ Entity::Entity(World* world, sol::table& data) :
 	visionRange_(5),
 	hitpoints_(1),
 	isVulnerable_(true),
-	teleported_(false)
+	teleported_(false),
+	isGuided_(false),
+	destination_(nullptr)
 	
 {
 	int speed = data["speed"].get_or(20);
@@ -26,7 +28,7 @@ Entity::Entity(World* world, sol::table& data) :
 
 void Entity::update()
 {
-	GameObject::update();
+	
 
 	unsigned long long frameNumber = getWorld()->getFrameNumber();
 	getWorld()->getScene()->moveEntity(this, nextMove_);
@@ -41,6 +43,19 @@ void Entity::update()
 
 	if (defaultSpeed_ != 0 && frameNumber % defaultSpeed_ == 0)
 	{
+		GameObject::update();
+		if (!path_.empty())
+		{
+			speed_ = path_.front();
+			path_.pop_front();
+
+		}
+		else if(isGuided_)
+		{
+			speed_.x = 0;
+			speed_.y = 0;
+		}
+
 		if (speed_.x != 0)
 		{
 			nextMove_.x += speed_.x;
@@ -49,13 +64,13 @@ void Entity::update()
 		{
 			nextMove_.y += speed_.y;
 		}
+
+		
+
+		
 	}
 
-	if (!path_.empty())
-	{
-		speed_ = path_.front();
-		path_.pop_front();
-	}
+	
 
 	//if (vulnerbailityTimer_ == frameNumber)
 	//{
@@ -92,12 +107,11 @@ void Entity::draw()
 	ConsoleCharacter character;
 	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
 
-	sf::Vector2i pos = getPosition();
+	sf::Vector2i pos = getPosition()+getNextMove();
 
 	for (auto& node : path_)
 	{
-		pos.x += node.x;
-		pos.y += node.y;
+		pos += node;
 		pos = getWorld()->getScene()->normalize(pos);
 		character.setPosition(pos);
 
@@ -131,15 +145,57 @@ sf::Vector2i Entity::getSpeed()
 	return speed_;
 }
 
-void Entity::setPath(std::forward_list<sf::Vector2i>& path)
+void Entity::setPath(std::list<sf::Vector2i>& path, sf::Vector2i pathDestination)
 {
+	std::cout << "Set path" << std::endl;
 	path_ = path;
+	pathDestination_ = pathDestination;
 }
 
 bool Entity::isPathEmpty()
 {
 	return path_.empty();
 }
+
+int Entity::getPathSize()
+{
+	return path_.size();
+}
+
+sf::Vector2i Entity::getPathDestination()
+{
+	return pathDestination_;
+}
+
+bool Entity::isGuided()
+{
+	return isGuided_;
+}
+
+void Entity::guideTo(GameObject * destination)
+{
+	if (destination_ != destination)
+	{
+		isGuided_ = true;
+		destination_ = destination;
+		path_.clear();
+	}
+	
+}
+
+void Entity::stopGuide()
+{
+	isGuided_ = false;
+	destination_ = nullptr;
+	path_.clear();
+}
+
+GameObject * Entity::getDestination()
+{
+	return destination_;
+}
+
+
 
 void Entity::setDefaultSpeed(int speed)
 {

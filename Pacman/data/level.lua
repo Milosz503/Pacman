@@ -21,8 +21,7 @@ level = {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
  height = 20, width = 20}
 tiles = {
 	[0] = {
-		type = "Point",
-		name = "None"
+		name = "Floor"
 	},
 	[1] = {
 		type = "Wall",
@@ -51,6 +50,18 @@ objects = {
 		name = "RedGhost",
 		x = 5,
 		y = 4,
+	},
+	
+	{
+		name = "RedGhost",
+		x = 18,
+		y = 5,
+	},
+	
+	{
+		name = "RedGhost",
+		x = 10,
+		y = 16,
 	},
 	
 

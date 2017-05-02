@@ -140,9 +140,9 @@ void GameState::draw()
 	getContext().console->draw(updateTime_);
 	getContext().console->draw(drawTime_);
 
-	systems_.draw();
+	
 	world_.draw();
-
+	systems_.draw();
 	
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));

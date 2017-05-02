@@ -69,6 +69,8 @@ int LuaGameHandle::getDistance(LuaObjectHandle & object1, LuaObjectHandle & obje
 
 
 
+
+
 LuaGameHandle::~LuaGameHandle()
 {
 }

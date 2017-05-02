@@ -21,16 +21,32 @@ entities = {
 				return false
 			end)
 			
-			speedX = 0
-			speedY = 0
+			distance = world:getDistance(self, player)
 			
-			if player.x < self.x then speedX = -1
-			elseif player.x > self.x then speedX = 1 end
+			if self:getDestination() == player then
+				if distance > 8 then self:guideTo(world:getTile(3, 4)) end
+				
+			elseif distance < 6 then
+				self:guideTo(player) 
+				
+			else
+				self:guideTo(world:getTile(3, 4))
+			end
 			
-			if player.y < self.y then speedY = -1
-			elseif player.y > self.y then speedY = 1 end
+			
+
+			
+			-- speedX = 0
+			-- speedY = 0
+			
+			-- if player.x < self.x then speedX = -1
+			-- elseif player.x > self.x then speedX = 1 end
+			
+			-- if player.y < self.y then speedY = -1
+			-- elseif player.y > self.y then speedY = 1 end
 			
 			--self:setSpeed(speedX, speedY)
+			
 		end
 	},
 	
@@ -50,7 +66,8 @@ entities = {
 
 
 tiles = {
-
+	
+	
 	Wall = {
 		type = "tile";
 		category = "wall";
@@ -59,9 +76,9 @@ tiles = {
 		texture = {x = 4, y = 3; color = Colors.blue};
 		
 		collide = function (self)
-			print("collide wall ".. self.x .. " " .. self.y .. " " .. self.name .. " " .. self.type)
-			print("Score: " .. world.score)
-			self:setColor(Colors.red)
+			-- print("collide wall ".. self.x .. " " .. self.y .. " " .. self.name .. " " .. self.type)
+			-- print("Score: " .. world.score)
+			-- self:setColor(Colors.red)
 			
 		end
 		
@@ -90,7 +107,7 @@ tiles = {
 		category = "none";
 		
 		isPhysical = false;
-		texture = {x = 5, y = 10, color = Colors.darkGrey};
+		texture = {x = 15, y = 15};
 	},
 
 

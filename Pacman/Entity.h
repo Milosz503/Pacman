@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 
-#include <forward_list>
+#include <list>
 
 class World;
 
@@ -31,8 +31,16 @@ public:
 	void setSpeed(Direction::X x, Direction::Y y);
 	sf::Vector2i getSpeed();
 
-	void setPath(std::forward_list<sf::Vector2i>& path);
+	void setPath(std::list<sf::Vector2i>& path, sf::Vector2i pathDestination);
 	bool isPathEmpty();
+	int getPathSize();
+	sf::Vector2i getPathDestination();
+	
+
+	bool isGuided();
+	void guideTo(GameObject* destination);
+	void stopGuide();
+	GameObject* getDestination();
 
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
@@ -71,7 +79,10 @@ private:
 
 	bool teleported_;
 
-	std::forward_list<sf::Vector2i> path_;
-	
+	std::list<sf::Vector2i> path_;
+	sf::Vector2i pathDestination_;
+
+	bool isGuided_;
+	GameObject* destination_;
 };
 

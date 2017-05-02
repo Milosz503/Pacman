@@ -383,7 +383,7 @@ void Scene::draw()
 	{
 		world_->getConsole()->draw(*entity);
 	}
-	world_->getConsole()->draw(*player_);
+	//world_->getConsole()->draw(*player_);
 
 }
 
