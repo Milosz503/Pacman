@@ -21,6 +21,7 @@ public:
 	GameObject(const GameObject& obj);
 	GameObject(World* world, Type type, sol::table& data);
 
+	void init(sol::table& properties);
 
 	virtual bool isToRemove();
 	virtual void markToRemove();
@@ -57,6 +58,7 @@ private:
 	bool isToRemove_;
 
 	LuaObjectHandle luaHandle_;
+	std::shared_ptr<sol::protected_function> initFunction_;
 	std::shared_ptr<sol::protected_function> collisionFunction_;
 	std::shared_ptr<sol::protected_function> updateFunction_;
 

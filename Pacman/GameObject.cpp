@@ -11,6 +11,7 @@ GameObject::GameObject(const GameObject & obj) :
 	type_(obj.type_),
 	category_(obj.category_),
 	luaHandle_(this),
+	initFunction_(obj.initFunction_),
 	collisionFunction_(obj.collisionFunction_),
 	updateFunction_(obj.updateFunction_)
 {
@@ -23,6 +24,7 @@ GameObject::GameObject(World* world, Type type, sol::table& data) :
 	type_(type),
 	category_("none"),
 	luaHandle_(this),
+	initFunction_(nullptr),
 	collisionFunction_(nullptr),
 	updateFunction_(nullptr)
 {
@@ -39,6 +41,21 @@ GameObject::GameObject(World* world, Type type, sol::table& data) :
 	setCategory(category);
 
 	setLuaFunctions(data);
+}
+
+void GameObject::init(sol::table & properties)
+{
+	if (initFunction_ != nullptr)
+	{
+		std::cout << "calling init: " << name_ << properties["name"].get_or<std::string>("???") << std::endl;
+		auto result = (*initFunction_)(luaHandle_, sol::object(properties));
+
+		if (!result.valid())
+		{
+			sol::error e = result;
+			std::cout << "ERROR object " << name_ << " in init function: " << e.what() << std::endl;
+		}
+	}
 }
 
 
@@ -97,6 +114,13 @@ int GameObject::getHp() const
 
 void GameObject::setLuaFunctions(sol::table data)
 {
+
+	sol::optional<sol::protected_function> init = data["init"];
+	if (init)
+	{
+		initFunction_ = std::make_shared<sol::protected_function>(init.value());
+	}
+
 	sol::optional<sol::protected_function> update = data["update"];
 	if (update)
 	{

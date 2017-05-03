@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "sol.hpp"
 
 class GameObject;
 
@@ -37,15 +38,16 @@ public:
 
 	void remove();
 
+	sol::table& getVars();
 
 
 
-
-	GameObject* getObject();
+	GameObject* getObject() const;
 
 	~LuaObjectHandle();
 
 private:
+	sol::table vars_;
 	GameObject* object_;
 };
 

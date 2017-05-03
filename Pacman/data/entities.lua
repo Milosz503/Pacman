@@ -12,10 +12,23 @@ entities = {
 		category = "ghost";
 		
 		speed = 20;
-		visionRange = 4;
+		visionRange = 8;
 		texture = {x = 5, y = 2, color = Colors.red};
 		
+		init = function(self, properties)
+			for k,v in ipairs(properties) do print(v) end
+			print(properties["name"])
+			print(" " .. properties.x .. "  " .. properties.y)
+			vars = self.vars
+			vars.x = properties.x-- or 4
+			vars.y = properties.y-- or 4
+			self.defaultSpeed = properties.speed or 30
+			
+		end;
+		
+		
 		update = function(self)
+			
 			player = world:findEntity(function(e)
 				if e.category == "player" then return true end
 				return false
@@ -24,13 +37,13 @@ entities = {
 			distance = world:getDistance(self, player)
 			
 			if self:getDestination() == player then
-				if distance > 8 then self:guideTo(world:getTile(3, 4)) end
+				if distance > 10 then self:guideTo(world:getTile(self.vars.x, self.vars.y)) end
 				
-			elseif distance < 6 then
+			elseif distance < 8 then
 				self:guideTo(player) 
 				
 			else
-				self:guideTo(world:getTile(3, 4))
+				self:guideTo(world:getTile(self.vars.x, self.vars.y))
 			end
 			
 			

@@ -8,7 +8,7 @@
 #include "Scene.h"
 #include "GameLogic.h"
 #include "EditSystem.h"
-
+#include "StateStack.h"
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
@@ -32,7 +32,17 @@ GameState::GameState(StateStack & stack, Context context) :
 	
 
 	//world_.getScene()->prepareLevel(getContext().level);
-	LevelManager::loadLevel(world_.getScene(), world_.getEntityManager(), "data/level.lua");
+	try
+	{
+		LevelManager::loadLevel(&world_, "data/level.lua");
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << "Exception: " << e.what() << std::endl;
+		stack.clearStates();
+		stack.pushState(States::Menu);
+	}
+	
 
 
 

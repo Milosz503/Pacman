@@ -9,7 +9,7 @@ extern "C" {
 }
 
 #include <LuaBridge.h>
-
+#include "World.h"
 #include "sol.hpp"
 
 using namespace luabridge;
@@ -21,10 +21,12 @@ LevelManager::LevelManager()
 
 
 
-void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::string fileName)
+void LevelManager::loadLevel(World* world, std::string fileName)
 {
-	
-	sol::state lua;
+	Scene* scene = world->getScene();
+	EntityManager* entityManager = world->getEntityManager();
+	sol::state& lua = world->getLua();
+
 	lua.open_libraries(sol::lib::base);
 	auto result = lua.script_file(fileName, &sol::simple_on_error);
 	if (!result.valid())
@@ -71,11 +73,10 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 				{
 					Tile* tile = entityManager->createTile(tileName.value());
 
-					if (tile != nullptr)
-					{
-						tile->setPosition(x, y);
-						scene->addTile(tileName.value(), x - 1, y - 1);
-					}
+
+					tile->setPosition(x, y);
+					tile->init(tileData);
+					scene->addTile(tileName.value(), x - 1, y - 1);
 					
 				}
 			}
@@ -106,6 +107,7 @@ void LevelManager::loadLevel(Scene * scene, EntityManager* entityManager, std::s
 
 					Entity* entity = entityManager->createEntity(name.value());
 					entity->setPosition(x, y);
+					entity->init(object);
 
 					scene->addEntity(entity);
 				}

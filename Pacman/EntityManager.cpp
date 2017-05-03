@@ -7,7 +7,8 @@
 
 
 EntityManager::EntityManager(World* world) :
-	world_(world)
+	world_(world),
+	lua_(world->getLua())
 {
 	lua_.open_libraries(sol::lib::base, sol::lib::math);
 	auto result = lua_.script_file("data/entities.lua", &sol::simple_on_error);
@@ -42,7 +43,8 @@ EntityManager::EntityManager(World* world) :
 		"guideTo", &LuaObjectHandle::guideTo,
 		"getDestination", &LuaObjectHandle::getDestination,
 		"isGuided", &LuaObjectHandle::isGuided,
-		"remove", &LuaObjectHandle::remove
+		"remove", &LuaObjectHandle::remove,
+		"vars", sol::property(&LuaObjectHandle::getVars)
 
 		);
 
@@ -132,16 +134,33 @@ void EntityManager::addEntity(std::string name, sol::table data)
 
 Tile * EntityManager::createTile(std::string tileName)
 {
-	auto it = tileTemplates_.find(tileName);
-	if(it != tileTemplates_.end())
-		return new Tile(*it->second);
 
+	try
+	{
+		return new Tile(*tileTemplates_.at(tileName));
+	}
+	catch (std::out_of_range& e)
+	{
+		throw std::runtime_error(tileName + " tile doesn't exist");
+	}
 	return nullptr;
 }
 
 Entity * EntityManager::createEntity(std::string entityName)
 {
-	return new Entity(*entityTemplates_.at(entityName));
+
+	try
+	{
+		return new Entity(*entityTemplates_.at(entityName));
+	}
+	catch (std::out_of_range& e)
+	{
+		throw std::runtime_error(entityName + " entity doesn't exist");
+	}
+	return nullptr;
+
+
+	
 }
 
 

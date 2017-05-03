@@ -44,24 +44,28 @@ objects = {
 		name = "Player",
 		x = 2,
 		y = 3,
+
 	},
 	
 	{
 		name = "RedGhost",
 		x = 5,
 		y = 4,
+		speed = 20,
 	},
 	
 	{
 		name = "RedGhost",
 		x = 18,
 		y = 5,
+		speed = 15,
 	},
 	
 	{
 		name = "RedGhost",
 		x = 10,
 		y = 16,
+		speed = 25,
 	},
 	
 

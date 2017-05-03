@@ -13,6 +13,8 @@
 #include "EntityManager.h"
 #include "LuaGameHandle.h"
 
+#include "sol.hpp"
+
 class EntityManager;
 class LuaGameHandle;
 
@@ -35,6 +37,7 @@ public:
 	Scene* getScene();
 	EntityManager* getEntityManager();
 	LuaGameHandle* getLuaGameHandle();
+	sol::state& getLua();
 
 	~World();
 
@@ -47,6 +50,7 @@ private:
 	int score_;
 	sf::Vector2i spawnPoint_;
 
+	sol::state lua_;
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
 	Scene* scene_;

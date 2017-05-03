@@ -9,7 +9,7 @@
 
 class EntityManager;
 class Scene;
-
+class World;
 
 class LevelManager
 {
@@ -19,7 +19,7 @@ public:
 
 
 
-	static void loadLevel(Scene* scene, EntityManager* entityManager, std::string fileName);
+	static void loadLevel(World* world, std::string fileName);
 	static void saveLevel(Scene* scene, std::string fileName);
 
 	~LevelManager();

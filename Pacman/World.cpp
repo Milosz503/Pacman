@@ -83,6 +83,11 @@ LuaGameHandle * World::getLuaGameHandle()
 	return luaHandle_;
 }
 
+sol::state & World::getLua()
+{
+	return lua_;
+}
+
 
 World::~World()
 {
