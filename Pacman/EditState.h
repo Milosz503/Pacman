@@ -16,6 +16,16 @@ struct SpawnPoint
 	sf::Vector2i position;
 };
 
+struct Brush
+{
+	enum Type {Tile, Entity};
+
+	Brush(Type type, int value) : type(type), value(value) {}
+
+	Type type;
+	int value;
+};
+
 class EditState : public State
 {
 public:
@@ -34,7 +44,7 @@ private:
 	//Level* level_;
 	std::string levelFile_;
 
-	int selectedTile_;
+	Brush brush_;
 
 	int width_;
 	int height_;
@@ -46,12 +56,20 @@ private:
 	std::vector<ObjectIcon> tiles_;
 	std::vector<ObjectIcon> entities_;
 
+	int getEntity(std::string name);
+	int getTile(std::string name);
+
+
+	void drawMenu();
+	void drawObjectOption(ObjectIcon object, int key, int x, int y,
+		CharacterColor::Color color = CharacterColor::White);
+
+	void drawLevel();
+	
+
+
 	void loadObjects();
 	void loadLevel();
 	void saveLevel();
-
-	void drawMenu();
-	void drawLevel();
-
 };
 

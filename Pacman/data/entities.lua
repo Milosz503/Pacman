@@ -21,14 +21,32 @@ end
  
  
 entities = {
- 
+	
+	AgresiveGhost = {
+		
+		type = "entity";
+		category = "ghost";
+		
+		speed = 15;
+		
+		texture = {x = 6, y = 2, color = Colors.green };
+		
+		update = function(self)
+			player = world:getPlayer();
+			
+			self:guideTo(player);
+			
+		end
+		
+	},
+	
 	RedGhost = {
 		type = "entity";
 		category = "ghost";
 		
 		speed = 20;
 		visionRange = 8;
-		texture = {x = 5, y = 2, color = Colors.red};
+		texture = {x = 5, y = 2, color = Colors.red };
 		
 		init = function(self, properties)
 			for k,v in ipairs(properties) do print(v) end
@@ -104,6 +122,62 @@ entities = {
 
 tiles = {
 	
+	WallBL = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 15, y = 8};
+	},
+	
+	
+	WallHor = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 6, y = 8};
+	},
+	
+	
+	WallRB = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 2, y = 9};
+	},
+	
+	
+	WallVer = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 5, y = 8};
+	},
+	
+	
+	WallTR = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 12, y = 8};
+	},
+	
+
+	
+	WallLT = {
+		type = "tile";
+		category = "wall";
+		isPhysical = true;
+		
+		texture = {x = 9, y  =8};
+	},
+	
+
+	
 	
 	Wall = {
 		type = "tile";
@@ -129,15 +203,15 @@ tiles = {
 		texture = {x = 10, y = 12; color = Colors.green};
 	},
 	
-	Teleport = {
-		type = "tile";
-		category = "teleport";
+	-- Teleport = {
+		-- type = "tile";
+		-- category = "teleport";
 		
-		isPhysical = false;
-		texture = {x = 5, y = 74};
+		-- isPhysical = false;
+		-- texture = {x = 5, y = 74};
 		
 		
-	},
+	-- },
 	
 	Floor = { 
 		type = "tile";
