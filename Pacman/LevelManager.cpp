@@ -54,16 +54,16 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 
 	for (int y = 1; y <= height; ++y)
 	{
-		sol::table row = level[y];
-		if (!level.valid())
-		{
-			std::cout << "Error parsing level! y = " << y << std::endl;
-			return;
-		}
+		//sol::table row = level[y];
+		//if (!level.valid())
+		//{
+		//	std::cout << "Error parsing level! y = " << y << std::endl;
+		//	return;
+		//}
 
 		for (int x = 1; x <= width; ++x)
 		{
-			int tileID = row[x].get_or(0);
+			int tileID = level[y][x].get_or(0);
 
 			sol::table tileData = tiles[tileID];
 			if (tileData.valid())

@@ -25,6 +25,7 @@ public:
 
 	LuaObjectHandle* getTile(int x, int y) const;
 	LuaObjectHandle* findEntity(sol::function condition);
+	LuaObjectHandle* getPlayer() const;
 
 	void removeTile(int x, int y);
 	void removeObject(LuaObjectHandle& objectHandle);

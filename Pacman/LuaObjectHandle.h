@@ -1,9 +1,20 @@
 #pragma once
 
 #include <string>
+#include <SFML\Graphics.hpp>
 #include "sol.hpp"
 
 class GameObject;
+
+
+struct NodeCost
+{
+	NodeCost(int x, int y) : x(x), y(y), cost(0) {};
+	int x;
+	int y;
+	int cost;
+};
+
 
 class LuaObjectHandle
 {
@@ -24,6 +35,7 @@ public:
 	void setTexture(int x, int y);
 
 	void setSpeed(int x, int y);
+	sf::Vector2i getSpeed();
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
 
@@ -31,7 +43,9 @@ public:
 	void heal(unsigned hp);
 	void damage(unsigned dmg);
 
-	void guideTo(LuaObjectHandle& destination);
+	void guideTo(LuaObjectHandle& destination, sol::protected_function customWages);
+	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);
+
 	LuaObjectHandle* getDestination();
 	bool isGuided();
 

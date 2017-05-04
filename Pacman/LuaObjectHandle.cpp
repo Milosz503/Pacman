@@ -101,6 +101,20 @@ void LuaObjectHandle::setSpeed(int x, int y)
 	}
 }
 
+sf::Vector2i LuaObjectHandle::getSpeed()
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		return static_cast<Entity*>(object_)->getSpeed();
+
+	}
+	else
+	{
+		std::cout << "Error 'tile' doesn't have speed!" << std::endl;
+	}
+	return sf::Vector2i(0, 0);
+}
+
 void LuaObjectHandle::setDefaultSpeed(int speed)
 {
 	if (object_->getType() == GameObject::Entity)
@@ -141,13 +155,27 @@ void LuaObjectHandle::damage(unsigned dmg)
 	object_->setHp(object_->getHp() - dmg);
 }
 
-void LuaObjectHandle::guideTo(LuaObjectHandle & destination)
+void LuaObjectHandle::guideTo(LuaObjectHandle & destination, sol::protected_function customWages)
 {
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(destination.getObject());
+		entity->guideTo(destination.getObject(), customWages);
+
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
+	}
+}
+void LuaObjectHandle::guideTo_costs(LuaObjectHandle & destination, sol::protected_function customWages)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		Entity* entity = static_cast<Entity*>(object_);
+
+		entity->guideTo(destination.getObject(), customWages);
 
 	}
 	else

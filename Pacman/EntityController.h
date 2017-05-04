@@ -26,7 +26,7 @@ public:
 	~EntityController();
 
 	typedef std::pair<float, sf::Vector2i> NodePair;
-	typedef std::pair<int, sf::Vector2i> NodeCost;
+	//typedef std::pair<int, sf::Vector2i> NodeCost;
 
 private:
 	

@@ -14,6 +14,9 @@ public:
 	Tile* createTile(std::string tileName);
 	Entity* createEntity(std::string entityName);
 
+	//const std::map<std::string, Tile*>& getTiles();
+	//const std::map<std::string, Entity*>& getEntities();
+
 
 	~EntityManager();
 

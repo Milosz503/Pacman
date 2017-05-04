@@ -2,7 +2,22 @@
 Colors = dofile("data/colors.lua")
  
  
- 
+function toPlayerBackCosts(nodes)
+	player = world:getPlayer()
+	playerX = player.x
+	playerY = player.y
+	
+	print(playerX .. " " .. playerY)
+	
+	playerX = playerX - player:getSpeed().x
+	playerY = playerY - player:getSpeed().y
+	
+	print(playerX .. " " .. playerY)
+	
+	node = NodeCost.new(playerX, playerY)
+	node.cost = 100
+	nodes:add(node)
+end
  
  
 entities = {
@@ -29,6 +44,15 @@ entities = {
 		
 		update = function(self)
 			
+			costs = function(nodes)
+				
+				node = NodeCost.new(4, 4)
+				node.cost = 100
+				nodes:add(node)
+				
+			end
+		
+			
 			player = world:findEntity(function(e)
 				if e.category == "player" then return true end
 				return false
@@ -37,13 +61,13 @@ entities = {
 			distance = world:getDistance(self, player)
 			
 			if self:getDestination() == player then
-				if distance > 10 then self:guideTo(world:getTile(self.vars.x, self.vars.y)) end
+				if distance > 10 then self:guideTo(world:getTile(self.vars.x, self.vars.y), costs) end
 				
 			elseif distance < 8 then
 				self:guideTo(player) 
 				
 			else
-				self:guideTo(world:getTile(self.vars.x, self.vars.y))
+				self:guideTo(world:getTile(self.vars.x, self.vars.y), costs)
 			end
 			
 			

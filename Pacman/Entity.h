@@ -2,8 +2,10 @@
 
 #include "GameObject.h"
 #include "Animation.h"
-
+#include <memory>
 #include <list>
+
+
 
 class World;
 
@@ -38,9 +40,10 @@ public:
 	
 
 	bool isGuided();
-	void guideTo(GameObject* destination);
+	void guideTo(GameObject* destination, sol::protected_function customWages);
 	void stopGuide();
 	GameObject* getDestination();
+	std::vector<NodeCost> getWages();
 
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
@@ -82,6 +85,7 @@ private:
 	std::list<sf::Vector2i> path_;
 	sf::Vector2i pathDestination_;
 
+	sol::protected_function* customWages_;
 	bool isGuided_;
 	GameObject* destination_;
 };

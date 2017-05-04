@@ -44,6 +44,15 @@ LuaObjectHandle * LuaGameHandle::findEntity(sol::function condition)
 	return nullptr;
 }
 
+LuaObjectHandle * LuaGameHandle::getPlayer() const
+{
+	Entity* player = world_->getScene()->getPlayer();
+	if(player != nullptr)
+		return &player->getHandle();
+
+	return nullptr;
+}
+
 void LuaGameHandle::removeTile(int x, int y)
 {
 	world_->getScene()->removeTile(x, y);

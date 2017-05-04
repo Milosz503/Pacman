@@ -36,6 +36,7 @@ EntityManager::EntityManager(World* world) :
 		"setColor", &LuaObjectHandle::setColor,
 		"setTexture", &LuaObjectHandle::setTexture,
 		"setSpeed", &LuaObjectHandle::setSpeed,
+		"getSpeed", &LuaObjectHandle::getSpeed,
 		"defaultSpeed", sol::property(&LuaObjectHandle::getDefaultSpeed, &LuaObjectHandle::setDefaultSpeed),
 		"hp", sol::property(&LuaObjectHandle::getHp),
 		"heal", &LuaObjectHandle::heal,
@@ -53,9 +54,24 @@ EntityManager::EntityManager(World* world) :
 		"addScore", &LuaGameHandle::addScore,
 		"getTile", &LuaGameHandle::getTile,
 		"findEntity", &LuaGameHandle::findEntity,
+		"getPlayer", &LuaGameHandle::getPlayer,
 		"removeTile", &LuaGameHandle::removeTile,
 		"removeObject", &LuaGameHandle::removeObject,
 		"getDistance", &LuaGameHandle::getDistance
+		);
+
+	lua_.new_usertype<sf::Vector2i>("Vector2i",
+		sol::constructors<sf::Vector2i() , sf::Vector2i(int, int)>(),
+		"x", &sf::Vector2i::x,
+		"y", &sf::Vector2i::y
+
+		);
+
+	lua_.new_usertype<NodeCost>("NodeCost",
+		sol::constructors<NodeCost(int, int)>(),
+		"x", &NodeCost::x,
+		"y", &NodeCost::y,
+		"cost", &NodeCost::cost
 		);
 
 
@@ -162,6 +178,16 @@ Entity * EntityManager::createEntity(std::string entityName)
 
 	
 }
+
+//const std::map<std::string, Tile*>& EntityManager::getTiles()
+//{
+//	return tileTemplates_;
+//}
+//
+//const std::map<std::string, Entity*>& EntityManager::getEntities()
+//{
+//	return entityTemplates_;
+//}
 
 
 

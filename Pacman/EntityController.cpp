@@ -65,7 +65,12 @@ void EntityController::update(Entity * entity)
 
 
 		std::vector<sf::Vector2i> path;
-		std::vector<NodeCost> customCosts;
+		std::vector<NodeCost> customCosts = entity->getWages();
+
+		for (auto& node : customCosts)
+		{
+			std::cout << "Node: " << node.x << " " << node.y << " " << node.cost << std::endl;
+		}
 
 		bool found = searchPathAStar(start,
 			destination, path, customCosts);
@@ -279,13 +284,13 @@ sf::Vector2i EntityController::searchPath(sf::Vector2i start, sf::Vector2i targe
 }
 
 
-int getCost(sf::Vector2i node, std::vector<EntityController::NodeCost>& customCosts)
+int getCost(sf::Vector2i node, std::vector<NodeCost>& customCosts)
 {
 	for (auto& customNode : customCosts)
 	{
-		if (node == customNode.second)
+		if (node.x == customNode.x && node.y == customNode.y)
 		{
-			return customNode.first;
+			return customNode.cost;
 		}
 	}
 	return 1;

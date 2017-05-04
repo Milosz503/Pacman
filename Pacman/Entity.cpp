@@ -15,6 +15,7 @@ Entity::Entity(World* world, sol::table& data) :
 	hitpoints_(1),
 	isVulnerable_(true),
 	teleported_(false),
+	customWages_(nullptr),
 	isGuided_(false),
 	destination_(nullptr)
 	
@@ -172,13 +173,15 @@ bool Entity::isGuided()
 	return isGuided_;
 }
 
-void Entity::guideTo(GameObject * destination)
+void Entity::guideTo(GameObject * destination, sol::protected_function customWages)
 {
 	if (destination_ != destination)
 	{
 		isGuided_ = true;
 		destination_ = destination;
 		path_.clear();
+		if(customWages.valid())
+			customWages_ = new sol::protected_function(customWages);
 	}
 	
 }
@@ -188,11 +191,30 @@ void Entity::stopGuide()
 	isGuided_ = false;
 	destination_ = nullptr;
 	path_.clear();
+	customWages_ = nullptr;
 }
 
 GameObject * Entity::getDestination()
 {
 	return destination_;
+}
+
+std::vector<NodeCost> Entity::getWages()
+{
+	std::vector<NodeCost> nodes;
+
+	if (customWages_ != nullptr)
+	{
+		auto result = (*customWages_)(nodes);
+		if (!result.valid())
+		{
+			sol::error e = result;
+			std::cout << "Error function custom costs: " << e.what() << std::endl;
+		}
+	}
+		
+
+	return nodes;
 }
 
 
