@@ -11,6 +11,8 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	width_(width),
 	height_(height),
 	fontHeight_(8),
+	offsetX_(0),
+	offsetY_(0),
 	textureManager_(textureManager)
 {
 
@@ -59,6 +61,12 @@ unsigned ConsoleWindow::getFontSize()
 	return fontHeight_;
 }
 
+void ConsoleWindow::setOffset(int x, int y)
+{
+	offsetX_ = x;
+	offsetY_ = y;
+}
+
 void ConsoleWindow::clear(Color color)
 {
     for (int i = 0; i < width_; i++)
@@ -75,63 +83,14 @@ void ConsoleWindow::clear(Color color)
 	window_.clear(color);
 }
 
-void ConsoleWindow::draw(ConsoleSprite& sprite)
-{
-    for (unsigned x = sprite.getX() < 0 ? -sprite.getX() : 0; x < sprite.getWidth() && sprite.getX() + x < width_; x++)
-	{
-		for (unsigned y = sprite.getY() < 0 ? -sprite.getY() : 0; y < sprite.getHeight() && sprite.getY() + y < height_; ++y)
-		{
-			/*if (buffer_[sprite.getY() + y][sprite.getX() + x] == sprite.getCharacter(x, y) && sprite.getCharacter(x, y) == 'Q')
-			{
-				buffer_[sprite.getY() + y][sprite.getX() + x] = '2';
-			}
-			else if (sprite.getCharacter(x, y) && sprite.getCharacter(x, y) == 'Q' && buffer_[sprite.getY() + y][sprite.getX() + x] > '1' && buffer_[sprite.getY() + y][sprite.getX() + x] < '9')
-			{
-				buffer_[sprite.getY() + y][sprite.getX() + x]++;
-			}
-			else
-			{*/
-			
-					
-			//}
 
-//			if (sprite.getTexture() != Textures::None)
-//			{
-//				background_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getBackground(sprite.getTexture());
-	//			textures_[sprite.getY() + y][sprite.getX() + x] = TextureManager::getTexture(sprite.getTexture());
-//			}
-	//		else
-			{
-				if (sprite.getCharacter(x, y) != L' ')
-				{
-					buffer_[sprite.getY() + y][sprite.getX() + x] = sprite.getCharacter(x, y);
-					colors_[sprite.getY() + y][sprite.getX() + x] = sprite.getColor(x, y);
-				}
-			}
 
-			
-
-		}
-	}
-}
-
-void ConsoleWindow::draw(const CText & text)
-{
-
-    if (text.posY >= 0 && text.posY < height_)
-	{
-		for (int x = text.posX < 0 ? -text.posX : 0; x < text.length && text.posX + x < width_; x++)
-		{
-			buffer_[text.posY][text.posX + x] = text.text[x];
-		}
-	}
-}
 
 void ConsoleWindow::draw(ConsoleCharacter & character)
 {
 
-	int x = character.getX();
-	int y = character.getY();
+	int x = character.getX() + offsetX_;
+	int y = character.getY() + offsetY_;
 
 	if (x >= 0 && x < width_ 
 		&&	y >= 0 && y < height_)
@@ -145,8 +104,8 @@ void ConsoleWindow::draw(ConsoleCharacter & character)
 
 void ConsoleWindow::draw(ConsoleText & consoleText)
 {
-	int x = consoleText.getX();
-	int y = consoleText.getY();
+	int x = consoleText.getX() + offsetX_;
+	int y = consoleText.getY() + offsetY_;
 
 	std::wstring text = consoleText.getText();
 

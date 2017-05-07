@@ -11,7 +11,7 @@
 
 class World;
 class Scene;
-
+class NodePairComparator;
 
 class EntityController : public System
 {
@@ -26,6 +26,7 @@ public:
 	~EntityController();
 
 	typedef std::pair<float, sf::Vector2i> NodePair;
+	typedef std::priority_queue<NodePair, std::vector<NodePair>, NodePairComparator> NodeQueue;
 	//typedef std::pair<int, sf::Vector2i> NodeCost;
 
 private:
@@ -46,6 +47,9 @@ private:
 	sf::Vector2i getDistance(sf::Vector2i& start, sf::Vector2i& goal);
 	float heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start);
 
+	void clearData();
+	void addNeighbor(sf::Vector2i neighbor, std::vector<NodeCost>& customCosts, NodeQueue& queue);
+
 
 	enum NodeState {Left, Up, Right, Down, Visited, Unvisited};
 
@@ -53,6 +57,17 @@ private:
 	std::vector<std::vector<int>> distance;
 	std::vector<sf::Vector2i> path;
 	sf::Vector2i start;
+
+
+
+
+	std::vector<std::vector<sf::Vector2i>> cameFrom_;
+	std::vector<std::vector<float>> cost_;
+	std::vector<sf::Vector2i> path_;
+
+	sf::Vector2i currentPosition_;
+	sf::Vector2i goal_;
+	sf::Vector2i start_;
 
 };
 

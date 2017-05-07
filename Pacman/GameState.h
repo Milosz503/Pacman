@@ -21,6 +21,7 @@ private:
 
 	World world_;
 	SystemManager systems_;
+	ConsoleWindow* console_;
 
 	//World world_;
 

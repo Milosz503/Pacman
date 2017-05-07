@@ -130,7 +130,8 @@ bool EditState::handleEvent(sf::Event event)
 {
 	if (event.type == Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
-
+		levelFile_ = "data/level-copy.lua";
+		saveLevel();
 
 		requestStackPop();
 		requestStackPush(States::Menu);

@@ -13,32 +13,6 @@ class ConsoleWindow;
 
 
 
-struct CText
-{
-	friend class ConsoleWindow;
-
-	CText(std::wstring text, int x, int y) :
-		text(text),
-		posX(x),
-		posY(y)
-	{
-		length = text.length();
-	}
-
-	void setText(std::wstring text)
-	{
-		this->text = text;
-		length = text.length();
-	}
-
-private:
-	std::wstring text;
-	int posX;
-	int posY;
-
-	int length;
-};
-
 
 class ConsoleWindow
 {
@@ -48,9 +22,9 @@ public:
 	void setFontSize(unsigned size);
 	unsigned getFontSize();
 
+	void setOffset(int x, int y);
+
 	void clear(sf::Color color = sf::Color::Black);
-	void draw(ConsoleSprite& sprite);
-	void draw(const CText & text);
 	void draw(ConsoleCharacter& character);
 	void draw(ConsoleText& consoleText);
 	void show();
@@ -81,6 +55,9 @@ private:
 
 	unsigned fontHeight_;
 	unsigned fontWidth_;
+
+	int offsetX_;
+	int offsetY_;
 
 	sf::RenderWindow window_;
 

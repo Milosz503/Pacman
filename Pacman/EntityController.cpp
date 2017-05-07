@@ -2,6 +2,7 @@
 #include "World.h"
 #include "ConsoleWindow.h"
 #include <forward_list>
+#include <limits>
 
 
 EntityController::EntityController(SystemManager* systemManager, World* world) :
@@ -481,7 +482,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 	directions[3] = Right;
 
 
-	std::priority_queue<NodePair, std::vector<NodePair>, NodePairComparator> nodes;
+	NodeQueue nodes;
 
 	graph[start.x][start.y] = Visited;
 	distance[start.x][start.y] = 0;
@@ -542,7 +543,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 		neighbors[2] = sf::Vector2i(pos.x, pos.y + 1);
 		neighbors[3] = sf::Vector2i(pos.x - 1, pos.y);
 
-
+		
 		
 
 
@@ -555,6 +556,7 @@ bool EntityController::searchPathAStar(sf::Vector2i start, sf::Vector2i goal,
 			if (!scene_->isTilePhysical(neighbor.x, neighbor.y) && distance[neighbor.x][neighbor.y] > newCost)
 			{
 				float priority = newCost + heuristic(neighbor, goal, start);
+					
 
 				nodes.push(NodePair(priority, neighbor));
 				graph[neighbor.x][neighbor.y] = directions[i];
@@ -652,4 +654,23 @@ float EntityController::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::V
 
 	//return 0;
 	return cross*0.0000001 + (1.00001)*(distance.x + distance.y);//(abs(current.x - goal.x) + abs(current.y - goal.y));
+}
+
+void EntityController::clearData()
+{
+	path_.clear();
+
+	for (int x = 0; x < cost_.size(); ++x)
+	{
+		for (int y = 0; y < cost_[x].size(); ++y)
+		{
+			cost_[x][y] = std::numeric_limits<float>::max();
+		}
+	}
+}
+
+void EntityController::addNeighbor(sf::Vector2i neighbor, std::vector<NodeCost>& customCosts, NodeQueue & queue)
+{
+	neighbor = scene_->normalize(neighbor);
+
 }

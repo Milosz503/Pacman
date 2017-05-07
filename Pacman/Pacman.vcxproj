@@ -170,6 +170,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="LuaGameHandle.h" />
     <ClInclude Include="LuaObjectHandle.h" />
+    <ClInclude Include="PathFinder.h" />
     <ClInclude Include="sol.hpp" />
     <ClInclude Include="SystemEvent.h" />
     <ClInclude Include="LevelManager.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="LuaObjectHandle.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Pacman.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Scene.cpp" />

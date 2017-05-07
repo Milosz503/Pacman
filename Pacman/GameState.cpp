@@ -21,6 +21,8 @@ GameState::GameState(StateStack & stack, Context context) :
 	fps(0)
 {
 
+	console_ = getContext().console;
+
 	scoreText_.setPosition(2, 2);
 	updateTime_.setPosition(0, 47);
 	drawTime_.setPosition(0, 48);
@@ -145,18 +147,23 @@ void GameState::draw()
 	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
 
 
-	getContext().console->draw(text);
-	getContext().console->draw(scoreText_);
-	getContext().console->draw(updateTime_);
-	getContext().console->draw(drawTime_);
 
-	
+
+	console_->draw(text);
+	console_->draw(scoreText_);
+	console_->draw(updateTime_);
+	console_->draw(drawTime_);
+
+	console_->setOffset(2, 4);
+
 	world_.draw();
 	systems_.draw();
+
+	console_->setOffset(0, 0);
 	
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
-	getContext().console->draw(character_);
+	console_->draw(character_);
 }
 
 GameState::~GameState()
