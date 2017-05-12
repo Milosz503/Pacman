@@ -434,7 +434,7 @@ void Scene::update()
 
 	entities_.erase(std::remove(entities_.begin(), entities_.end(), nullptr), entities_.end());
 
-	std::cout << entities_.size() << std::endl;
+	//std::cout << entities_.size() << std::endl;
 
 }
 

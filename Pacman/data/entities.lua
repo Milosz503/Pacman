@@ -20,6 +20,8 @@ function toPlayerBackCosts(nodes)
 end
  
  
+
+ 
 entities = {
 	
 	AgresiveGhost = {
@@ -27,15 +29,20 @@ entities = {
 		type = "entity";
 		category = "ghost";
 		
-		speed = 15;
+		speed = 20;
 		
 		texture = {x = 6, y = 2, color = Colors.green };
+		
+
 		
 		update = function(self)
 			player = world:getPlayer();
 			
 			--if player ~= nil then
+			if self.vars.guided == nil then
 				self:guideTo(player);
+				self.vars.guided = true;
+			end
 			--end
 			
 		end

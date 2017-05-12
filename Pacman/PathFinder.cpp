@@ -32,7 +32,7 @@ PathFinder::~PathFinder()
 {
 }
 
-std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i goal)
+std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
 {
 	clearData();
 
@@ -68,8 +68,19 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 		for (int i = 0; i < neighbors.size(); ++i)
 		{
-			addNeighbor(pos, pos + neighbors[i], 1);
+
+			if (pos + neighbors[i] != lastPosition)
+			{
+				addNeighbor(pos, pos + neighbors[i], 1);
+				
+			}
+			else
+			{
+				std::cout << "!!" << std::endl;
+			}
+				
 		}
+		//lastPosition = pos;
 		++iterations;
 	}
 
@@ -79,6 +90,94 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 	std::reverse(path_.begin(), path_.end());
 
 	return path_;
+}
+
+sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
+{
+	if (start == goal)
+		return sf::Vector2i(0, 0);
+
+	sf::Vector2i distance((goal.x - start.x), (goal.y - start.y));
+
+	int x = abs(distance.x);
+	int y = abs(distance.y);
+
+	sf::Vector2i direction(0, 0);
+
+	if (distance.x < 0) direction.x = -1;
+	else /*if (distance.x > 0)*/ direction.x = 1;
+
+	if (distance.y < 0) direction.y = -1;
+	else /*if (distance.y > 0)*/ direction.y = 1;
+
+	sf::Vector2i nextMove = start;
+
+	if (x > y)
+	{
+		nextMove.x += direction.x;
+		if (!isPhysical(nextMove))
+		{
+			return sf::Vector2i(direction.x, 0);
+		}
+		else
+		{
+			nextMove = start;
+			nextMove.y += direction.y;
+
+			if (!isPhysical(nextMove))
+			{
+				return sf::Vector2i(0, direction.y);
+			}
+			else
+			{
+				nextMove = start;
+				nextMove.y -= direction.y;
+
+				if (!isPhysical(nextMove))
+				{
+					return sf::Vector2i(0, -direction.y);
+				}
+				else
+				{
+					return sf::Vector2i(-direction.x, 0);
+				}
+			}
+		}
+	}
+	else
+	{
+		nextMove.y += direction.y;
+		if (!isPhysical(nextMove))
+		{
+			return sf::Vector2i(0, direction.y);
+		}
+		else
+		{
+			nextMove = start;
+			nextMove.x += direction.x;
+
+			if (!isPhysical(nextMove))
+			{
+				return sf::Vector2i(direction.x, 0);
+			}
+			else
+			{
+				nextMove = start;
+				nextMove.y -= direction.x;
+
+				if (!isPhysical(nextMove))
+				{
+					return sf::Vector2i(-direction.x, 0);
+				}
+				else
+				{
+					return sf::Vector2i(0, -direction.y);
+				}
+			}
+		}
+	}
+
+	return sf::Vector2i(0, 0);
 }
 
 
@@ -173,4 +272,10 @@ float PathFinder::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2
 
 	//return 0;
 	return cross*0.0000001 + (1.00001)*(distance.x + distance.y);//(abs(current.x - goal.x) + abs(current.y - goal.y));
+}
+
+bool PathFinder::isPhysical(sf::Vector2i pos)
+{
+	pos = scene_->normalize(pos);
+	return scene_->isTilePhysical(pos.x, pos.y);
 }

@@ -54,6 +54,8 @@ void EntityController::update(Entity * entity)
 {
 	if (entity->getCategory() == "ghost" && entity->isGuided() && entity->isPathEmpty() && entity->isReadyToMove())// || entity->getType() == Entity::SlowGhost) && entity->isReadyToMove())
 	{
+		
+
 		sf::Vector2i destination = entity->getDestination()->getPosition();
 		if (entity->getDestination()->getType() == GameObject::Entity)
 		{
@@ -64,11 +66,23 @@ void EntityController::update(Entity * entity)
 
 		sf::Vector2i start = entity->getPosition() + entity->getNextMove();
 
+		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
+
+		if (entity->getCategory() == "AgresiveGhost")
+			std::cout << "Last pos: " << lastPosition.x << " " << lastPosition.y << std::endl;
 
 		if (start == destination)
 			return;
 
-		std::vector<sf::Vector2i>& path = finder_.findPath(start, destination);
+		lastPosition_ = lastPosition;
+		goal_ = destination;
+		start_ = start;
+
+		sf::Vector2i dir = finder_.findDirectionTo(start, destination, lastPosition);
+		entity->setSpeed((Direction::X)(dir.x), (Direction::Y)(dir.y));
+		return;
+
+		std::vector<sf::Vector2i>& path = finder_.findPath(start, destination, lastPosition);
 		if (path.size() > 0)
 		{
 			entity->setPath(std::list<sf::Vector2i>(path.begin(), path.end()), destination);
@@ -120,41 +134,52 @@ void EntityController::update(Entity * entity)
 //	}*/
 //}
 
-//void EntityController::draw()
-//{
-//	
-//	//ConsoleCharacter character(TextureManager::getTexture(L'.', CharacterColor::Red));
-//
-//
-//	//for (int x = 0; x < distance.size(); ++x)
-//	//{
-//	//	for (int y = 0; y < distance[x].size(); ++y)
-//	//	{
-//	//		if (distance[x][y] < 100000)
-//	//		{
-//	//			character.setPosition(x, y);
-//	//			character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
-//
-//	//			getWorld()->getConsole()->draw(character);
-//	//		}
-//
-//	//	}
-//	//}
-//	//character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
-//
-//	//sf::Vector2i pos = start;
-//
-//	//for (auto& node : path)
-//	//{
-//	//	pos.x += node.x;
-//	//	pos.y += node.y;
-//	//	pos = scene_->normalize(pos);
-//	//	character.setPosition(pos);
-//
-//	//	getWorld()->getConsole()->draw(character);
-//	//}
-//	
-//}
+void EntityController::draw()
+{
+	
+	ConsoleCharacter character(TextureManager::getTexture(L'*', CharacterColor::Red));
+
+	character.setPosition(goal_);
+	//getWorld()->getConsole()->draw(character);
+
+	character.setPosition(start_);
+	character.setTexture(TextureManager::getTexture(L's', CharacterColor::Grey));
+	getWorld()->getConsole()->draw(character);
+
+
+	character.setPosition(lastPosition_);
+	character.setTexture(TextureManager::getTexture(L'l', CharacterColor::White));
+	getWorld()->getConsole()->draw(character);
+
+	//for (int x = 0; x < distance.size(); ++x)
+	//{
+	//	for (int y = 0; y < distance[x].size(); ++y)
+	//	{
+	//		if (distance[x][y] < 100000)
+	//		{
+	//			character.setPosition(x, y);
+	//			character.setTexture(TextureManager::getTexture(L'0' /*+ distance[x][y]*/, CharacterColor::Blue));
+
+	//			getWorld()->getConsole()->draw(character);
+	//		}
+
+	//	}
+	//}
+	//character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
+
+	//sf::Vector2i pos = start;
+
+	//for (auto& node : path)
+	//{
+	//	pos.x += node.x;
+	//	pos.y += node.y;
+	//	pos = scene_->normalize(pos);
+	//	character.setPosition(pos);
+
+	//	getWorld()->getConsole()->draw(character);
+	//}
+	
+}
 
 EntityController::~EntityController()
 {

@@ -53,8 +53,8 @@ void Entity::update()
 		}
 		else if(isGuided_)
 		{
-			speed_.x = 0;
-			speed_.y = 0;
+			//speed_.x = 0;
+			//speed_.y = 0;
 		}
 
 		if (speed_.x != 0)

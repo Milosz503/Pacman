@@ -22,7 +22,7 @@ public:
 	virtual void update() override;
 	void update(Entity* entity);
 	//void handleCollision(Entity* entity, Tile* tile);
-	//virtual void draw() override;
+	virtual void draw() override;
 
 	~EntityController();
 
@@ -68,9 +68,9 @@ private:
 	//std::vector<std::vector<float>> cost_;
 	//std::vector<sf::Vector2i> path_;
 
-	//sf::Vector2i currentPosition_;
-	//sf::Vector2i goal_;
-	//sf::Vector2i start_;
+	sf::Vector2i lastPosition_;
+	sf::Vector2i goal_;
+	sf::Vector2i start_;
 
 };
 

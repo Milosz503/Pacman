@@ -13,7 +13,7 @@ levelLogic = {
 	
 	collide = function(vars, object1, object2)
 		
-		print (object1.category .. "  " .. object2.category)
+		--print (object1.category .. "  " .. object2.category)
 		
 		if (object1.category == "player" or object2.category == "player") and
 			(object1.category == "ghost" or object2.category == "ghost") then

@@ -30,5 +30,6 @@ void main() {
 	}
 	pixel = (2 * pixel + pixel * (1.0 - dist/(light.z * resolution.x)))/3;
 	gl_FragColor = gl_Color * pixel;
+	gl_FragColor =  texture2D(texture, gl_TexCoord[0].xy);
 
 }

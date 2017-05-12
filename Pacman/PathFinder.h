@@ -35,8 +35,8 @@ public:
 	PathFinder(Scene* scene);
 	~PathFinder();
 
-	std::vector<sf::Vector2i>& findPath(sf::Vector2i start, sf::Vector2i goal);
-
+	std::vector<sf::Vector2i>& findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
+	sf::Vector2i findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
 
 private:
 
@@ -59,5 +59,7 @@ private:
 
 	sf::Vector2i getDistance(sf::Vector2i& start, sf::Vector2i& goal);
 	float heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start);
+
+	bool isPhysical(sf::Vector2i pos);
 };
 
