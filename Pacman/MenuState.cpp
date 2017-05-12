@@ -24,14 +24,14 @@ bool MenuState::handleEvent(sf::Event event)
 		if (event.key.code == Keyboard::Return)
 		{
 			requestStackPop();
-			requestStackPush(States::Game);
+			requestStackPush(States::LevelChoiceGame);
 		}
 
 		switch (event.key.code)
 		{
 		case Keyboard::Num1:
 			requestStackPop();
-			requestStackPush(States::Game);
+			requestStackPush(States::LevelChoiceGame);
 			break;
 
 		case Keyboard::Num2:
@@ -50,7 +50,7 @@ bool MenuState::handleEvent(sf::Event event)
 
 		case Keyboard::Num3:
 			requestStackPop();
-			requestStackPush(States::Editor);
+			requestStackPush(States::LevelChoiceEditor);
 			break;
 		
 		case Keyboard::Num4:

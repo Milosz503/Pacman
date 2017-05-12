@@ -9,6 +9,7 @@
 #include "GameLogic.h"
 #include "EditSystem.h"
 #include "StateStack.h"
+#include "LevelLogic.h"
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
@@ -27,23 +28,9 @@ GameState::GameState(StateStack & stack, Context context) :
 	updateTime_.setPosition(0, 47);
 	drawTime_.setPosition(0, 48);
 
-	character_.setTexture(TextureManager::getTexture(L'P', CharacterColor::Green));
-	character_.setPosition(0, 0);
 
-	
-	
 
-	//world_.getScene()->prepareLevel(getContext().level);
-	try
-	{
-		LevelManager::loadLevel(&world_, "data/level.lua");
-	}
-	catch (std::runtime_error& e)
-	{
-		std::cout << "Exception: " << e.what() << std::endl;
-		stack.clearStates();
-		stack.pushState(States::Menu);
-	}
+	loadLevel();
 	
 
 
@@ -53,7 +40,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<GameLogic>();
 	systems_.addSystem<EditSystem>();
-	
+	systems_.addSystem<LevelLogic>();
 
 
 
@@ -63,6 +50,8 @@ GameState::GameState(StateStack & stack, Context context) :
 
 bool GameState::update(sf::Time dt)
 {
+
+
 	sf::Clock clock;
 	clock.restart();
 
@@ -70,11 +59,7 @@ bool GameState::update(sf::Time dt)
 	systems_.update();
 	world_.update();
 	
-	if (world_.getFrameNumber() % 7 == 0)
-		character_.move(0, 1);
 
-	if (world_.getFrameNumber() % 7 == 0)
-		character_.move(1, 0);
 
 	if (world_.getFrameNumber() % 20 == 0)
 		averageUpdate_ = 0;
@@ -102,10 +87,6 @@ bool GameState::handleEvent(sf::Event event)
 
 		if (event.key.code == Keyboard::Escape)
 		{
-			//LevelManager levelManager(getContext().level);
-			//levelManager.saveFile("level2.txt");
-
-			//LevelManager::saveLevel(world_.getScene(), "data/level.lua");
 
 			requestStackPop();
 			requestStackPush(States::Menu);
@@ -114,18 +95,6 @@ bool GameState::handleEvent(sf::Event event)
 	
 	}
 
-	if (event.type == Event::MouseButtonPressed)
-	{
-		if (event.mouseButton.button == sf::Mouse::Left)
-		{
-			//world_.addTile(Tile::Wall, event.mouseButton.x / 16, event.mouseButton.y / 16);
-		}
-
-		if (event.mouseButton.button == sf::Mouse::Right)
-		{
-			//world_.removeTile(event.mouseButton.x / 16, event.mouseButton.y / 16);
-		}
-	}
 
 	return false;
 }
@@ -163,9 +132,33 @@ void GameState::draw()
 	
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
-	console_->draw(character_);
+
 }
 
 GameState::~GameState()
 {
+}
+
+void GameState::loadLevel()
+{
+
+
+	try
+	{
+		LevelManager::loadLevel(&world_, *getContext().levelFile);
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << "Exception: " << e.what() << std::endl;
+		requestStackClear();
+		requestStackPush(States::Menu);
+	}
+
+	//if (world_.getScene()->getPlayer() == nullptr)
+	//{
+	//	std::cout << "ERROR: Player not loaded!" << std::endl;
+	//	requestStackClear();
+	//	requestStackPush(States::Menu);
+	//}
+
 }

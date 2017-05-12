@@ -9,8 +9,11 @@ Scene::Scene(World* world) :
 	world_(world),
 	player_(nullptr),
 	width_(0),
-	height_(0)
+	height_(0),
+	entitiesToSpawn_(false)
 {
+
+	entityManager_ = world_->getEntityManager();
 	//addEntity(Entity::Pacman, 1, 1);
 	//player_ = entities_.back();
 
@@ -244,6 +247,8 @@ void Scene::setSize(int width, int height)
 			tiles_[x][y] = nullptr;
 		}
 	}
+
+	entities_.clear();
 }
 
 void Scene::addEntity(Entity * entity)
@@ -254,7 +259,10 @@ void Scene::addEntity(Entity * entity)
 	if (entity->getCategory() == "player")
 	{
 		player_ = entity;
+
+		std::cout << "player! " << entity->getCategory() << std::endl;
 	}
+	std::cout << "added " << entity->getCategory() << std::endl;
 }
 
 //void Scene::addEntity(Entity::Type type, int x, int y)
@@ -327,12 +335,59 @@ void Scene::moveEntity(Entity * entity, sf::Vector2i & move)
 
 }
 
+void Scene::addSpawn(sf::Vector2i position, std::string entityName, sol::table & data)
+{
+	spawns_.push_back(SpawnPoint());
+
+	spawns_.back().position = position;
+	spawns_.back().entityName = entityName;
+	spawns_.back().data = data;
+}
+
+void Scene::spawnEntity(SpawnPoint* spawn)
+{
+	Entity* entity = entityManager_->createEntity(spawn->entityName);
+	entity->setPosition(spawn->position);
+	entity->init(spawn->data);
+
+	addEntity(entity);
+
+}
+
+void Scene::spawnEntites()
+{
+	for (auto& spawn : spawns_)
+	{
+		spawnEntity(&spawn);
+	}
+}
+
+void Scene::arrangeSpawnEntities()
+{
+	entitiesToSpawn_ = true;
+}
+
+void Scene::removeEntities()
+{
+	for (int i = 0; i < entities_.size(); ++i)
+	{
+		entities_[i]->markToRemove();
+	}
+
+}
+
 
 
 
 
 void Scene::update()
 {
+	if (entitiesToSpawn_)
+	{
+		entitiesToSpawn_ = false;
+		spawnEntites();
+	}
+
 
 	unsigned long long frameNumber = world_->getFrameNumber();
 
@@ -365,6 +420,22 @@ void Scene::update()
 		}
 	}
 
+	for (int i = 0; i < entities_.size(); ++i)
+	{
+		if (entities_[i]->isToRemove())
+		{
+			if (entities_[i]->getCategory() == "player" && entities_[i] == player_)
+				player_ = nullptr;
+
+			delete entities_[i];
+			entities_[i] = nullptr;
+		}
+	}
+
+	entities_.erase(std::remove(entities_.begin(), entities_.end(), nullptr), entities_.end());
+
+	std::cout << entities_.size() << std::endl;
+
 }
 
 void Scene::draw()
@@ -383,7 +454,8 @@ void Scene::draw()
 	{
 		world_->getConsole()->draw(*entity);
 	}
-	world_->getConsole()->draw(*player_);
+	if(player_ != nullptr)
+		world_->getConsole()->draw(*player_);
 
 }
 

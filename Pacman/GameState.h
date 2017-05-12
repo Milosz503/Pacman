@@ -31,13 +31,15 @@ private:
 	CharacterColor::Color currentColor;
 	sf::Color backgroundColor_;
 
-	ConsoleCharacter character_;
+
 	ConsoleText scoreText_;
 	ConsoleText updateTime_;
 	ConsoleText drawTime_;
 	float fps;
 
 	float averageUpdate_;
+
+	void loadLevel();
 	
 
 };

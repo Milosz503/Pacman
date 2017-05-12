@@ -38,6 +38,7 @@ State::Context State::getContext() const
 State::Context::Context(ConsoleWindow * console, TextureManager * textureManager) :
 
 	console(console),
-	textureManager(textureManager)
+	textureManager(textureManager),
+	levelFile(new std::string("data/level.lua"))
 {
 }

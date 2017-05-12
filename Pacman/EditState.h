@@ -9,9 +9,9 @@ struct ObjectIcon
 	TextureCharacter texture;
 	
 };
-struct SpawnPoint
+struct Spawn
 {
-	SpawnPoint(int e, sf::Vector2i p) : entity(e), position(p) {};
+	Spawn(int e, sf::Vector2i p) : entity(e), position(p) {};
 	int entity;
 	sf::Vector2i position;
 };
@@ -50,7 +50,7 @@ private:
 	int height_;
 
 	std::vector<std::vector<int>> level_;
-	std::vector<SpawnPoint> spawns_;
+	std::vector<Spawn> spawns_;
 	
 
 	std::vector<ObjectIcon> tiles_;

@@ -6,6 +6,7 @@
 #include "MenuState.h"
 #include "LevelManager.h"
 #include "EditState.h"
+#include "LevelChoiceState.h"
 
 
 //Po setPosition entity moze przeskoczyc przez sciane
@@ -35,6 +36,8 @@ int main()
 	stack.registerState<GameState>(States::Game);
 	stack.registerState<MenuState>(States::Menu);
 	stack.registerState<EditState>(States::Editor);
+	stack.registerState<LevelChoiceState>(States::LevelChoiceGame, States::Game);
+	stack.registerState<LevelChoiceState>(States::LevelChoiceEditor, States::Editor);
 
 	stack.pushState(States::Menu);
 

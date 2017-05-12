@@ -34,7 +34,9 @@ entities = {
 		update = function(self)
 			player = world:getPlayer();
 			
-			self:guideTo(player);
+			--if player ~= nil then
+				self:guideTo(player);
+			--end
 			
 		end
 		
@@ -112,6 +114,22 @@ entities = {
 		
 		speed = 10;
 		texture = {x = 0, y = 2, color = Colors.yellow};
+		
+		
+		collide = function(self, object)
+		
+			if object.category == "ghost" then
+				print("COLLISION")
+				world:removeEntities()
+			end
+			
+			if object.type == "entity" then
+				print("Entity Col")
+			end
+			
+
+		
+		end
 		
 	},
  
@@ -201,6 +219,14 @@ tiles = {
 		
 		isPhysical = false;
 		texture = {x = 10, y = 12; color = Colors.green};
+		
+		collide = function (self, object)
+			if object.category == "player" then
+				world:addScore(1)
+				self:remove()
+			end
+		
+		end
 	},
 	
 	-- Teleport = {

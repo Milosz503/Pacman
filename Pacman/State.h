@@ -17,6 +17,8 @@ namespace States
 	enum ID {
 		None,
 		Menu,
+		LevelChoiceGame,
+		LevelChoiceEditor,
 		Settings,
 		Editor,
 		Game,
@@ -37,6 +39,7 @@ public:
 
 		ConsoleWindow* console;
 		TextureManager* textureManager;
+		std::string* levelFile;
 
 		//Level* level;
 	};

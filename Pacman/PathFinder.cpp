@@ -1,8 +1,30 @@
 #include "PathFinder.h"
 #include <array>
+#include <limits>
+#include <algorithm>
 
-PathFinder::PathFinder()
+PathFinder::PathFinder(Scene* scene) :
+	 scene_(scene)
 {
+	cameFrom_.resize(scene_->getWidth());
+
+	for (int i = 0; i < cameFrom_.size(); ++i)
+	{
+		cameFrom_[i].resize(scene_->getHeight());
+
+	
+	}
+
+
+	cost_.resize(scene_->getWidth());
+
+	for (int i = 0; i < cost_.size(); ++i)
+	{
+		cost_[i].resize(scene_->getHeight());
+
+		
+	}
+	
 }
 
 
@@ -14,6 +36,13 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 {
 	clearData();
 
+	start = scene_->normalize(start);
+	goal = scene_->normalize(goal);
+
+	start_ = start;
+	goal_ = goal;
+
+
 	std::array<sf::Vector2i, 4> neighbors;
 
 	neighbors[0] = sf::Vector2i(1, 0);
@@ -24,16 +53,16 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 
 
-	NodeQueue queue;
+	
 	cost_[start.x][start.y] = 0;
 
-	queue.push(NodePair(0, start));
+	nodes_.push(NodePair(0, start));
 
 	int iterations = 0;
-	while (!queue.empty())
+	while (!nodes_.empty())
 	{
-		NodePair node = queue.top();
-		queue.pop();
+		NodePair node = nodes_.top();
+		nodes_.pop();
 
 		sf::Vector2i pos = node.second;
 
@@ -47,26 +76,101 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 	readPath(start, goal);
 	
+	std::reverse(path_.begin(), path_.end());
 
 	return path_;
 }
 
 
 
-sf::Vector2i PathFinder::getDirection(sf::Vector2i start, sf::Vector2i goal)
+sf::Vector2i PathFinder::getDirection(sf::Vector2i pos, sf::Vector2i next)
 {
-	return sf::Vector2i();
+	sf::Vector2i dir = pos - next;
+
+	if (dir.x > 1) dir.x = -1;
+	else if (dir.x < -1) dir.x = 1;
+
+	if (dir.y > 1) dir.y = -1;
+	else if (dir.y < -1) dir.y = 1;
+
+	return dir;
 }
 
 void PathFinder::readPath(sf::Vector2i start, sf::Vector2i goal)
 {
+	sf::Vector2i pos = goal;
+	sf::Vector2i next;
+
+	while (pos != start)
+	{
+		next = cameFrom_[pos.x][pos.y];
+		path_.push_back(getDirection(pos, next));
+
+		std::cout << (pos - next).x << " " << (pos - next).y << std::endl;
+
+		pos = next;
+	}
 }
 
 void PathFinder::clearData()
 {
+	for (int x = 0; x < cost_.size(); ++x)
+	{
+		for (int y = 0; y < cost_[x].size(); ++y)
+		{
+			cost_[x][y] = std::numeric_limits<int>::max();
+		}
+	}
+
+	path_.clear();
+
+	nodes_ = NodeQueue();
 }
 
 void PathFinder::addNeighbor(sf::Vector2i currentPos, sf::Vector2i neighbor, int neighborCost)
 {
-	
+	neighbor = scene_->normalize(neighbor);
+
+	float newCost = cost_[currentPos.x][currentPos.y] + neighborCost;
+
+	if (!scene_->isTilePhysical(neighbor.x, neighbor.y) && cost_[neighbor.x][neighbor.y] > newCost)
+	{
+		float priority = newCost + heuristic(neighbor, goal_, start_);
+
+		nodes_.push(NodePair(priority, neighbor));
+		cameFrom_[neighbor.x][neighbor.y] = currentPos;
+		cost_[neighbor.x][neighbor.y] = newCost;
+	}
+}
+
+sf::Vector2i PathFinder::getDistance(sf::Vector2i& start, sf::Vector2i& goal)
+{
+	sf::Vector2i distance(abs(start.x - goal.x), abs(start.y - goal.y));
+
+	if (distance.x >= scene_->getWidth() / 2)
+		distance.x = scene_->getWidth() - distance.x;
+
+	if (distance.y >= scene_->getHeight() / 2)
+		distance.y = scene_->getHeight() - distance.y;
+
+	return distance;
+}
+
+float length(sf::Vector2i vector)
+{
+	return std::sqrt(vector.x * vector.x + vector.y * vector.y);
+}
+
+float PathFinder::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start)
+{
+	float dx1 = current.x - goal.x;
+	float dy1 = current.y - goal.y;
+	float dx2 = start.x - goal.x;
+	float dy2 = start.y - goal.y;
+	float cross = abs(dx1*dy2 - dx2*dy1);
+
+	sf::Vector2i distance = getDistance(current, goal);
+
+	//return 0;
+	return cross*0.0000001 + (1.00001)*(distance.x + distance.y);//(abs(current.x - goal.x) + abs(current.y - goal.y));
 }

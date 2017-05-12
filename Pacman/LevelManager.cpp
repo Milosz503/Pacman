@@ -105,11 +105,12 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 					int x = object["x"].get_or(0);
 					int y = object["y"].get_or(0);
 
-					Entity* entity = entityManager->createEntity(name.value());
+				/*	Entity* entity = entityManager->createEntity(name.value());
 					entity->setPosition(x, y);
 					entity->init(object);
 
-					scene->addEntity(entity);
+					scene->addEntity(entity);*/
+					scene->addSpawn(sf::Vector2i(x, y), name.value(), object);
 				}
 				else
 				{
@@ -125,6 +126,8 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 			
 		}
 	}
+
+	scene->arrangeSpawnEntities();
 
 
 

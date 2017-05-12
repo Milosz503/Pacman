@@ -46,11 +46,15 @@ void Physics::checkDynamicCollisions(std::list<DynamicPair>& collisions)
 				if (entities[i]->getNextPosition() == entities[j]->getPosition())
 				{
 					collisions.push_back(DynamicPair(entities[i], entities[j]));
+					DynamicCollision event(entities[i], entities[j]);
+					sendEvent(&event);
 				}
 			}
 			else if(entities[i]->getNextPosition() == entities[j]->getNextPosition())
 			{
 				collisions.push_back(DynamicPair(entities[i], entities[j]));
+				DynamicCollision event(entities[i], entities[j]);
+				sendEvent(&event);
 			}
 			
 		}

@@ -20,8 +20,8 @@ public:
 
 	explicit StateStack(State::Context context);
 
-	template<typename T>
-	void registerState(States::ID stateID);
+	template<typename T, typename... Args>
+	void registerState(States::ID stateID, Args... args);
 
 
 	void update(sf::Time dt);
@@ -65,12 +65,12 @@ private:
 
 };
 
-template<typename T>
-inline void StateStack::registerState(States::ID stateID)
+template<typename T, typename... Args>
+inline void StateStack::registerState(States::ID stateID, Args... args)
 {
-	factories_[stateID] = [this]()
+	factories_[stateID] = [&, args...]()
 	{
-		return State::Ptr(new T(*this, context_));
+		return State::Ptr(new T(*this, context_, args...));
 	};
 }
 

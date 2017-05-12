@@ -8,10 +8,24 @@ EditState::EditState(StateStack & stack, Context context) :
 	State(stack, context),
 	textureManager_(context.textureManager),
 	console_(context.console),
-	levelFile_("data/level.lua"),
-	brush_(Brush::Tile, 0)
+	levelFile_(*context.levelFile),
+	brush_(Brush::Tile, 0),
+	width_(20),
+	height_(20)
 {
-	
+	level_.resize(width_);
+
+	for (int x = 0; x < width_; ++x)
+	{
+		level_[x].resize(height_);
+
+		for (int y = 0; y < height_; ++y)
+		{
+			level_[x][y] = 0;
+		}
+	}
+
+
 	loadObjects();
 	loadLevel();
 
@@ -179,8 +193,24 @@ bool EditState::handleEvent(sf::Event event)
 
 				if (brush_.type == Brush::Entity)
 				{
-					spawns_.push_back(SpawnPoint(brush_.value, pos));
+					spawns_.push_back(Spawn(brush_.value, pos));
 				}
+			}
+			if (pos.x < width_ && pos.y < height_ + tiles_.size() + entities_.size() + 1 && pos.x >= 0 && pos.y > height_)
+			{
+				int value = pos.y - height_ - 1;
+
+				if (value >= tiles_.size())
+				{
+					brush_.type = Brush::Entity;
+					brush_.value = value - tiles_.size();
+				}
+				else
+				{
+					brush_.type = Brush::Tile;
+					brush_.value = value;
+				}
+
 			}
 		}
 		if (event.key.code == Mouse::Button::Right)
@@ -194,7 +224,7 @@ bool EditState::handleEvent(sf::Event event)
 
 			if (pos.x < width_ && pos.y < height_ && pos.x >= 0 && pos.y >= 0)
 			{
-				auto it = std::find_if(spawns_.begin(), spawns_.end(), [&](const SpawnPoint& p)
+				auto it = std::find_if(spawns_.begin(), spawns_.end(), [&](const Spawn& p)
 				{
 					if (p.position == pos)
 						return true;
@@ -336,7 +366,7 @@ void EditState::drawLevel()
 
 	for (int i = 0; i < spawns_.size(); ++i)
 	{
-		SpawnPoint spawn = spawns_[i];
+		Spawn spawn = spawns_[i];
 		sprite.setTexture(entities_[spawn.entity].texture);
 		sprite.setPosition(spawn.position);
 
@@ -459,8 +489,8 @@ void EditState::loadLevel()
 		return;
 	}
 
-	width_ = level["width"].get_or(0);
-	height_ = level["height"].get_or(0);
+	width_ = level["width"].get_or(20);
+	height_ = level["height"].get_or(20);
 
 	level_.resize(width_);
 
@@ -518,7 +548,7 @@ void EditState::loadLevel()
 					int x = object["x"].get_or(0);
 					int y = object["y"].get_or(0);
 
-					SpawnPoint spawn(getEntity(name.value()), sf::Vector2i(x, y));
+					Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y));
 					spawns_.push_back(spawn);
 				}
 				else

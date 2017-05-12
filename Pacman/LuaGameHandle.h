@@ -2,11 +2,7 @@
 
 #include "World.h"
 
-extern "C" {
-# include <lua.h>
-# include <lauxlib.h>
-# include <lualib.h>
-}
+
 
 #include <LuaBridge.h>
 
@@ -33,7 +29,8 @@ public:
 	int getDistance(LuaObjectHandle& object1, LuaObjectHandle& object2);
 
 
-
+	void removeEntities();
+	void spawnEntities();
 
 
 

@@ -16,8 +16,9 @@ World::World(State::Context context) :
 	
 {
 	luaHandle_ = new LuaGameHandle(this);
-	scene_ = new Scene(this);
 	entityManager_ = new EntityManager(this);
+	scene_ = new Scene(this);
+	
 	
 	
 

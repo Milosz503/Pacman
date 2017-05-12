@@ -168,6 +168,8 @@
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="LevelChoiceState.h" />
+    <ClInclude Include="LevelLogic.h" />
     <ClInclude Include="LuaGameHandle.h" />
     <ClInclude Include="LuaObjectHandle.h" />
     <ClInclude Include="PathFinder.h" />
@@ -204,6 +206,8 @@
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="LevelChoiceState.cpp" />
+    <ClCompile Include="LevelLogic.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LuaGameHandle.cpp" />
     <ClCompile Include="LuaObjectHandle.cpp" />

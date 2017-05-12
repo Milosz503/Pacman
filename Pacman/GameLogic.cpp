@@ -69,6 +69,18 @@ void GameLogic::onEvent(SystemEvent * event)
 		break;
 	}
 
+	case SystemEvent::dynamicCollision:
+	{
+		DynamicCollision* collision = static_cast<DynamicCollision*>(event);
+
+		collision->entity1->collide(collision->entity2);
+		collision->entity2->collide(collision->entity1);
+
+		std::cout << "Dynamic collision" << std::endl;
+
+		break;
+	}
+
 	}
 }
 

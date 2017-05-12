@@ -74,6 +74,17 @@ int LuaGameHandle::getDistance(LuaObjectHandle & object1, LuaObjectHandle & obje
 	return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
 }
 
+void LuaGameHandle::removeEntities()
+{
+	world_->getScene()->removeEntities();
+}
+
+void LuaGameHandle::spawnEntities()
+{
+	world_->getScene()->arrangeSpawnEntities();
+}
+
+
 
 
 

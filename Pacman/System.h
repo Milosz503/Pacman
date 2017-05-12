@@ -10,7 +10,7 @@ class SystemManager;
 class System
 {
 public:
-	enum Type{GameLogic, Physics, PlayerController, EntityController};
+	enum Type{GameLogic, LevelLogic, Physics, PlayerController, EntityController};
 
 
 	System(SystemManager* systemManager, World* world);
@@ -18,6 +18,7 @@ public:
 	virtual void update() = 0;
 
 	virtual void draw();
+
 
 	void handleSystemEvent(SystemEvent* event);
 

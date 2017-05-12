@@ -14,6 +14,17 @@ extern "C" {
 
 
 class World;
+class EntityManager;
+
+struct SpawnPoint
+{
+	sf::Vector2i position;
+
+	std::string entityName;
+	sol::table data;
+
+};
+
 
 class Scene
 {
@@ -61,6 +72,10 @@ public:
 
 	void moveEntity(Entity* entity, sf::Vector2i& move);
 
+	void addSpawn(sf::Vector2i position, std::string entityName, sol::table& data);
+	void arrangeSpawnEntities();
+	void removeEntities();
+
 	void update();
 
 	void draw();
@@ -69,7 +84,9 @@ public:
 
 private:
 	World* world_;
+	EntityManager* entityManager_;
 
+	std::vector<SpawnPoint> spawns_;
 	std::vector<Entity*> entities_;
 	std::vector<std::vector<Tile*>> tiles_;
 
@@ -77,5 +94,12 @@ private:
 
 	int width_;
 	int height_;
+
+	bool entitiesToSpawn_;
+
+
+	
+	void spawnEntity(SpawnPoint* spawn);
+	void spawnEntites();
 };
 

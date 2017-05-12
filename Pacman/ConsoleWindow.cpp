@@ -16,6 +16,8 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	textureManager_(textureManager)
 {
 
+	
+
     if (!font_.loadFromFile("PxPlus_IBM_BIOS.ttf"))
 	{
 		cout << "ERROR";
@@ -25,6 +27,17 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
 	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), "Bomberman");
+
+	if (!texture_.create(width * fontWidth_, height * fontHeight_))
+	{
+		cout << "Error creating renderTexture!" << std::endl;
+	}
+
+
+	if (!shader_.loadFromFile("shader.frag", sf::Shader::Fragment))
+	{
+		cout << "Error shader!" << std::endl;
+	}
 
 
     buffer_ = new wchar_t*[height_];
@@ -81,6 +94,7 @@ void ConsoleWindow::clear(Color color)
 	}
 
 	window_.clear(color);
+	texture_.clear(Color::Transparent);
 }
 
 
@@ -205,10 +219,18 @@ void ConsoleWindow::show()
 
 	}
 	window_.draw(tiles);
-	window_.draw(tilesTex, &textureManager_->getTileset());
+
+	texture_.draw(tilesTex, &textureManager_->getTileset());
+	texture_.display();
 
 
+	Sprite sprite(texture_.getTexture());
+	sprite.setPosition(0, 0);
 
+	shader_.setUniform("texture", sf::Shader::CurrentTexture);
+	shader_.setUniform("width", (float)(width_ * fontWidth_));
+	shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
+	window_.draw(sprite, &shader_);
 
 
 	window_.display();

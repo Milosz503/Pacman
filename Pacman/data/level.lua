@@ -4,3 +4,4 @@ tiles =
 {{name = "Point"}, {name = "Wall"}, {name = "WallBL"}, {name = "WallHor"}, {name = "WallLT"}, {name = "WallRB"}, {name = "WallTR"}, {name = "WallVer"}, [0] = {name = "Floor"}}
 objects = 
 {{name = "Player", x = 9, y = 2}, {name = "RedGhost", x = 1, y = 18}, {name = "RedGhost", x = 18, y = 18}, {name = "AgresiveGhost", x = 6, y = 10}}
+

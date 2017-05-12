@@ -136,7 +136,17 @@ void GameObject::setLuaFunctions(sol::table data)
 
 void GameObject::collide(GameObject * collidingObject)
 {
-	callFunction(collisionFunction_, "colide");
+	if (collisionFunction_ != nullptr)
+	{
+		auto result = (*collisionFunction_)(luaHandle_, collidingObject->getHandle());
+
+		if (!result.valid())
+		{
+			sol::error e = result;
+			std::cout << "ERROR object " << name_ << " in collide function: " << e.what() << std::endl;
+		}
+	}
+
 }
 
 GameObject::~GameObject()

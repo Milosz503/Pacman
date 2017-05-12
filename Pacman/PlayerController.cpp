@@ -19,6 +19,9 @@ PlayerController::~PlayerController()
 void PlayerController::update()
 {
 
+	if (getWorld()->getScene()->getPlayer() == nullptr)
+		return;
+
 	Direction::X x = Direction::ZeroX;
 	Direction::Y y = Direction::ZeroY;
 

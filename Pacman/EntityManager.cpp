@@ -57,7 +57,9 @@ EntityManager::EntityManager(World* world) :
 		"getPlayer", &LuaGameHandle::getPlayer,
 		"removeTile", &LuaGameHandle::removeTile,
 		"removeObject", &LuaGameHandle::removeObject,
-		"getDistance", &LuaGameHandle::getDistance
+		"getDistance", &LuaGameHandle::getDistance,
+		"removeEntities", &LuaGameHandle::removeEntities,
+		"spawnEntities", &LuaGameHandle::spawnEntities
 		);
 
 	lua_.new_usertype<sf::Vector2i>("Vector2i",

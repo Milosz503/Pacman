@@ -59,7 +59,11 @@ private:
 	int offsetX_;
 	int offsetY_;
 
+
+	sf::RenderTexture texture_;
 	sf::RenderWindow window_;
+
+	sf::Shader shader_;
 
 	TextureManager* textureManager_;
 
