@@ -45,6 +45,8 @@ public:
 	void setBackground(const sf::Color& color);
 	sf::Color& getBackground();
 
+	int getWidth();
+
 private:
 	std::wstring text_;
 	CharacterColor::Color color_;

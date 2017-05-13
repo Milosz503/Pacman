@@ -33,6 +33,8 @@ private:
 
 
 	ConsoleText scoreText_;
+	ConsoleText livesText_;
+
 	ConsoleText updateTime_;
 	ConsoleText drawTime_;
 	float fps;

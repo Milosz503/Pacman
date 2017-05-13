@@ -99,6 +99,8 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 
 	sf::Vector2i distance((goal.x - start.x), (goal.y - start.y));
 
+	std::array<sf::Vector2i, 4> directions;
+
 	int x = abs(distance.x);
 	int y = abs(distance.y);
 
@@ -111,6 +113,29 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 	else /*if (distance.y > 0)*/ direction.y = 1;
 
 	sf::Vector2i nextMove = start;
+
+	if (x > y)
+	{
+		directions[0] = sf::Vector2i(direction.x, 0);
+		directions[1] = sf::Vector2i(0, direction.y);
+		directions[2] = sf::Vector2i(0, -direction.y);
+		directions[3] = sf::Vector2i(-direction.x, 0);
+	}
+	else
+	{
+		directions[0] = sf::Vector2i(0, direction.y);
+		directions[1] = sf::Vector2i(direction.x, 0);
+		directions[2] = sf::Vector2i(-direction.x, 0);
+		directions[3] = sf::Vector2i(0, -direction.y);
+	}
+
+	for (int i = 0; i < directions.size(); ++i)
+	{
+		if (start + directions[i] != lastPosition && !isPhysical(start + directions[i]))
+			return directions[i];
+	}
+
+	return directions[0];
 
 	if (x > y)
 	{

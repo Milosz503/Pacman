@@ -5,9 +5,7 @@ levelLogic = {
 	update = function(vars)
 		--print("Level LOGIC!")
 		
-		if vars.lives == nil then
-			vars.lives = 3
-		end
+
 		
 	end,
 	
@@ -20,10 +18,10 @@ levelLogic = {
 			
 			print("PLAYER - GHOST")
 			
-			if vars.lives > 0 then
+			if world.lives > 0 then
 			
 				world:spawnEntities()
-				vars.lives = vars.lives - 1
+				world:removeLive()
 			end
 			
 			

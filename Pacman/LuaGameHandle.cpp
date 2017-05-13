@@ -18,6 +18,26 @@ int LuaGameHandle::getScore()
 	return world_->getScore();
 }
 
+void LuaGameHandle::addLive()
+{
+	world_->addLives(1);
+}
+
+void LuaGameHandle::addLives(int lives)
+{
+	world_->addLives(lives);
+}
+
+void LuaGameHandle::removeLive()
+{
+	world_->removeLive();
+}
+
+int LuaGameHandle::getLives()
+{
+	return world_->getLives();
+}
+
 LuaObjectHandle*  LuaGameHandle::getTile(int x, int y) const
 {
 	Tile* tile = world_->getScene()->getTile(x, y);

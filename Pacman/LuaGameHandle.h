@@ -19,6 +19,11 @@ public:
 	void addScore(int score);
 	int getScore();
 
+	void addLive();
+	void addLives(int lives);
+	void removeLive();
+	int getLives();
+
 	LuaObjectHandle* getTile(int x, int y) const;
 	LuaObjectHandle* findEntity(sol::function condition);
 	LuaObjectHandle* getPlayer() const;

@@ -67,6 +67,11 @@ void ConsoleWindow::setFontSize(unsigned size)
 
 	window_.setSize(sf::Vector2u(width_ * fontWidth_, height_ * fontHeight_));
 	window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
+
+	if (!texture_.create(width_ * fontWidth_, height_ * fontHeight_))
+	{
+		cout << "Error creating renderTexture!" << std::endl;
+	}
 }
 
 unsigned ConsoleWindow::getFontSize()
@@ -228,7 +233,6 @@ void ConsoleWindow::show()
 	sprite.setPosition(0, 0);
 
 	shader_.setUniform("texture", sf::Shader::CurrentTexture);
-	shader_.setUniform("width", (float)(width_ * fontWidth_));
 	shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
 	window_.draw(sprite, &shader_);
 

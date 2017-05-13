@@ -89,6 +89,11 @@ sf::Color& ConsoleText::getBackground()
 	return background_;
 }
 
+int ConsoleText::getWidth()
+{
+	return text_.length();
+}
+
 
 // ------------------------------
 

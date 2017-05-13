@@ -9,6 +9,7 @@ World::World(State::Context context) :
 	offsetX_(0),
 	offsetY_(0),
 	score_(0),
+	playerLives_(3),
 	spawnPoint_(2 + offsetX_, 2 + offsetY_),
 	console_(context.console),
 	textureManager_(context.textureManager),
@@ -57,6 +58,21 @@ int World::getScore()
 void World::addScore(unsigned score)
 {
 	score_ += score;
+}
+
+int World::getLives()
+{
+	return playerLives_;
+}
+
+void World::removeLive()
+{
+	--playerLives_;
+}
+
+void World::addLives(int lives)
+{
+	playerLives_ += lives;
 }
 
 ConsoleWindow * World::getConsole()

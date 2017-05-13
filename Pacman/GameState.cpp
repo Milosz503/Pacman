@@ -25,6 +25,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	console_ = getContext().console;
 
 	scoreText_.setPosition(2, 2);
+	livesText_.setPosition(12, 2);
 	updateTime_.setPosition(0, 47);
 	drawTime_.setPosition(0, 48);
 
@@ -114,12 +115,15 @@ void GameState::draw()
 	text.setPosition(0, 45);
 
 	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
+	livesText_.setText(L"Lives: " + std::to_wstring(world_.getLives()));
+	livesText_.setPosition(scoreText_.getX() + scoreText_.getWidth() + 3, livesText_.getY());
 
 
 
 
 	console_->draw(text);
 	console_->draw(scoreText_);
+	console_->draw(livesText_);
 	console_->draw(updateTime_);
 	console_->draw(drawTime_);
 

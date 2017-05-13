@@ -32,6 +32,10 @@ public:
 	int getScore();
 	void addScore(unsigned score = 1);
 
+	int getLives();
+	void removeLive();
+	void addLives(int lives);
+
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
 	Scene* getScene();
@@ -48,6 +52,7 @@ private:
 	unsigned long long frameCounter_;
 
 	int score_;
+	int playerLives_;
 	sf::Vector2i spawnPoint_;
 
 	sol::state lua_;
