@@ -94,8 +94,8 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
 {
-	if (start == goal)
-		return sf::Vector2i(0, 0);
+	//if (start == goal)
+	//	return sf::Vector2i(0, 0);
 
 	sf::Vector2i distance((goal.x - start.x), (goal.y - start.y));
 

@@ -71,8 +71,8 @@ void EntityController::update(Entity * entity)
 		if (entity->getCategory() == "AgresiveGhost")
 			std::cout << "Last pos: " << lastPosition.x << " " << lastPosition.y << std::endl;
 
-		if (start == destination)
-			return;
+		/*if (start == destination)
+			return;*/
 
 		lastPosition_ = lastPosition;
 		goal_ = destination;
