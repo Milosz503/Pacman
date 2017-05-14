@@ -155,13 +155,13 @@ void LuaObjectHandle::damage(unsigned dmg)
 	object_->setHp(object_->getHp() - dmg);
 }
 
-void LuaObjectHandle::guideTo(LuaObjectHandle & destination, sol::protected_function customWages)
+void LuaObjectHandle::guideTo(LuaObjectHandle & destination)
 {
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(destination.getObject(), customWages);
+		entity->guideTo(destination.getObject());
 
 	}
 	else
@@ -176,6 +176,21 @@ void LuaObjectHandle::guideTo_costs(LuaObjectHandle & destination, sol::protecte
 		Entity* entity = static_cast<Entity*>(object_);
 
 		entity->guideTo(destination.getObject(), customWages);
+
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
+	}
+}
+
+void LuaObjectHandle::guideToPos(int x, int y)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		Entity* entity = static_cast<Entity*>(object_);
+
+		entity->guideTo(sf::Vector2i(x, y));
 
 	}
 	else

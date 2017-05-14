@@ -41,7 +41,7 @@ entities = {
 			--if player ~= nil then
 			dist = world:getDistance(self, player)
 			
-			if dist > 6 then self:guideTo(world:getTile(0, 0))
+			if dist > 6 then self:guideTo(0, 0)
 			else self:guideTo(player) end
 			
 

@@ -56,20 +56,19 @@ void EntityController::update(Entity * entity)
 	{
 		
 
-		sf::Vector2i destination = entity->getDestination()->getPosition();
+		sf::Vector2i destination = entity->getGoal(); /*entity->getDestination()->getPosition();
 		if (entity->getDestination()->getType() == GameObject::Entity)
 		{
 			Entity* e = static_cast<Entity*>(entity->getDestination());
 			destination += e->getNextMove();
-		}
+		}*/
 		
 
 		sf::Vector2i start = entity->getPosition() + entity->getNextMove();
 
 		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
 
-		if (entity->getCategory() == "AgresiveGhost")
-			std::cout << "Last pos: " << lastPosition.x << " " << lastPosition.y << std::endl;
+
 
 		if (start == destination)
 			return;

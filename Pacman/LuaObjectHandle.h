@@ -43,8 +43,9 @@ public:
 	void heal(unsigned hp);
 	void damage(unsigned dmg);
 
-	void guideTo(LuaObjectHandle& destination, sol::protected_function customWages);
+	void guideTo(LuaObjectHandle& destination);
 	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);
+	void guideToPos(int x, int y);
 
 	LuaObjectHandle* getDestination();
 	bool isGuided();

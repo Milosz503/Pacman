@@ -180,10 +180,36 @@ void Entity::guideTo(GameObject * destination, sol::protected_function customWag
 		isGuided_ = true;
 		destination_ = destination;
 		path_.clear();
-		if(customWages.valid())
+		if (customWages.valid())
 			customWages_ = new sol::protected_function(customWages);
+		else
+			customWages_ = nullptr;
 	}
 	
+}
+
+void Entity::guideTo(sf::Vector2i destination)
+{
+	isGuided_ = true;
+	if (destinationPos_ != destination || destination_ != nullptr)
+	{
+		destination_ = nullptr;
+		destinationPos_ = destination;
+
+		path_.clear();
+		customWages_ = nullptr;
+	}
+}
+
+void Entity::guideTo(GameObject * destination)
+{
+	if (destination_ != destination)
+	{
+		isGuided_ = true;
+		destination_ = destination;
+		path_.clear();
+		customWages_ = nullptr;
+	}
 }
 
 void Entity::stopGuide()
@@ -197,6 +223,38 @@ void Entity::stopGuide()
 GameObject * Entity::getDestination()
 {
 	return destination_;
+}
+
+bool Entity::isGoalMoving()
+{
+	if (destination_ == nullptr)
+		return false;
+
+	if (destination_->getType() == GameObject::Tile)
+		return false;
+
+	return true;
+}
+
+sf::Vector2i Entity::getGoal()
+{
+	if (destination_ != nullptr)
+	{
+		if (destination_->getType() == GameObject::Entity)
+		{
+			Entity* e = static_cast<Entity*>(destination_);
+			return e->getPosition() + e->getNextMove();
+		}
+		else
+		{
+			return destination_->getPosition();
+		}
+		
+	}
+	else
+	{
+		return destinationPos_;
+	}
 }
 
 std::vector<NodeCost> Entity::getWages()

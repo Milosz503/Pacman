@@ -41,7 +41,7 @@ EntityManager::EntityManager(World* world) :
 		"hp", sol::property(&LuaObjectHandle::getHp),
 		"heal", &LuaObjectHandle::heal,
 		"damage", &LuaObjectHandle::damage,
-		"guideTo", &LuaObjectHandle::guideTo,
+		"guideTo", sol::overload(&LuaObjectHandle::guideTo, &LuaObjectHandle::guideToPos),
 		"getDestination", &LuaObjectHandle::getDestination,
 		"isGuided", &LuaObjectHandle::isGuided,
 		"remove", &LuaObjectHandle::remove,

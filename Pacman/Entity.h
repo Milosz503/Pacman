@@ -41,8 +41,16 @@ public:
 
 	bool isGuided();
 	void guideTo(GameObject* destination, sol::protected_function customWages);
+	void guideTo(sf::Vector2i destination);
+	void guideTo(GameObject* destination);
 	void stopGuide();
 	GameObject* getDestination();
+
+	bool isGoalMoving();
+	sf::Vector2i getGoal();
+
+
+
 	std::vector<NodeCost> getWages();
 
 	void setDefaultSpeed(int speed);
@@ -88,5 +96,6 @@ private:
 	sol::protected_function* customWages_;
 	bool isGuided_;
 	GameObject* destination_;
+	sf::Vector2i destinationPos_;
 };
 
