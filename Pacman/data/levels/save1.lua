@@ -3,4 +3,4 @@ level =
 tiles = 
 {{name = "Point"}, {name = "Wall"}, {name = "WallBL"}, {name = "WallHor"}, {name = "WallLT"}, {name = "WallRB"}, {name = "WallTR"}, {name = "WallVer"}, [0] = {name = "Floor"}}
 objects = 
-{{name = "Player", x = 1, y = 1}, {name = "AgresiveGhost", x = 2, y = 8}, {name = "RedGhost", x = 8, y = 3}}
+{{name = "Player", x = 1, y = 1}, {name = "RedGhost", x = 8, y = 3}, {name = "YellowGhost", x = 2, y = 7}}

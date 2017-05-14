@@ -70,8 +70,8 @@ void EntityController::update(Entity * entity)
 
 
 
-		if (start == destination)
-			return;
+		/*if (start == destination)
+			return;*/
 
 		lastPosition_ = lastPosition;
 		goal_ = destination;

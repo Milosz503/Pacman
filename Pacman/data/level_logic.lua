@@ -2,9 +2,11 @@
 
 levelLogic = {
 	
+	testVar = 1,
+	
 	update = function(vars)
 		--print("Level LOGIC!")
-		
+		print(testVar)
 
 		
 	end,
