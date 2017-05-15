@@ -68,6 +68,7 @@ void EntityController::update(Entity * entity)
 
 		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
 
+		std::string guideType = entity->getGuideType();
 
 
 		/*if (start == destination)
@@ -77,15 +78,32 @@ void EntityController::update(Entity * entity)
 		goal_ = destination;
 		start_ = start;
 
-		sf::Vector2i dir = finder_.findDirectionTo(start, destination, lastPosition);
-		entity->setSpeed((Direction::X)(dir.x), (Direction::Y)(dir.y));
-		return;
 
-		std::vector<sf::Vector2i>& path = finder_.findPath(start, destination, lastPosition);
-		if (path.size() > 0)
+		if (guideType == A_STAR)
 		{
-			entity->setPath(std::list<sf::Vector2i>(path.begin(), path.end()), destination);
+			std::vector<sf::Vector2i>& path = finder_.findPath(start, destination, lastPosition);
+			if (path.size() > 0)
+			{
+				entity->setPath(std::list<sf::Vector2i>(path.begin(), path.end()), destination);
+			}
 		}
+		else if(guideType == DIRECTION)
+		{
+			sf::Vector2i dir = finder_.findDirectionTo(start, destination, lastPosition);
+			entity->setSpeed((Direction::X)(dir.x), (Direction::Y)(dir.y));
+		}
+		else
+		{
+			std::cout << "UNKNOWN guide type! " << entity->getName() << std::endl;
+
+			sf::Vector2i dir = finder_.findDirectionTo(start, destination, lastPosition);
+			entity->setSpeed((Direction::X)(dir.x), (Direction::Y)(dir.y));
+		}
+
+
+		
+
+		
 
 		return;
 
@@ -143,12 +161,12 @@ void EntityController::draw()
 
 	character.setPosition(start_);
 	character.setTexture(TextureManager::getTexture(L's', CharacterColor::Grey));
-	getWorld()->getConsole()->draw(character);
+	//getWorld()->getConsole()->draw(character);
 
 
 	character.setPosition(lastPosition_);
 	character.setTexture(TextureManager::getTexture(L'l', CharacterColor::White));
-	getWorld()->getConsole()->draw(character);
+	//getWorld()->getConsole()->draw(character);
 
 	//for (int x = 0; x < distance.size(); ++x)
 	//{

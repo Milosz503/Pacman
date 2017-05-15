@@ -257,6 +257,16 @@ sf::Vector2i Entity::getGoal()
 	}
 }
 
+std::string Entity::getGuideType()
+{
+	return guideType_;
+}
+
+void Entity::setGuideType(std::string type)
+{
+	guideType_ = type;
+}
+
 std::vector<NodeCost> Entity::getWages()
 {
 	std::vector<NodeCost> nodes;

@@ -1,3 +1,5 @@
+
+
 local function chooseNextGoal(self)
 	
 	
@@ -5,7 +7,7 @@ local function chooseNextGoal(self)
 	player = world:getPlayer()
 	dist = world:getDistance(self, player)
 	
-	if dist > self.vars.visionRange then self:guideTo(world:getTile(20, 20))
+	if dist > self.vars.visionRange then self:guideTo(1,1)
 		else self:guideTo(player) end
 	
 end
@@ -24,8 +26,10 @@ return
 		vars = self.vars
 		
 		--Lua data
-		vars.visionRange = 8
+		vars.visionRange = 10
 		--
+		
+		self:setGuideType("a_star")
 		
 	end,
 	

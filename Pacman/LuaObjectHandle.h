@@ -47,6 +47,8 @@ public:
 	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);
 	void guideToPos(int x, int y);
 
+	void setGuideType(std::string type);
+
 	LuaObjectHandle* getDestination();
 	bool isGuided();
 

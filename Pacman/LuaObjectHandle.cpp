@@ -199,6 +199,21 @@ void LuaObjectHandle::guideToPos(int x, int y)
 	}
 }
 
+void LuaObjectHandle::setGuideType(std::string type)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		Entity* entity = static_cast<Entity*>(object_);
+
+		entity->setGuideType(type);
+
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
+	}
+}
+
 LuaObjectHandle* LuaObjectHandle::getDestination()
 {
 	if (object_->getType() == GameObject::Entity)

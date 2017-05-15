@@ -44,6 +44,7 @@ EntityManager::EntityManager(World* world) :
 		"guideTo", sol::overload(&LuaObjectHandle::guideTo, &LuaObjectHandle::guideToPos),
 		"getDestination", &LuaObjectHandle::getDestination,
 		"isGuided", &LuaObjectHandle::isGuided,
+		"setGuideType", &LuaObjectHandle::setGuideType,
 		"remove", &LuaObjectHandle::remove,
 		"vars", sol::property(&LuaObjectHandle::getVars)
 

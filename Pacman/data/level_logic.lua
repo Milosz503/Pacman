@@ -6,7 +6,7 @@ levelLogic = {
 	
 	update = function(vars)
 		--print("Level LOGIC!")
-		print(testVar)
+
 
 		
 	end,

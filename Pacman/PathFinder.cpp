@@ -58,6 +58,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 	nodes_.push(NodePair(0, start));
 
+	bool found = false;
 	int iterations = 0;
 	while (!nodes_.empty())
 	{
@@ -65,6 +66,11 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 		nodes_.pop();
 
 		sf::Vector2i pos = node.second;
+
+		if (pos == goal) {
+			found = true;
+			break;
+		}
 
 		for (int i = 0; i < neighbors.size(); ++i)
 		{
@@ -76,7 +82,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 			}
 			else
 			{
-				std::cout << "!!" << std::endl;
+				//std::cout << "!!" << std::endl;
 			}
 				
 		}
@@ -84,10 +90,13 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 		++iterations;
 	}
 
+	if (found)
+	{
+		readPath(start, goal);
 
-	readPath(start, goal);
+		std::reverse(path_.begin(), path_.end());
+	}
 	
-	std::reverse(path_.begin(), path_.end());
 
 	return path_;
 }
@@ -230,7 +239,7 @@ void PathFinder::readPath(sf::Vector2i start, sf::Vector2i goal)
 		next = cameFrom_[pos.x][pos.y];
 		path_.push_back(getDirection(pos, next));
 
-		std::cout << (pos - next).x << " " << (pos - next).y << std::endl;
+		//std::cout << (pos - next).x << " " << (pos - next).y << std::endl;
 
 		pos = next;
 	}

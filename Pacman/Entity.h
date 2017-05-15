@@ -48,6 +48,9 @@ public:
 
 	bool isGoalMoving();
 	sf::Vector2i getGoal();
+	std::string getGuideType();
+
+	void setGuideType(std::string type);
 
 
 
@@ -94,6 +97,7 @@ private:
 	sf::Vector2i pathDestination_;
 
 	sol::protected_function* customWages_;
+	std::string guideType_;
 	bool isGuided_;
 	GameObject* destination_;
 	sf::Vector2i destinationPos_;

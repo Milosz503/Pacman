@@ -33,6 +33,7 @@ entities = {
 	
 	RedGhost = dofile("data/entities/RedGhost.lua"),
 	
+	GreyGhost = dofile("data/entities/GreyGhost.lua"),	
 	
 	Player = {
 		type = "entity";

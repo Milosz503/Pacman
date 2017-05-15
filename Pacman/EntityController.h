@@ -14,9 +14,18 @@ class World;
 class Scene;
 
 
+
 class EntityController : public System
 {
 public:
+
+	const std::string A_STAR = "a_star";
+	const std::string A_STAR_BACK = "a_star_back";
+	const std::string A_STAR_FRONT = "a_star_front";
+
+	const std::string DIRECTION = "direction";
+
+
 	EntityController(SystemManager* systemManager, World* world);
 
 	virtual void update() override;

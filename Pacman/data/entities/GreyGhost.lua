@@ -1,13 +1,13 @@
 local homeX = 1
-local homeY = 1
+local homeY = 29
 
 return {
 		type = "entity";
 		category = "ghost";
 		
-		speed = 15;
+		speed = 13;
 
-		texture = {x = 6, y = 2, color = Colors.red };
+		texture = {x = 6, y = 2, color = Colors.grey };
 		
 		init = function(self, properties)
 			

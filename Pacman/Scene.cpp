@@ -235,14 +235,14 @@ void Scene::setSize(int width, int height)
 
 	tiles_.resize(width_);
 
-	for (int x = lastW; x < tiles_.size(); ++x)
+	for (int x = 0; x < tiles_.size(); ++x)
 	{
 		tiles_[x].resize(height_);
 	}
 
-	for (int x = lastW; x < width_; ++x)
+	for (int x = 0; x < width_; ++x)
 	{
-		for (int y = lastH; y < height_; ++y)
+		for (int y = 0; y < height_; ++y)
 		{
 			tiles_[x][y] = nullptr;
 		}
