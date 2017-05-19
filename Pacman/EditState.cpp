@@ -3,6 +3,9 @@
 #include "sol.hpp"
 #include <algorithm>
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 
 EditState::EditState(StateStack & stack, Context context) :
 	State(stack, context),
@@ -54,6 +57,40 @@ EditState::~EditState()
 
 bool EditState::update(sf::Time dt)
 {
+	ImGui::Begin("Hello, world!");
+	ImGui::Button("Look at this pretty button");
+	ImGui::ColorButton(ImVec4(1, 1, 0, 1));
+
+	static float f = 0.0f;
+	ImGui::Text("Hello, world!");
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	sf::Sprite sprite;
+	sprite.setTexture(getContext().textureManager->getTileset());
+
+	for (int i = 0; i < 16; ++i)
+	{
+		sprite.setTextureRect(sf::IntRect(i * 9, 1, 8, 8));
+
+		ImGui::PushID(i);
+		
+		if (ImGui::ImageButton(sprite, sf::Vector2f(16, 16)))
+		{
+			std::cout << i << std::endl;
+		}
+		ImGui::PopID();
+
+		ImGui::SameLine(-10, 0);
+
+	}
+
+
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
+	ImGui::ShowTestWindow();
+
 	if (Mouse::isButtonPressed(Mouse::Button::Left))
 	{
 		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
@@ -196,22 +233,22 @@ bool EditState::handleEvent(sf::Event event)
 					spawns_.push_back(Spawn(brush_.value, pos));
 				}
 			}
-			if (pos.x < width_ && pos.y < height_ + tiles_.size() + entities_.size() + 1 && pos.x >= 0 && pos.y > height_)
-			{
-				int value = pos.y - height_ - 1;
+			//if (pos.x < width_ && pos.y < height_ + tiles_.size() + entities_.size() + 1 && pos.x >= 0 && pos.y > height_)
+			//{
+			//	int value = pos.y - height_ - 1;
 
-				if (value >= tiles_.size())
-				{
-					brush_.type = Brush::Entity;
-					brush_.value = value - tiles_.size();
-				}
-				else
-				{
-					brush_.type = Brush::Tile;
-					brush_.value = value;
-				}
+			//	if (value >= tiles_.size())
+			//	{
+			//		brush_.type = Brush::Entity;
+			//		brush_.value = value - tiles_.size();
+			//	}
+			//	else
+			//	{
+			//		brush_.type = Brush::Tile;
+			//		brush_.value = value;
+			//	}
 
-			}
+			//}
 		}
 		if (event.key.code == Mouse::Button::Right)
 		{
@@ -301,7 +338,29 @@ int EditState::getTile(std::string name)
 
 void EditState::drawMenu()
 {
+
+	ImGui::Begin("Edit");
+
+	//sf::Sprite sprite;
+	//sprite.setTexture(getContext().textureManager->getTileset());
+
+	//for (int i = 0; i < 16; ++i)
+	//{
+	//	sprite.setTextureRect(sf::IntRect(i * 9, 1, 8, 8));
+
+	//	ImGui::PushID(i);
+	//	if (ImGui::ImageButton(sprite, sf::Vector2f(16, 16)))
+	//	{
+	//		std::cout << i << std::endl;
+	//	}
+	//	ImGui::PopID();
+
+	//	ImGui::SameLine();
+	//}
+
+
 	
+
 
 	for (int i = 0; i < tiles_.size(); ++i)
 	{
@@ -322,6 +381,29 @@ void EditState::drawMenu()
 		drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color);
 
 	}
+
+
+	if (Mouse::isButtonPressed(Mouse::Button::Left))
+	{
+		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
+
+		pos.x /= console_->getFontSize();
+		pos.y /= console_->getFontSize();
+
+
+
+		if (pos.x < width_ && pos.y < height_ && pos.x >= 0 && pos.y >= 0)
+		{
+			if (brush_.type == Brush::Tile)
+				level_[pos.x][pos.y] = brush_.value;
+			else
+			{
+				//spawns_.push_back(SpawnPoint(brush_.value, pos));
+			}
+		}
+	}
+
+	ImGui::End();
 
 }
 
@@ -346,6 +428,42 @@ void EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, Chara
 	getContext().console->draw(prefix);
 	getContext().console->draw(sprite);
 	getContext().console->draw(text);
+
+
+	sf::Sprite buttonSprite;
+	buttonSprite.setTexture(getContext().textureManager->getTileset());
+
+
+	sf::IntRect rect;
+	rect.width = 8;
+	rect.height = 8;
+	rect.left = object.texture.rect.x * 9;
+	rect.top = object.texture.rect.y * 9 + 1;
+
+	buttonSprite.setTextureRect(rect);
+
+	ImGui::PushID(key);
+	if (ImGui::ImageButton(buttonSprite, sf::Vector2f(16, 16)))
+	{
+		int value = key - 1;
+
+		if (value >= tiles_.size())
+		{
+			brush_.type = Brush::Entity;
+			brush_.value = value - tiles_.size();
+		}
+		else
+		{
+			brush_.type = Brush::Tile;
+			brush_.value = value;
+		}
+
+		std::cout << key << std::endl;
+	}
+	ImGui::PopID();
+
+	ImGui::SameLine();
+
 }
 
 void EditState::drawLevel()

@@ -237,11 +237,16 @@ void ConsoleWindow::show()
 	window_.draw(sprite, &shader_);
 
 
-	window_.display();
+	
 
 
 
 	
+}
+
+void ConsoleWindow::display()
+{
+	window_.display();
 }
 
 void ConsoleWindow::drawsf(const Vertex * vertices, unsigned int vertexCount, PrimitiveType type, const RenderStates & states)
@@ -256,13 +261,16 @@ void ConsoleWindow::drawsf(const Drawable & drawable, const RenderStates & state
 
 bool ConsoleWindow::pollEvent(Event & event)
 {
-	{
 		bool answer = window_.pollEvent(event);
 	
+		if (event.type == sf::Event::Resized)
+		{
+			window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+		}
+
 		return answer;
 	
 	
-	}
 }
 
 unsigned ConsoleWindow::getWidth()

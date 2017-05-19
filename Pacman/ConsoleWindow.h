@@ -28,6 +28,7 @@ public:
 	void draw(ConsoleCharacter& character);
 	void draw(ConsoleText& consoleText);
 	void show();
+	void display();
 
 	void drawsf(const sf::Vertex *vertices, unsigned int vertexCount,
 		sf::PrimitiveType type, const sf::RenderStates &states = sf::RenderStates::Default);
