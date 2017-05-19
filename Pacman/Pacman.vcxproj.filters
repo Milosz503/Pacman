@@ -37,6 +37,9 @@
     <Filter Include="Header Files\Game\Entities">
       <UniqueIdentifier>{26c47071-4a57-4cb0-ad3b-2dd5aa95c5df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{9bf2e4b0-de6b-4153-8604-9b396e129331}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -253,6 +256,18 @@
     </ClCompile>
     <ClCompile Include="LevelLogic.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui-SFML.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
