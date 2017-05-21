@@ -366,9 +366,17 @@ void EditState::drawMenu()
 	{
 		CharacterColor::Color color = CharacterColor::White;
 		if (brush_.type == Brush::Tile && brush_.value == i)
+		{
 			color = CharacterColor::LightGrey;
+			drawObjectOption(tiles_[i], 1 + i, 1, height_ + i + 1, color, true);
+		}
+		else
+		{
+			drawObjectOption(tiles_[i], 1 + i, 1, height_ + i + 1, color, false);
 
-		drawObjectOption(tiles_[i], 1+i, 1, height_ + i + 1, color);
+		}
+
+		
 
 	}
 
@@ -376,9 +384,16 @@ void EditState::drawMenu()
 	{
 		CharacterColor::Color color = CharacterColor::White;
 		if (brush_.type == Brush::Entity && brush_.value == i)
+		{
 			color = CharacterColor::LightGrey;
+			drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color, true);
+		}
+		else
+		{
+			drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color, false);
+		}
 
-		drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color);
+		
 
 	}
 
@@ -407,7 +422,7 @@ void EditState::drawMenu()
 
 }
 
-void EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, CharacterColor::Color color)
+bool EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, CharacterColor::Color color, bool isSelected)
 {
 	ConsoleCharacter sprite;
 	ConsoleText prefix;
@@ -442,8 +457,16 @@ void EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, Chara
 
 	buttonSprite.setTextureRect(rect);
 
+	ImGui::BeginGroup();
 	ImGui::PushID(key);
-	if (ImGui::ImageButton(buttonSprite, sf::Vector2f(16, 16)))
+
+	ImGui::Image(buttonSprite, sf::Vector2f(16, 16));
+	
+	ImGui::PopID();
+	ImGui::PushID(key*1000);
+	ImGui::SameLine(0, 4);
+
+	if(ImGui::Button(object.name.c_str()))
 	{
 		int value = key - 1;
 
@@ -460,10 +483,14 @@ void EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, Chara
 
 		std::cout << key << std::endl;
 	}
+
 	ImGui::PopID();
-
-	ImGui::SameLine();
-
+	ImGui::EndGroup();
+	if (ImGui::IsItemClicked())
+	{
+		std::cout << "Click!" << std::endl;
+	}
+	return false;
 }
 
 void EditState::drawLevel()
