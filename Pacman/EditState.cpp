@@ -364,15 +364,13 @@ void EditState::drawMenu()
 
 	for (int i = 0; i < tiles_.size(); ++i)
 	{
-		CharacterColor::Color color = CharacterColor::White;
 		if (brush_.type == Brush::Tile && brush_.value == i)
 		{
-			color = CharacterColor::LightGrey;
-			drawObjectOption(tiles_[i], 1 + i, 1, height_ + i + 1, color, true);
+			drawObjectOption(tiles_[i], 1 + i, true);
 		}
 		else
 		{
-			drawObjectOption(tiles_[i], 1 + i, 1, height_ + i + 1, color, false);
+			drawObjectOption(tiles_[i], 1 + i, false);
 
 		}
 
@@ -382,15 +380,13 @@ void EditState::drawMenu()
 
 	for (int i = 0; i < entities_.size(); ++i)
 	{
-		CharacterColor::Color color = CharacterColor::White;
 		if (brush_.type == Brush::Entity && brush_.value == i)
 		{
-			color = CharacterColor::LightGrey;
-			drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color, true);
+			drawObjectOption(entities_[i], 1 + i + tiles_.size(), true);
 		}
 		else
 		{
-			drawObjectOption(entities_[i], 1 + i + tiles_.size(), 1, height_ + i + 1 + tiles_.size(), color, false);
+			drawObjectOption(entities_[i], 1 + i + tiles_.size(), false);
 		}
 
 		
@@ -422,27 +418,9 @@ void EditState::drawMenu()
 
 }
 
-bool EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, CharacterColor::Color color, bool isSelected)
+bool EditState::drawObjectOption(ObjectIcon object, int key, bool isSelected)
 {
-	ConsoleCharacter sprite;
-	ConsoleText prefix;
-	ConsoleText text;
 
-
-	prefix.setText(std::to_wstring(key) + L" -");
-	prefix.setPosition(x, y);
-
-	sprite.setTexture(object.texture);
-	sprite.setPosition(x+4, y);
-
-	std::wstring name(object.name.begin(), object.name.end());
-	text.setText(std::wstring(name));
-	text.setPosition(x+6, y);
-	text.setColor(color);
-
-	getContext().console->draw(prefix);
-	getContext().console->draw(sprite);
-	getContext().console->draw(text);
 
 
 	sf::Sprite buttonSprite;
@@ -460,11 +438,18 @@ bool EditState::drawObjectOption(ObjectIcon object, int key, int x, int y, Chara
 	ImGui::BeginGroup();
 	ImGui::PushID(key);
 
-	ImGui::Image(buttonSprite, sf::Vector2f(16, 16));
+	if(isSelected)
+		ImGui::Image(buttonSprite, sf::Vector2f(16, 16), sf::Color::White, sf::Color(120, 120, 120));
+	else
+		ImGui::Image(buttonSprite, sf::Vector2f(16, 16));
+
 	
 	ImGui::PopID();
 	ImGui::PushID(key*1000);
 	ImGui::SameLine(0, 4);
+
+
+
 
 	if(ImGui::Button(object.name.c_str()))
 	{

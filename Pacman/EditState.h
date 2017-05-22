@@ -61,8 +61,7 @@ private:
 
 
 	void drawMenu();
-	bool drawObjectOption(ObjectIcon object, int key, int x, int y,
-		CharacterColor::Color color = CharacterColor::White, bool isSelected = false);
+	bool drawObjectOption(ObjectIcon object, int key, bool isSelected = false);
 
 	void drawLevel();
 	
