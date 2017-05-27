@@ -266,7 +266,7 @@ void PathFinder::addNeighbor(sf::Vector2i currentPos, sf::Vector2i neighbor, int
 
 	float newCost = cost_[currentPos.x][currentPos.y] + neighborCost;
 
-	if (!scene_->isTilePhysical(neighbor.x, neighbor.y) && cost_[neighbor.x][neighbor.y] > newCost)
+	if (/*!scene_->isTilePhysical(neighbor.x, neighbor.y)*/ !isPhysical(neighbor) && cost_[neighbor.x][neighbor.y] > newCost)
 	{
 		float priority = newCost + heuristic(neighbor, goal_, start_);
 
@@ -311,5 +311,15 @@ float PathFinder::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2
 bool PathFinder::isPhysical(sf::Vector2i pos)
 {
 	pos = scene_->normalize(pos);
+	
+	if (scene_->getTile(pos.x, pos.y)->getCategory() == "ghostBase")
+	{
+		if (scene_->getTile(start_.x, start_.y)->getCategory() == "ghostBase")
+			return false;
+		else
+			return scene_->isTilePhysical(pos.x, pos.y);
+	}
+
+
 	return scene_->isTilePhysical(pos.x, pos.y);
 }

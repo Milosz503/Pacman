@@ -38,12 +38,15 @@ public:
 
 
 private:
+	sol::state lua_;
 
 	TextureManager* textureManager_;
 	ConsoleWindow* console_;
 	//Level* level_;
 	std::string levelFile_;
 
+
+	sol::table objectData_;
 	Brush brush_;
 
 	int width_;
@@ -60,8 +63,10 @@ private:
 	int getTile(std::string name);
 
 
-	void drawMenu();
-	bool drawObjectOption(ObjectIcon object, int key, bool isSelected = false);
+	void palette();
+	bool objectButton(ObjectIcon object, bool isSelected = false);
+
+	void objectConfiguration();
 
 	void drawLevel();
 	

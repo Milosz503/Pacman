@@ -12,11 +12,16 @@ EditState::EditState(StateStack & stack, Context context) :
 	textureManager_(context.textureManager),
 	console_(context.console),
 	levelFile_(*context.levelFile),
+	objectData_(lua_, sol::create),
 	brush_(Brush::Tile, 0),
 	width_(20),
 	height_(20)
 {
 	level_.resize(width_);
+
+	objectData_["addX"] = 10;
+	objectData_["addY"] = 12;
+	objectData_["str"] = "data!!";
 
 	for (int x = 0; x < width_; ++x)
 	{
@@ -104,12 +109,10 @@ bool EditState::update(sf::Time dt)
 		{
 			if(brush_.type == Brush::Tile)
 				level_[pos.x][pos.y] = brush_.value;
-			else
-			{
-				//spawns_.push_back(SpawnPoint(brush_.value, pos));
-			}
+
 		}
 	}
+
 
 	/*if (Mouse::isButtonPressed(Mouse::Button::Right))
 	{
@@ -284,7 +287,8 @@ void EditState::draw()
 {
 
 	drawLevel();
-	drawMenu();
+	palette();
+	objectConfiguration();
 	
 
 }
@@ -336,10 +340,10 @@ int EditState::getTile(std::string name)
 
 
 
-void EditState::drawMenu()
+void EditState::palette()
 {
 
-	ImGui::Begin("Edit");
+	ImGui::Begin("Palette");
 
 	//sf::Sprite sprite;
 	//sprite.setTexture(getContext().textureManager->getTileset());
@@ -360,20 +364,26 @@ void EditState::drawMenu()
 
 
 	
-
+	bool isSelected;
 
 	for (int i = 0; i < tiles_.size(); ++i)
 	{
 		if (brush_.type == Brush::Tile && brush_.value == i)
 		{
-			drawObjectOption(tiles_[i], 1 + i, true);
+			isSelected = true;
 		}
 		else
 		{
-			drawObjectOption(tiles_[i], 1 + i, false);
+			isSelected = false;
 
 		}
+		if (objectButton(tiles_[i], isSelected))
+		{
 
+				brush_.type = Brush::Tile;
+				brush_.value = i;
+
+		}
 		
 
 	}
@@ -382,46 +392,32 @@ void EditState::drawMenu()
 	{
 		if (brush_.type == Brush::Entity && brush_.value == i)
 		{
-			drawObjectOption(entities_[i], 1 + i + tiles_.size(), true);
+			isSelected = true;
 		}
 		else
 		{
-			drawObjectOption(entities_[i], 1 + i + tiles_.size(), false);
+			isSelected = false;
 		}
 
-		
-
-	}
-
-
-	if (Mouse::isButtonPressed(Mouse::Button::Left))
-	{
-		sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
-
-		pos.x /= console_->getFontSize();
-		pos.y /= console_->getFontSize();
-
-
-
-		if (pos.x < width_ && pos.y < height_ && pos.x >= 0 && pos.y >= 0)
+		if (objectButton(entities_[i], isSelected))
 		{
-			if (brush_.type == Brush::Tile)
-				level_[pos.x][pos.y] = brush_.value;
-			else
-			{
-				//spawns_.push_back(SpawnPoint(brush_.value, pos));
-			}
+			brush_.type = Brush::Entity;
+			brush_.value = i;
 		}
+
 	}
+
+
+
 
 	ImGui::End();
 
 }
 
-bool EditState::drawObjectOption(ObjectIcon object, int key, bool isSelected)
+bool EditState::objectButton(ObjectIcon object, bool isSelected)
 {
 
-
+	bool answer = false;
 
 	sf::Sprite buttonSprite;
 	buttonSprite.setTexture(getContext().textureManager->getTileset());
@@ -436,16 +432,16 @@ bool EditState::drawObjectOption(ObjectIcon object, int key, bool isSelected)
 	buttonSprite.setTextureRect(rect);
 
 	ImGui::BeginGroup();
-	ImGui::PushID(key);
+	//ImGui::PushID(key);
 
 	if(isSelected)
-		ImGui::Image(buttonSprite, sf::Vector2f(16, 16), sf::Color::White, sf::Color(120, 120, 120));
+		ImGui::Image(buttonSprite, sf::Vector2f(16, 16), sf::Color::White, sf::Color::White);
 	else
 		ImGui::Image(buttonSprite, sf::Vector2f(16, 16));
 
 	
-	ImGui::PopID();
-	ImGui::PushID(key*1000);
+	//ImGui::PopID();
+	//ImGui::PushID(key*1000);
 	ImGui::SameLine(0, 4);
 
 
@@ -453,7 +449,7 @@ bool EditState::drawObjectOption(ObjectIcon object, int key, bool isSelected)
 
 	if(ImGui::Button(object.name.c_str()))
 	{
-		int value = key - 1;
+		/*int value = key - 1;
 
 		if (value >= tiles_.size())
 		{
@@ -466,16 +462,74 @@ bool EditState::drawObjectOption(ObjectIcon object, int key, bool isSelected)
 			brush_.value = value;
 		}
 
-		std::cout << key << std::endl;
+		std::cout << key << std::endl;*/
+
+		answer = true;
 	}
 
-	ImGui::PopID();
+	//ImGui::PopID();
 	ImGui::EndGroup();
 	if (ImGui::IsItemClicked())
 	{
 		std::cout << "Click!" << std::endl;
 	}
-	return false;
+	return answer;
+}
+
+void EditState::objectConfiguration()
+{
+	ImGui::Begin("Object data");
+
+	int id = 0;
+	for (auto& attribute : objectData_)
+	{
+		if (attribute.first.is<std::string>())
+		{
+			std::string name = attribute.first.as<std::string>();
+
+			auto data = attribute.second;
+
+			ImGui::PushID(id);
+
+			ImGui::Text(name.c_str());
+			ImGui::SameLine();
+			
+			if (data.get_type() == sol::type::number)
+			{
+				int value = data.as<int>();
+				ImGui::InputInt("", &value);
+				
+				objectData_[name] = value;
+			}
+			else if (data.get_type() == sol::type::string)
+			{
+				std::string value = data.as<std::string>();
+
+				int bufSize = 20 >= value.length() ? 20 : value.length();
+
+				char* buf = new char[bufSize];
+				strcpy_s(buf, bufSize, data.as<std::string>().c_str());
+
+				ImGui::InputText("", buf, bufSize);
+
+				objectData_[name] = std::string(buf);
+
+			}
+			else
+			{
+				ImGui::Text("unknown type");
+			}
+
+
+		}
+		ImGui::PopID();
+		++id;
+	}
+
+
+	ImGui::End();
+
+
 }
 
 void EditState::drawLevel()
@@ -700,9 +754,9 @@ void EditState::loadLevel()
 
 void EditState::saveLevel()
 {
-	sol::state lua;
-	lua.open_libraries(sol::lib::base, sol::lib::io, sol::lib::string, sol::lib::math, sol::lib::table, sol::lib::package);
-	auto result = lua.script_file("data/scripts/data_generator.lua", &sol::simple_on_error);
+	//sol::state lua;
+	lua_.open_libraries(sol::lib::base, sol::lib::io, sol::lib::string, sol::lib::math, sol::lib::table, sol::lib::package);
+	auto result = lua_.script_file("data/scripts/data_generator.lua", &sol::simple_on_error);
 	if (!result.valid())
 	{
 		sol::error e = result;
@@ -710,31 +764,31 @@ void EditState::saveLevel()
 		return;
 	}
 
-	lua.create_table("tiles");
-	lua.create_table("level");
-	lua.create_table("objects");
+	lua_.create_table("tiles");
+	lua_.create_table("level");
+	lua_.create_table("objects");
 
-	lua["level"]["width"] = width_;
-	lua["level"]["height"] = height_;
+	lua_["level"]["width"] = width_;
+	lua_["level"]["height"] = height_;
 
 	for (int y = 1; y <= height_; ++y)
 	{
-		lua["level"][y] = sol::table(lua, sol::create);
+		lua_["level"][y] = sol::table(lua_, sol::create);
 		for (int x = 1; x <= width_; ++x)
 		{
-			lua["level"][y][x] = level_[x - 1][y - 1];
+			lua_["level"][y][x] = level_[x - 1][y - 1];
 		}
 	}
 
 	for (int i = 0; i < tiles_.size(); ++i)
 	{
-		lua["tiles"][i] = sol::table(lua, sol::create);
-		lua["tiles"][i]["name"] = tiles_[i].name;
+		lua_["tiles"][i] = sol::table(lua_, sol::create);
+		lua_["tiles"][i]["name"] = tiles_[i].name;
 	}
 
 	for (int i = 0; i < spawns_.size(); ++i)
 	{
-		sol::table object(lua, sol::create);
+		sol::table object(lua_, sol::create);
 
 		std::string name = entities_[spawns_[i].entity].name;
 		sf::Vector2i position = spawns_[i].position;
@@ -743,11 +797,11 @@ void EditState::saveLevel()
 		object["x"] = position.x;
 		object["y"] = position.y;
 
-		lua["objects"][i + 1] = object;
+		lua_["objects"][i + 1] = object;
 	}
 
 
-	sol::table generator = lua["generator"];
+	sol::table generator = lua_["generator"];
 	if (generator.valid())
 	{
 		sol::protected_function openFile = generator["openFile"];
@@ -760,21 +814,21 @@ void EditState::saveLevel()
 
 			sol::protected_function_result result;
 
-			result = generate("level", lua["level"]);
+			result = generate("level", lua_["level"]);
 			if (!result.valid())
 			{
 				sol::error e = result;
 				std::cout << "Saving level FAILED: " << e.what() << std::endl;
 			}
 
-			result = generate("tiles", lua["tiles"]);
+			result = generate("tiles", lua_["tiles"]);
 			if (!result.valid())
 			{
 				sol::error e = result;
 				std::cout << "Saving level FAILED: " << e.what() << std::endl;
 			}
 
-			result = generate("objects", lua["objects"]);
+			result = generate("objects", lua_["objects"]);
 			if (!result.valid())
 			{
 				sol::error e = result;

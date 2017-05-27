@@ -66,6 +66,16 @@ entities = {
 
 
 tiles = {
+
+	GhostBase = {
+		type = "tile";
+		category = "ghostBase";
+		
+		isPhysical = true;
+		
+		texture = {x = 4, y = 3, color = Colors.lightGrey};
+	},
+	
 	
 	WallBL = {
 		type = "tile";

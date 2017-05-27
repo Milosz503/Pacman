@@ -37,10 +37,12 @@ return
 	update = function(self)
 		vars = self.vars
 	
-		
-		chooseNextGoal(self)
+		--self:setSpeed(1, 0)
+		--chooseNextGoal(self)
 		--if player ~= nil then
 		
+		player = world:getPlayer()
+		self:guideTo(player)
 		
 		
 		

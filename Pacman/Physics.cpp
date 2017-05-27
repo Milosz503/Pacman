@@ -71,6 +71,9 @@ Physics::~Physics()
 
 void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 {
+	bool isGhost = entity->getCategory() == "ghost";
+
+	std::cout << isGhost << std::endl;
 
 
 	Vector2i nextMove = entity->getNextMove();
@@ -85,9 +88,49 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 
 	if (nextMove.x != 0 && nextMove.y != 0)
 	{
-		bool isEmptyX = !scene_->isTilePhysical(position.x + nextMove.x, position.y);
-		bool isEmptyY = !scene_->isTilePhysical(position.x, position.y + nextMove.y);
-		bool isEmptyXY = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
+		
+		bool isEmptyX;
+		bool isEmptyY;
+		bool isEmptyXY;
+
+		if (isGhost)
+		{
+			Tile* tile = scene_->getTile(position.x + nextMove.x, position.y);
+			if (tile != nullptr && tile->getCategory() == "ghostBase")
+			{
+				isEmptyX = true;
+			}
+			else
+			{
+				isEmptyX = !scene_->isTilePhysical(position.x + nextMove.x, position.y);
+			}
+
+			tile = scene_->getTile(position.x, position.y + nextMove.y);
+			if (tile != nullptr && tile->getCategory() == "ghostBase")
+			{
+				isEmptyY = true;
+			}
+			else
+			{
+				isEmptyY = !scene_->isTilePhysical(position.x, position.y + nextMove.y);
+			}
+
+			tile = scene_->getTile(position.x + nextMove.x, position.y + nextMove.y);
+			if (tile != nullptr && tile->getCategory() == "ghostBase")
+			{
+				isEmptyXY = true;
+			}
+			else
+			{
+				isEmptyXY = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
+			}
+		}
+		else
+		{
+			isEmptyX = !scene_->isTilePhysical(position.x + nextMove.x, position.y);
+			isEmptyY = !scene_->isTilePhysical(position.x, position.y + nextMove.y);
+			isEmptyXY = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
+		}
 
 		if ((isEmptyX || isEmptyY) && isEmptyXY)
 		{
@@ -115,7 +158,27 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 	}
 	else if(nextMove.x != 0 || nextMove.y != 0)
 	{
-		if (!scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y))
+		bool isEmpty;
+
+		if (isGhost)
+		{
+			Tile* tile = scene_->getTile(position.x + nextMove.x, position.y + nextMove.y);
+			if (tile != nullptr && tile->getCategory() == "ghostBase")
+			{
+				isEmpty = true;
+			}
+			else
+			{
+				isEmpty = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
+			}
+		}
+		else
+		{
+			isEmpty = !scene_->isTilePhysical(position.x + nextMove.x, position.y + nextMove.y);
+		}
+
+
+		if (isEmpty)
 			newNextMove = nextMove;
 		else
 		{
