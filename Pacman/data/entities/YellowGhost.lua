@@ -1,22 +1,37 @@
-local homeX = 26
-local homeY = 1
 
 return {
 		type = "entity";
 		category = "ghost";
 		
-		speed = 11;
+		speed = 12;
 
 		texture = {x = 6, y = 2, color = Colors.yellow };
 		
 		init = function(self, properties)
 			
 			vars = self.vars
+			vars.start = 0
+			if properties then
+				vars.homeX = properties.homeX or 26
+				vars.homeY = properties.homeY or 1
+				vars.focusTime = properties.focusTime or 8
+				vars.focusTime = vars.focusTime*60
+				
+				if properties.color ~= nil then
+					self:setColor(properties.color)
+				end
+				
+			else
+				vars.homeX = 1
+				vars.homeY = 1
+				vars.focusTime = 500
+			end
+			
 
-			vars.visionRange = 12
+			vars.visionRange = 15
 			vars.state = "new"
 			
-			self:guideTo(homeX, homeY)
+			self:guideTo(vars.homeX, vars.homeY)
 			self:setGuideType("a_star")
 			
 		end;
@@ -31,9 +46,8 @@ return {
 			
 			if vars.state == "new" then
 				
-				if self.x == homeX and self.y == homeY then
+				if self.x == vars.homeX and self.y == vars.homeY then
 					self:setGuideType("direction")
-					--self:guideTo(player)
 					vars.state = "base"
 					
 					print("end new")
@@ -45,20 +59,26 @@ return {
 				
 				if distance <= vars.visionRange then
 					self:guideTo(player)
+					vars.start = world:getTime()
 					vars.state = "player"
 				end
 				
 			elseif vars.state == "player" then
 				
 				if distance > (vars.visionRange + 2) then
-					self:guideTo(homeX, homeY)
+					self:guideTo(vars.homeX, vars.homeY)
 					vars.state = "base"
+				end
+				
+				if (world:getTime() - vars.start) > vars.focusTime then
+					self:guideTo(vars.homeX, vars.homeY)
+					vars.state = "new"
 				end
 				
 			end
 			
 
-			
+			-- print (vars.homeX.. " " .. vars.homeY)
 			
 
 			

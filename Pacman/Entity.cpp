@@ -105,6 +105,8 @@ void Entity::update()
 
 void Entity::draw()
 {
+	return;
+
 	ConsoleCharacter character;
 	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
 
@@ -118,6 +120,9 @@ void Entity::draw()
 
 		getWorld()->getConsole()->draw(character);
 	}
+
+	character.setPosition(destinationPos_);
+	getWorld()->getConsole()->draw(character);
 }
 
 
@@ -238,6 +243,7 @@ bool Entity::isGoalMoving()
 
 sf::Vector2i Entity::getGoal()
 {
+	std::cout << "return: ";
 	if (destination_ != nullptr)
 	{
 		if (destination_->getType() == GameObject::Entity)
@@ -253,8 +259,10 @@ sf::Vector2i Entity::getGoal()
 	}
 	else
 	{
+		std::cout  << destinationPos_.x << " " << destinationPos_.y << std::endl;
 		return destinationPos_;
 	}
+	return destinationPos_;
 }
 
 std::string Entity::getGuideType()

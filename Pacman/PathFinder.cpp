@@ -141,7 +141,12 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 	for (int i = 0; i < directions.size(); ++i)
 	{
 		if (start + directions[i] != lastPosition && !isPhysical(start + directions[i]))
+		{
+			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal.y << "start:" << start.y << std::endl;
+
 			return directions[i];
+		}
+			
 	}
 
 	return directions[0];
@@ -311,10 +316,10 @@ float PathFinder::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2
 bool PathFinder::isPhysical(sf::Vector2i pos)
 {
 	pos = scene_->normalize(pos);
-	
-	if (scene_->getTile(pos.x, pos.y)->getCategory() == "ghostBase")
+
+	if (scene_->getTile(pos.x, pos.y) != nullptr && scene_->getTile(pos.x, pos.y)->getCategory() == "ghostBase")
 	{
-		if (scene_->getTile(start_.x, start_.y)->getCategory() == "ghostBase")
+		if (scene_->getTile(start_.x, start_.y) != nullptr && scene_->getTile(start_.x, start_.y)->getCategory() == "ghostBase")
 			return false;
 		else
 			return scene_->isTilePhysical(pos.x, pos.y);

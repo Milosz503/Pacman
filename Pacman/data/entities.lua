@@ -144,7 +144,7 @@ tiles = {
 		collide = function (self)
 			-- print("collide wall ".. self.x .. " " .. self.y .. " " .. self.name .. " " .. self.type)
 			-- print("Score: " .. world.score)
-			-- self:setColor(Colors.red)
+			 --self:setColor(Colors.red)
 			
 		end
 		

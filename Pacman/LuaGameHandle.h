@@ -37,7 +37,7 @@ public:
 	void removeEntities();
 	void spawnEntities();
 
-
+	int getTime();
 
 
 	~LuaGameHandle();

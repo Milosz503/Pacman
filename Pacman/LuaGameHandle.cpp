@@ -104,6 +104,11 @@ void LuaGameHandle::spawnEntities()
 	world_->getScene()->arrangeSpawnEntities();
 }
 
+int LuaGameHandle::getTime()
+{
+	return world_->getFrameNumber();
+}
+
 
 
 

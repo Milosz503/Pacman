@@ -73,7 +73,6 @@ void Physics::checkMove(Entity* entity, std::list < StaticPair >& collisions)
 {
 	bool isGhost = entity->getCategory() == "ghost";
 
-	std::cout << isGhost << std::endl;
 
 
 	Vector2i nextMove = entity->getNextMove();

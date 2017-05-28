@@ -79,6 +79,8 @@ void EntityController::update(Entity * entity)
 		start_ = start;
 
 
+		std::cout << "destination: " << destination.x << " " << destination.y << std::endl;
+
 		if (guideType == A_STAR)
 		{
 			std::vector<sf::Vector2i>& path = finder_.findPath(start, destination, lastPosition);

@@ -64,7 +64,8 @@ EntityManager::EntityManager(World* world) :
 		"removeObject", &LuaGameHandle::removeObject,
 		"getDistance", &LuaGameHandle::getDistance,
 		"removeEntities", &LuaGameHandle::removeEntities,
-		"spawnEntities", &LuaGameHandle::spawnEntities
+		"spawnEntities", &LuaGameHandle::spawnEntities,
+		"getTime", &LuaGameHandle::getTime
 		);
 
 	lua_.new_usertype<sf::Vector2i>("Vector2i",

@@ -36,8 +36,12 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 		return;
 	}
 
+	
+
 	sol::table level = lua["level"];
 	sol::table tiles = lua["tiles"];
+
+
 
 	if (!level.valid() || !tiles.valid())
 	{
@@ -73,9 +77,10 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 				{
 					Tile* tile = entityManager->createTile(tileName.value());
 
+					sol::table initData = tileData["data"];
 
 					tile->setPosition(x, y);
-					tile->init(tileData);
+					tile->init(initData);
 					scene->addTile(tileName.value(), x - 1, y - 1);
 					
 				}
@@ -110,7 +115,8 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 					entity->init(object);
 
 					scene->addEntity(entity);*/
-					scene->addSpawn(sf::Vector2i(x, y), name.value(), object);
+					sol::table initData = object["data"];
+					scene->addSpawn(sf::Vector2i(x, y), name.value(), initData);
 				}
 				else
 				{

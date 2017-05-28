@@ -19,9 +19,7 @@ EditState::EditState(StateStack & stack, Context context) :
 {
 	level_.resize(width_);
 
-	objectData_["addX"] = 10;
-	objectData_["addY"] = 12;
-	objectData_["str"] = "data!!";
+
 
 	for (int x = 0; x < width_; ++x)
 	{
@@ -233,7 +231,22 @@ bool EditState::handleEvent(sf::Event event)
 
 				if (brush_.type == Brush::Entity)
 				{
-					spawns_.push_back(Spawn(brush_.value, pos));
+					spawns_.push_back(Spawn(brush_.value, pos, objectData_));
+					objectData_ = sol::table(lua_, sol::create);
+				}
+				else if (brush_.type == Brush::SelectEntity)
+				{
+					auto it = std::find_if(spawns_.begin(), spawns_.end(), [&](const Spawn& p)
+					{
+						if (p.position == pos)
+							return true;
+						return false;
+					});
+
+					if (it != spawns_.end())
+					{
+						brush_.selectedEntity = spawns_.begin() - it;
+					}
 				}
 			}
 			//if (pos.x < width_ && pos.y < height_ + tiles_.size() + entities_.size() + 1 && pos.x >= 0 && pos.y > height_)
@@ -363,6 +376,25 @@ void EditState::palette()
 	//}
 
 
+	if (brush_.type == Brush::SelectEntity)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8, 1, 1, 1));
+
+		if (ImGui::Button("Select"))
+		{
+			brush_.type = Brush::SelectEntity;
+		}
+		ImGui::PopStyleColor();
+	}
+	else
+	{
+		if (ImGui::Button("Select"))
+		{
+			brush_.type = Brush::SelectEntity;
+		}
+	}
+		
+
 	
 	bool isSelected;
 
@@ -408,7 +440,13 @@ void EditState::palette()
 	}
 
 
+	sf::Vector2i pos = Mouse::getPosition(*getContext().console->getWindow());
 
+	pos.x /= console_->getFontSize();
+	pos.y /= console_->getFontSize();
+
+	ImGui::Separator();
+	ImGui::Text("Tile x:%d, y:%d", pos.x, pos.y);
 
 	ImGui::End();
 
@@ -496,8 +534,8 @@ void EditState::objectConfiguration()
 			
 			if (data.get_type() == sol::type::number)
 			{
-				int value = data.as<int>();
-				ImGui::InputInt("", &value);
+				float value = data.as<float>();
+				ImGui::InputFloat("", &value);
 				
 				objectData_[name] = value;
 			}
@@ -526,6 +564,59 @@ void EditState::objectConfiguration()
 		++id;
 	}
 
+	if (ImGui::Button("Add variable"))
+		ImGui::OpenPopup("Variable");
+
+	ImGui::SetNextWindowSize(ImVec2(200, 150));
+	if (ImGui::BeginPopupModal("Variable", NULL, ImGuiWindowFlags_NoResize))
+	{
+		ImGui::Text("New variable");
+
+		static char name[20] = "";
+
+		ImGui::InputText("Name", name, 20);
+
+		static int varType = 0;
+
+		ImGui::Combo("Type", &varType, "string\0number\0\0");
+
+		static float valueN = 0;
+		static char valueS[20] = "";
+
+		//if (varType == 0)
+		//{
+		//	ImGui::InputText("Value", valueS, 20);
+		//}
+		//else if (varType == 1)
+		//{
+		//	ImGui::InputFloat("Value##2", &valueN);
+		//}
+
+		if (ImGui::Button("Add"))
+		{
+	
+			if (name != "")
+			{
+
+				if (varType == 0)
+					objectData_[std::string(name)] = "";
+				else
+					objectData_[std::string(name)] = 0;
+
+
+				strcpy_s(name, 20, "");
+			}
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("cancel")) ImGui::CloseCurrentPopup();
+		
+
+		ImGui::EndPopup();
+	}
+
+	
+
 
 	ImGui::End();
 
@@ -550,7 +641,7 @@ void EditState::drawLevel()
 
 	for (int i = 0; i < spawns_.size(); ++i)
 	{
-		Spawn spawn = spawns_[i];
+		Spawn& spawn = spawns_[i];
 		sprite.setTexture(entities_[spawn.entity].texture);
 		sprite.setPosition(spawn.position);
 
@@ -654,9 +745,9 @@ void EditState::loadObjects()
 }
 void EditState::loadLevel()
 {
-	sol::state lua;
-	lua.open_libraries(sol::lib::base);
-	auto result = lua.script_file(levelFile_, &sol::simple_on_error);
+	//sol::state lua;
+	lua_.open_libraries(sol::lib::base);
+	auto result = lua_.script_file(levelFile_, &sol::simple_on_error);
 	if (!result.valid())
 	{
 		sol::error e = result;
@@ -664,8 +755,8 @@ void EditState::loadLevel()
 		return;
 	}
 
-	sol::table level = lua["level"];
-	sol::table tiles = lua["tiles"];
+	sol::table level = lua_["level"];
+	sol::table tiles = lua_["tiles"];
 
 	if (!level.valid() || !tiles.valid())
 	{
@@ -711,7 +802,7 @@ void EditState::loadLevel()
 		}
 	}
 
-	sol::table objects = lua["objects"];
+	sol::table objects = lua_["objects"];
 
 	if (!objects.valid())
 	{
@@ -732,7 +823,7 @@ void EditState::loadLevel()
 					int x = object["x"].get_or(0);
 					int y = object["y"].get_or(0);
 
-					Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y));
+					Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y), object["data"]);
 					spawns_.push_back(spawn);
 				}
 				else
@@ -796,6 +887,7 @@ void EditState::saveLevel()
 		object["name"] = name;
 		object["x"] = position.x;
 		object["y"] = position.y;
+		object["data"] = spawns_[i].objectData;
 
 		lua_["objects"][i + 1] = object;
 	}

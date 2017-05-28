@@ -11,19 +11,21 @@ struct ObjectIcon
 };
 struct Spawn
 {
-	Spawn(int e, sf::Vector2i p) : entity(e), position(p) {};
+	Spawn(int e, sf::Vector2i p, sol::table data) : entity(e), position(p), objectData(data) {};
 	int entity;
 	sf::Vector2i position;
+	sol::table objectData;
 };
 
 struct Brush
 {
-	enum Type {Tile, Entity};
+	enum Type {Tile, Entity, SelectEntity};
 
 	Brush(Type type, int value) : type(type), value(value) {}
 
 	Type type;
 	int value;
+	int selectedEntity;
 };
 
 class EditState : public State

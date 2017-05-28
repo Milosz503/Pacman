@@ -212,6 +212,11 @@ std::vector<Entity*>& Scene::getEntities()
 
 Entity * Scene::getPlayer()
 {
+	if (player_ == nullptr)
+	{
+		std::cout << "PLAYER IS NULL!" << std::endl;
+	}
+
 	return player_;
 }
 
