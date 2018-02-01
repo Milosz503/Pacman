@@ -40,7 +40,7 @@ void System::sendEvent(SystemEvent * event)
 	lastSentEvent_ = event;
 
 	if (systemManager_ != nullptr)
-		systemManager_->handleSystemEvent(event);
+		systemManager_->sendSystemEvent(event);
 
 	event = nullptr;
 

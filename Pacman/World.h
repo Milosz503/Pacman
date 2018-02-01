@@ -47,13 +47,10 @@ public:
 
 private:
 
-	int offsetX_;
-	int offsetY_;
 	unsigned long long frameCounter_;
 
 	int score_;
 	int playerLives_;
-	sf::Vector2i spawnPoint_;
 
 	sol::state lua_;
 	ConsoleWindow* console_;

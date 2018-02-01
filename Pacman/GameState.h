@@ -23,23 +23,17 @@ private:
 	SystemManager systems_;
 	ConsoleWindow* console_;
 
-	//World world_;
-
-	int posY;
-	int posX;
-
-	CharacterColor::Color currentColor;
-	sf::Color backgroundColor_;
-
 
 	ConsoleText scoreText_;
 	ConsoleText livesText_;
 
+	//Debug data
 	ConsoleText updateTime_;
 	ConsoleText drawTime_;
-	float fps;
-
+	ConsoleText fpsText_;
+	float fps_;
 	float averageUpdate_;
+
 
 	void loadLevel();
 	

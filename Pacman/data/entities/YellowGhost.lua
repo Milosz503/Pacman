@@ -17,6 +17,10 @@ return {
 				vars.focusTime = properties.focusTime or 8
 				vars.focusTime = vars.focusTime*60
 				
+				if(properties.x ~= nil) then
+					self.defaultSpeed = properties.x
+				end
+				
 				if properties.color ~= nil then
 					self:setColor(properties.color)
 				end

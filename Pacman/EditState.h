@@ -1,6 +1,8 @@
 #pragma once
 #include "State.h"
 
+//Do zmiany
+
 
 struct ObjectIcon
 {
@@ -25,7 +27,7 @@ struct Brush
 
 	Type type;
 	int value;
-	int selectedEntity;
+	int selectedEntity = -1;
 };
 
 class EditState : public State

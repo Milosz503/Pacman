@@ -3,4 +3,4 @@ level =
 tiles = 
 {{name = "GhostBase"}, {name = "Point"}, {name = "Wall"}, {name = "WallBL"}, {name = "WallHor"}, {name = "WallLT"}, {name = "WallRB"}, {name = "WallTR"}, {name = "WallVer"}, [0] = {name = "Floor"}}
 objects = 
-{{data = {color = 6, focusTime = 6, homeX = 1, homeY = 1}, name = "YellowGhost", x = 9, y = 10}, {data = {}, name = "Player", x = 9, y = 18}, {data = {homeX = 18, homeY = 1}, name = "YellowGhost", x = 10, y = 10}, {data = {color = 2, homeX = 18, homeY = 18}, name = "YellowGhost", x = 11, y = 10}, {data = {color = 7, homeX = 1, homeY = 18}, name = "YellowGhost", x = 8, y = 10}, {data = {color = 2, homeX = 6, homeY = 10}, name = "YellowGhost", x = 9, y = 9}}
+{{data = {color = 6, focusTime = 6, homeX = 1, homeY = 1}, name = "YellowGhost", x = 9, y = 10}, {data = {}, name = "Player", x = 9, y = 18}, {data = {homeX = 18, homeY = 1}, name = "YellowGhost", x = 10, y = 10}, {data = {color = 2, homeX = 18, homeY = 18}, name = "YellowGhost", x = 11, y = 10}, {data = {color = 7, homeX = 1, homeY = 18, x = 43}, name = "YellowGhost", x = 8, y = 10}, {data = {color = 2, homeX = 6, homeY = 10}, name = "YellowGhost", x = 9, y = 9}}

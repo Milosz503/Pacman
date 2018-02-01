@@ -17,7 +17,9 @@ public:
 	template <typename T>
 	void addSystem();
 
-	void handleSystemEvent(SystemEvent* event);
+
+	//send event to all systems
+	void sendSystemEvent(SystemEvent* event);
 	void update();
 	void draw();
 

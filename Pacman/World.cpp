@@ -3,14 +3,10 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Teleport.h"
 
 World::World(State::Context context) :
-	offsetX_(0),
-	offsetY_(0),
 	score_(0),
 	playerLives_(3),
-	spawnPoint_(2 + offsetX_, 2 + offsetY_),
 	console_(context.console),
 	textureManager_(context.textureManager),
 	frameCounter_(0)
@@ -30,8 +26,6 @@ void World::update()
 	scene_->update();
 
 	++frameCounter_;
-
-	//std::cout << "Entities: " << scene_->getEntities().size() << std::endl;
 	
 }
 
@@ -42,7 +36,7 @@ void World::draw()
 
 sf::IntRect World::getBounds()
 {
-	return sf::IntRect(offsetX_, offsetY_, scene_->getWidth(), scene_->getHeight());
+	return sf::IntRect(0, 0, scene_->getWidth(), scene_->getHeight());
 }
 
 unsigned long long World::getFrameNumber()

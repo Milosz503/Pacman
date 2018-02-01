@@ -26,14 +26,12 @@ public:
 	~System();
 
 private:
-	//GameSystems systems_;
 	SystemManager* systemManager_;
 	World* world_;
 	SystemEvent* lastSentEvent_;
 	
 
 protected:
-	//GameSystems& getSystems();
 	World* getWorld();
 
 	void sendEvent(SystemEvent* event);

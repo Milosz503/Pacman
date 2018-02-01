@@ -40,6 +40,30 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{9bf2e4b0-de6b-4153-8604-9b396e129331}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Menu">
+      <UniqueIdentifier>{1a30aeaa-4cd1-467c-9d01-7192d8043215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Editor">
+      <UniqueIdentifier>{9fba4bd1-41b8-493e-a6bc-467a56a29eb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Managers">
+      <UniqueIdentifier>{5b709326-2e51-47f2-9bb5-fd83252a5ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lua">
+      <UniqueIdentifier>{bde1a04e-4b0c-4f80-a347-cf42fe93a533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lua">
+      <UniqueIdentifier>{293e5227-29bb-47b5-a6a4-ecb1cc2f9631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{a0fafca8-32cf-4a31-a572-feedfe56f3f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{98355f2d-3e17-467f-a040-c82b2a6479df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Managers">
+      <UniqueIdentifier>{fae76d03-f9cc-4e4e-9223-6eeb181237e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -72,28 +96,16 @@
     <ClInclude Include="StateStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="DataTables.h">
-      <Filter>Header Files\Game\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\Game\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Teleport.h">
       <Filter>Header Files\Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
@@ -117,41 +129,47 @@
     <ClInclude Include="System.h">
       <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SystemManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameLogic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EditState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EditSystem.h">
       <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EditState.h">
+      <Filter>Header Files\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="LuaGameHandle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MenuState.h">
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="LuaObjectHandle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sol.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PathFinder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SystemManager.h">
+      <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
     <ClInclude Include="LevelChoiceState.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemEvent.h">
+      <Filter>Header Files\Game\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaGameHandle.h">
+      <Filter>Header Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaObjectHandle.h">
+      <Filter>Header Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="sol.hpp">
+      <Filter>Header Files\Lua</Filter>
     </ClInclude>
     <ClInclude Include="LevelLogic.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Header Files\Game\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Header Files\Game\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic.h">
+      <Filter>Header Files\Game\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Header Files\Game\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -179,17 +197,11 @@
     <ClCompile Include="StateStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pacman.cpp">
       <Filter>Source Files</Filter>
@@ -215,47 +227,14 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Game\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="DataTables.cpp">
-      <Filter>Source Files\Game\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Game\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Game\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Teleport.cpp">
-      <Filter>Source Files\Game\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EditState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EditSystem.cpp">
       <Filter>Source Files\Game\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaGameHandle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaObjectHandle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelChoiceState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelLogic.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui.cpp">
       <Filter>imgui</Filter>
@@ -268,6 +247,39 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\Biblioteki\imgui-sfml\imgui-SFML.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaGameHandle.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaObjectHandle.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelChoiceState.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuState.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemManager.cpp">
+      <Filter>Source Files\Game\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files\Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source Files\Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLogic.cpp">
+      <Filter>Source Files\Game\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
+      <Filter>Source Files\Game\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Source Files\Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="EditState.cpp">
+      <Filter>Source Files\Editor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

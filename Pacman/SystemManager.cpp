@@ -12,7 +12,7 @@ SystemManager::~SystemManager()
 {
 }
 
-void SystemManager::handleSystemEvent(SystemEvent * event)
+void SystemManager::sendSystemEvent(SystemEvent * event)
 {
 	for (auto& system : systems_)
 	{

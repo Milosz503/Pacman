@@ -195,7 +195,7 @@ bool EditState::handleEvent(sf::Event event)
 
 	if (event.type == Event::KeyPressed)
 	{
-		if (event.key.code >= Keyboard::Num1 && event.key.code < Keyboard::Num1 + tiles_.size() + entities_.size())
+		/*if (event.key.code >= Keyboard::Num1 && event.key.code < Keyboard::Num1 + tiles_.size() + entities_.size())
 		{
 			int value = event.key.code - Keyboard::Num1;
 
@@ -209,7 +209,7 @@ bool EditState::handleEvent(sf::Event event)
 				brush_.type = Brush::Tile;
 				brush_.value = value;
 			}
-		}
+		}*/
 
 
 		
@@ -245,7 +245,7 @@ bool EditState::handleEvent(sf::Event event)
 
 					if (it != spawns_.end())
 					{
-						brush_.selectedEntity = spawns_.begin() - it;
+						brush_.selectedEntity = it - spawns_.begin();
 					}
 				}
 			}
@@ -448,6 +448,13 @@ void EditState::palette()
 	ImGui::Separator();
 	ImGui::Text("Tile x:%d, y:%d", pos.x, pos.y);
 
+	if (brush_.type == Brush::SelectEntity)
+	{
+		ImGui::Separator();
+		ImGui::Text("Selected id:%d,  entities:%d", brush_.selectedEntity, spawns_.size());
+	}
+
+
 	ImGui::End();
 
 }
@@ -518,8 +525,36 @@ void EditState::objectConfiguration()
 {
 	ImGui::Begin("Object data");
 
+
+
+	sol::table* table = &objectData_;
+
+	if (brush_.type == Brush::Entity)
+	{
+		table = &objectData_;
+	}
+	else if (brush_.type == Brush::SelectEntity)
+	{
+		if (brush_.selectedEntity >= 0 && brush_.selectedEntity < spawns_.size())
+		{
+			table = &spawns_[brush_.selectedEntity].objectData;
+		}
+		else
+		{
+			ImGui::Text("No entity is selected");
+			ImGui::End();
+			return;
+		}
+	}
+	else
+	{
+		ImGui::Text("Not available");
+		ImGui::End();
+		return;
+	}
+
 	int id = 0;
-	for (auto& attribute : objectData_)
+	for (auto& attribute : *table)
 	{
 		if (attribute.first.is<std::string>())
 		{
@@ -537,7 +572,7 @@ void EditState::objectConfiguration()
 				float value = data.as<float>();
 				ImGui::InputFloat("", &value);
 				
-				objectData_[name] = value;
+				(*table)[name] = value;
 			}
 			else if (data.get_type() == sol::type::string)
 			{
@@ -550,7 +585,7 @@ void EditState::objectConfiguration()
 
 				ImGui::InputText("", buf, bufSize);
 
-				objectData_[name] = std::string(buf);
+				(*table)[name] = std::string(buf);
 
 			}
 			else
@@ -599,9 +634,9 @@ void EditState::objectConfiguration()
 			{
 
 				if (varType == 0)
-					objectData_[std::string(name)] = "";
+					(*table)[std::string(name)] = "";
 				else
-					objectData_[std::string(name)] = 0;
+					(*table)[std::string(name)] = 0;
 
 
 				strcpy_s(name, 20, "");
@@ -616,6 +651,26 @@ void EditState::objectConfiguration()
 	}
 
 	
+	if (brush_.type == Brush::SelectEntity)
+	{
+		if (brush_.selectedEntity >= 0 && brush_.selectedEntity < spawns_.size())
+		{
+			Spawn& spawn = spawns_[brush_.selectedEntity];
+
+			ImGui::Separator();
+
+			ImGui::Text("Position:");
+			ImGui::SameLine();
+			int v[2] = { spawn.position.x, spawn.position.y };
+
+			ImGui::InputInt2("##positionInput", v);
+
+			spawn.position.x = v[0];
+			spawn.position.y = v[1];
+
+
+		}
+	}
 
 
 	ImGui::End();
@@ -823,8 +878,20 @@ void EditState::loadLevel()
 					int x = object["x"].get_or(0);
 					int y = object["y"].get_or(0);
 
-					Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y), object["data"]);
-					spawns_.push_back(spawn);
+					sol::object data = object["data"];
+
+					if (data.get_type() == sol::type::table)
+					{
+						Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y), object["data"]);
+						spawns_.push_back(spawn);
+					}
+						
+					else
+					{
+						Spawn spawn(getEntity(name.value()), sf::Vector2i(x, y), sol::table(lua_, sol::create));
+						spawns_.push_back(spawn);
+					}
+						
 				}
 				else
 				{
