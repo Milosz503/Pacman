@@ -4,6 +4,8 @@
 #include <algorithm>
 
 
+
+
 World::World(State::Context context) :
 	score_(0),
 	playerLives_(3),
@@ -15,7 +17,6 @@ World::World(State::Context context) :
 	luaHandle_ = new LuaGameHandle(this);
 	entityManager_ = new EntityManager(this);
 	scene_ = new Scene(this);
-	
 	
 	
 

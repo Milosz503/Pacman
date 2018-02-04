@@ -17,7 +17,7 @@ class ConsoleWindow;
 class ConsoleWindow
 {
 public:
-	ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager);
+	ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager, std::string title);
 
 	void setFontSize(unsigned size);
 	unsigned getFontSize();

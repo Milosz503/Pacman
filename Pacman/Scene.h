@@ -51,7 +51,7 @@ public:
 
 	void addEntity(Entity* entity);
 
-	void addTile(std::string tileName, int x, int y);
+	void addTile(std::string tileName, int x, int y, sol::table & data);
 	void addTile(Tile* tile);
 
 

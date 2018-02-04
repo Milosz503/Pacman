@@ -5,7 +5,6 @@
 #include "World.h"
 
 LuaObjectHandle::LuaObjectHandle(GameObject* object) :
-	vars_(object->getWorld()->getLua(), sol::create),
 	object_(object)
 {
 }
@@ -240,9 +239,9 @@ void LuaObjectHandle::remove()
 	object_->markToRemove();
 }
 
-sol::table & LuaObjectHandle::getVars()
+sol::table & LuaObjectHandle::getLuaInstance()
 {
-	return vars_;
+	return object_->getLuaInstance();
 }
 
 

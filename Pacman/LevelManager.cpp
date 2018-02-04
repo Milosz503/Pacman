@@ -10,6 +10,7 @@ extern "C" {
 
 #include <LuaBridge.h>
 #include "World.h"
+
 #include "sol.hpp"
 
 using namespace luabridge;
@@ -81,7 +82,7 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 
 					tile->setPosition(x, y);
 					tile->init(initData);
-					scene->addTile(tileName.value(), x - 1, y - 1);
+					scene->addTile(tileName.value(), x - 1, y - 1, initData);
 					
 				}
 			}

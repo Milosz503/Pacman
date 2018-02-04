@@ -143,12 +143,14 @@ void Scene::addEntity(Entity * entity)
 }
 
 
-void Scene::addTile(std::string tileName, int x, int y)
+void Scene::addTile(std::string tileName, int x, int y, sol::table & data)
 {
 	Tile* tile = world_->getEntityManager()->createTile(tileName);
 	tile->setPosition(x, y);
 
 	tiles_[x][y] = tile;
+
+	tile->init(data);
 }
 
 void Scene::addTile(Tile * tile)

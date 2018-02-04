@@ -10,7 +10,9 @@ EntityManager::EntityManager(World* world) :
 	world_(world),
 	lua_(world->getLua())
 {
-	lua_.open_libraries(sol::lib::base, sol::lib::math);
+	
+
+	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package);
 	auto result = lua_.script_file("data/entities.lua", &sol::simple_on_error);
 	if (!result.valid())
 	{
@@ -46,7 +48,7 @@ EntityManager::EntityManager(World* world) :
 		"isGuided", &LuaObjectHandle::isGuided,
 		"setGuideType", &LuaObjectHandle::setGuideType,
 		"remove", &LuaObjectHandle::remove,
-		"vars", sol::property(&LuaObjectHandle::getVars)
+		"self", sol::property(&LuaObjectHandle::getLuaInstance)
 
 		);
 

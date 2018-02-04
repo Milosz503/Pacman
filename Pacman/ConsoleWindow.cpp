@@ -7,7 +7,7 @@ using namespace sf;
 
 
 
-ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager) :
+ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager, string title) :
 	width_(width),
 	height_(height),
 	fontHeight_(8),
@@ -26,7 +26,7 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
-	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), "Bomberman");
+	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title);
 
 	if (!texture_.create(width * fontWidth_, height * fontHeight_))
 	{

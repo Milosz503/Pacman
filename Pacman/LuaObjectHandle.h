@@ -2,6 +2,7 @@
 
 #include <string>
 #include <SFML\Graphics.hpp>
+
 #include "sol.hpp"
 
 class GameObject;
@@ -55,7 +56,7 @@ public:
 
 	void remove();
 
-	sol::table& getVars();
+	sol::table& getLuaInstance();
 
 
 
@@ -64,7 +65,6 @@ public:
 	~LuaObjectHandle();
 
 private:
-	sol::table vars_;
 	GameObject* object_;
 };
 

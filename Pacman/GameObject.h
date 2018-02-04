@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "LuaObjectHandle.h"
 
+
 #include "sol.hpp"
 
 class Stage;
@@ -19,7 +20,7 @@ public:
 	enum Type {Tile, Entity};
 
 	GameObject(const GameObject& obj);
-	GameObject(World* world, Type type, sol::table& data);
+	GameObject(World* world, Type type, sol::table data);
 
 	void init(sol::table& properties);
 
@@ -43,6 +44,7 @@ public:
 
 	void collide(GameObject* collidingObject);
 	LuaObjectHandle& getHandle();
+	sol::table& getLuaInstance();
 
 	World* getWorld();
 
@@ -57,7 +59,12 @@ private:
 	World* world_;
 	bool isToRemove_;
 
+	sol::table data_;
+
+	sol::table luaInstance_;
 	LuaObjectHandle luaHandle_;
+
+	std::shared_ptr<sol::protected_function> newFunction_;
 	std::shared_ptr<sol::protected_function> initFunction_;
 	std::shared_ptr<sol::protected_function> collisionFunction_;
 	std::shared_ptr<sol::protected_function> updateFunction_;
@@ -67,6 +74,8 @@ private:
 	std::string category_;
 	
 	int hp_;
+
+	
 
 
 	void setLuaFunctions(sol::table data);

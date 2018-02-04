@@ -1,3 +1,4 @@
+require "data.new_lua.Class"
 
 Colors = dofile("data/colors.lua")
  
@@ -26,7 +27,7 @@ entities = {
 	
 	AggressiveGhost = dofile("data/entities/AggressiveGhost.lua"),
 	
-	YellowGhost = dofile("data/entities/YellowGhost.lua"),
+	YellowGhost = dofile("data/new_lua/YellowGhost.lua"),
 	
 	GuardGhost = dofile("data/entities/GuardGhost.lua"),
 	
@@ -158,9 +159,9 @@ tiles = {
 		texture = {x = 10, y = 12; color = Colors.green};
 		
 		collide = function (self, object)
-			if object.category == "player" then
+			if object.handle.category == "player" then
 				world:addScore(1)
-				self:remove()
+				self.handle:remove()
 			end
 		
 		end

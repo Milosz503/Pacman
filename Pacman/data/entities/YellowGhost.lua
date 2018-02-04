@@ -7,95 +7,82 @@ return {
 
 		texture = {x = 6, y = 2, color = Colors.yellow };
 		
-		init = function(self, properties)
+		properties = {homeX = 0, homeY = 0, focusTime = 0, colors.yellow};
+		
+		init = function(handle, properties)
 			
-			vars = self.vars
-			vars.start = 0
+			self = handle.vars
+			self.start = 0
 			if properties then
-				vars.homeX = properties.homeX or 26
-				vars.homeY = properties.homeY or 1
-				vars.focusTime = properties.focusTime or 8
-				vars.focusTime = vars.focusTime*60
+				self.homeX = properties.homeX or 26
+				self.homeY = properties.homeY or 1
+				self.focusTime = properties.focusTime or 8
+				self.focusTime = self.focusTime*60
 				
 				if(properties.x ~= nil) then
-					self.defaultSpeed = properties.x
+					handle.defaultSpeed = properties.x
 				end
 				
 				if properties.color ~= nil then
-					self:setColor(properties.color)
+					handle:setColor(properties.color)
 				end
 				
 			else
-				vars.homeX = 1
-				vars.homeY = 1
-				vars.focusTime = 500
+				self.homeX = 1
+				self.homeY = 1
+				self.focusTime = 500
 			end
 			
 
-			vars.visionRange = 15
-			vars.state = "new"
+			self.visionRange = 15
+			self.state = "new"
 			
-			self:guideTo(vars.homeX, vars.homeY)
-			self:setGuideType("a_star")
+			handle:guideTo(self.homeX, self.homeY)
+			handle:setGuideType("a_star")
 			
 		end;
 		
 		
-		update = function(self)
+		update = function(handle)
 			
 			player = world:getPlayer()
-			distance = world:getDistance(self, player)
+			distance = world:getDistance(handle, player)
 			
-			vars = self.vars
+			self = handle.vars
 			
-			if vars.state == "new" then
+			if self.state == "new" then
 				
-				if self.x == vars.homeX and self.y == vars.homeY then
-					self:setGuideType("direction")
-					vars.state = "base"
+				if handle.x == self.homeX and handle.y == self.homeY then
+					handle:setGuideType("direction")
+					self.state = "base"
 					
 					print("end new")
 				end
 				
 				print("new")
 				
-			elseif vars.state == "base" then
+			elseif self.state == "base" then
 				
-				if distance <= vars.visionRange then
-					self:guideTo(player)
-					vars.start = world:getTime()
-					vars.state = "player"
+				if distance <= self.visionRange then
+					handle:guideTo(player)
+					self.start = world:getTime()
+					self.state = "player"
 				end
 				
-			elseif vars.state == "player" then
+			elseif self.state == "player" then
 				
-				if distance > (vars.visionRange + 2) then
-					self:guideTo(vars.homeX, vars.homeY)
-					vars.state = "base"
+				if distance > (self.visionRange + 2) then
+					handle:guideTo(self.homeX, self.homeY)
+					self.state = "base"
 				end
 				
-				if (world:getTime() - vars.start) > vars.focusTime then
-					self:guideTo(vars.homeX, vars.homeY)
-					vars.state = "new"
+				if (world:getTime() - self.start) > self.focusTime then
+					handle:guideTo(self.homeX, self.homeY)
+					self.state = "new"
 				end
 				
 			end
 			
-
-			-- print (vars.homeX.. " " .. vars.homeY)
-			
-
-			
-			-- speedX = 0
-			-- speedY = 0
-			
-			-- if player.x < self.x then speedX = -1
-			-- elseif player.x > self.x then speedX = 1 end
-			
-			-- if player.y < self.y then speedY = -1
-			-- elseif player.y > self.y then speedY = 1 end
-			
-			--self:setSpeed(speedX, speedY)
 			
 		end
 	}

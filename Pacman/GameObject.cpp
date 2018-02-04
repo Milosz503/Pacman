@@ -1,29 +1,35 @@
 #include "GameObject.h"
-
+#include "World.h"
 
 #include <iostream>
 
-GameObject::GameObject(const GameObject & obj) :
+GameObject::GameObject(const GameObject& obj) :
 	ConsoleCharacter(obj),
 	world_(obj.world_),
 	isToRemove_(obj.isToRemove_),
 	name_(obj.name_),
 	type_(obj.type_),
 	category_(obj.category_),
+	data_(obj.data_),
+	luaInstance_(world_->getLua(), sol::create),
 	luaHandle_(this),
+	newFunction_(obj.newFunction_),
 	initFunction_(obj.initFunction_),
 	collisionFunction_(obj.collisionFunction_),
 	updateFunction_(obj.updateFunction_)
 {
 }
 
-GameObject::GameObject(World* world, Type type, sol::table& data) :
+GameObject::GameObject(World* world, Type type, sol::table data) :
 	world_(world),
 	isToRemove_(false),
 	name_(""),
 	type_(type),
 	category_("none"),
+	data_(data),
+	luaInstance_(world_->getLua(), sol::create),
 	luaHandle_(this),
+	newFunction_(nullptr),
 	initFunction_(nullptr),
 	collisionFunction_(nullptr),
 	updateFunction_(nullptr)
@@ -45,10 +51,29 @@ GameObject::GameObject(World* world, Type type, sol::table& data) :
 
 void GameObject::init(sol::table & properties)
 {
+	luaInstance_["handle"] = luaHandle_;
+	if (newFunction_ != nullptr)
+	{
+		std::cout << "calling new: " << name_ << std::endl;
+		auto result = (*newFunction_)(data_);
+
+		if (!result.valid())
+		{
+
+			sol::error e = result;
+			std::cout << "ERROR object " << name_ << " in new function: " << e.what() << std::endl;
+		}
+		else
+		{
+			luaInstance_ = result;
+			luaInstance_["handle"] = luaHandle_;
+		}
+	}
+
 	if (initFunction_ != nullptr)
 	{
 		std::cout << "calling init: " << name_ << properties["name"].get_or<std::string>("???") << std::endl;
-		auto result = (*initFunction_)(luaHandle_, sol::object(properties));
+		auto result = (*initFunction_)(luaInstance_, sol::object(properties));
 
 		if (!result.valid())
 		{
@@ -115,6 +140,12 @@ int GameObject::getHp() const
 void GameObject::setLuaFunctions(sol::table data)
 {
 
+	sol::optional<sol::protected_function> newFunction = data["new"];
+	if (newFunction)
+	{
+		newFunction_ = std::make_shared<sol::protected_function>(newFunction.value());
+	}
+
 	sol::optional<sol::protected_function> init = data["init"];
 	if (init)
 	{
@@ -136,9 +167,10 @@ void GameObject::setLuaFunctions(sol::table data)
 
 void GameObject::collide(GameObject * collidingObject)
 {
+
 	if (collisionFunction_ != nullptr)
 	{
-		auto result = (*collisionFunction_)(luaHandle_, collidingObject->getHandle());
+		auto result = (*collisionFunction_)(luaInstance_, collidingObject->getLuaInstance());
 
 		if (!result.valid())
 		{
@@ -156,14 +188,17 @@ GameObject::~GameObject()
 bool GameObject::callFunction(std::shared_ptr<sol::protected_function>& func, std::string name)
 {
 	if (func != nullptr)
-	{
-		auto result = (*func)(luaHandle_);
+	{	
+
+
+		auto result = (*func)(luaInstance_);
 
 		if (!result.valid())
 		{
 			sol::error e = result;
 			std::cout << "ERROR entity " << name_ << " in " << name << " function: " << e.what() << std::endl;
 		}
+	
 
 	}
 
@@ -178,6 +213,11 @@ World * GameObject::getWorld()
 LuaObjectHandle&  GameObject::getHandle()
 {
 	return luaHandle_;
+}
+
+sol::table & GameObject::getLuaInstance()
+{
+	return luaInstance_;
 }
 
 

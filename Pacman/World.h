@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "State.h"
-#include "Stage.h"
 #include "Entity.h"
 #include "Tile.h"
 #include "Physics.h"
@@ -12,6 +11,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "LuaGameHandle.h"
+
 
 #include "sol.hpp"
 

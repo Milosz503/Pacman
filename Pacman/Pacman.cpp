@@ -23,7 +23,7 @@ int main()
 	TextureManager textureManager;
 	textureManager.generateTileset();
 	textureManager.loadTextures();
-	ConsoleWindow console(50, 50, &textureManager);
+	ConsoleWindow console(50, 50, &textureManager, "Pacman");
 	ImGui::SFML::Init(*console.getWindow());
 
 

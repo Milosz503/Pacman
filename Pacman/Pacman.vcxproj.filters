@@ -96,9 +96,6 @@
     <ClInclude Include="StateStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -115,9 +112,6 @@
       <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Physics.h">
-      <Filter>Header Files\Game\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
       <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
@@ -171,6 +165,9 @@
     <ClInclude Include="PathFinder.h">
       <Filter>Header Files\Game\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -196,9 +193,6 @@
     </ClCompile>
     <ClCompile Include="StateStack.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Game</Filter>
@@ -229,9 +223,6 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Game\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Game\Systems</Filter>
     </ClCompile>
     <ClCompile Include="EditSystem.cpp">
       <Filter>Source Files\Game\Systems</Filter>
@@ -280,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="EditState.cpp">
       <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

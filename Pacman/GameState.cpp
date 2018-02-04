@@ -138,7 +138,7 @@ void GameState::loadLevel()
 	{
 		LevelManager::loadLevel(&world_, *getContext().levelFile);
 	}
-	catch (std::runtime_error& e)
+	catch (std::exception& e)
 	{
 		std::cout << "Exception: " << e.what() << std::endl;
 		requestStackClear();
