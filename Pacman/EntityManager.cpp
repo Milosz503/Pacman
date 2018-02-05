@@ -11,21 +11,21 @@ EntityManager::EntityManager(World* world) :
 {
 	sol::state& lua = world->getLua();
 
-	sol::table tiles = lua["tiles"];
-	if (!tiles.valid())
+	sol::optional<sol::table> tiles = lua["tiles"];
+	if (!tiles)
 	{
 		std::cout << "Error parsing tiles: " << std::endl;
 		return;
 	}
 
-	sol::table entities = lua["entities"];
-	if (!entities.valid())
+	sol::optional<sol::table> entities = lua["entities"];
+	if (!entities)
 	{
 		std::cout << "Error parsing entities: " << std::endl;
 		return;
 	}
 
-	for (auto& tilePair : tiles)
+	for (auto& tilePair : tiles.value())
 	{
 		if (tilePair.first.get_type() == sol::type::string && tilePair.second.get_type() == sol::type::table)
 		{
@@ -40,7 +40,7 @@ EntityManager::EntityManager(World* world) :
 	}
 
 
-	for (auto& entityPair : entities)
+	for (auto& entityPair : entities.value())
 	{
 		if (entityPair.first.get_type() == sol::type::string && entityPair.second.get_type() == sol::type::table)
 		{
@@ -58,8 +58,6 @@ EntityManager::EntityManager(World* world) :
 
 void EntityManager::addTile(std::string name, sol::table data)
 {
-	std::string category = data["category"].get_or<std::string>("none");
-
 
 	Tile* tile = new Tile(world_, data);
 	tile->setName(name);
@@ -70,8 +68,6 @@ void EntityManager::addTile(std::string name, sol::table data)
 
 void EntityManager::addEntity(std::string name, sol::table data)
 {
-	std::string category = data["category"].get_or<std::string>("none");
-
 
 	Entity* entity = new Entity(world_, data);
 	entity->setName(name);

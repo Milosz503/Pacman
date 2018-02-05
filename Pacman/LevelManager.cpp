@@ -31,18 +31,19 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 	
 	world->getLuaManager().loadScript(fileName);
 
-	
-
-	sol::table level = lua["level"];
-	sol::table tiles = lua["tiles"];
-
-
-
-	if (!level.valid() || !tiles.valid())
-	{
-		std::cout << "Error loading level or tiles!" << std::endl;
+	sol::table level;
+	sol::table tiles;
+	try {
+		level = lua["level"];
+		tiles = lua["tiles"];
+	}
+	catch (sol::error e) {
+		std::cout << "Error loading level or tiles table! " << e.what() << std::endl;
 		return;
 	}
+	
+
+
 
 	int width = level["width"].get_or(0);
 	int height = level["height"].get_or(0);
@@ -63,7 +64,14 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 		for (int x = 1; x <= width; ++x)
 		{
 
-			sol::table tileData = level[y][x];
+			sol::optional<sol::table> result = level[y][x];
+			if (!result)
+			{
+				std::cout << "Error: loading tile (" << x << "' " << y << ")" << std::endl;
+				continue;
+			}
+			sol::table tileData = result.value();
+
 			int tileID = tileData["id"].get_or(0);
 
 

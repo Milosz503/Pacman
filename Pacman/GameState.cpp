@@ -33,7 +33,6 @@ GameState::GameState(StateStack & stack, Context context) :
 	fpsText_.setPosition(0, 45);
 
 
-	loadLevel();
 	
 
 	systems_.addSystem<Physics>();
@@ -130,26 +129,3 @@ GameState::~GameState()
 {
 }
 
-void GameState::loadLevel()
-{
-
-
-	try
-	{
-		LevelManager::loadLevel(&world_, *getContext().levelFile);
-	}
-	catch (std::exception& e)
-	{
-		std::cout << "Exception GameState: " << e.what() << std::endl;
-		requestStackClear();
-		requestStackPush(States::Menu);
-	}
-
-	//if (world_.getScene()->getPlayer() == nullptr)
-	//{
-	//	std::cout << "ERROR: Player not loaded!" << std::endl;
-	//	requestStackClear();
-	//	requestStackPush(States::Menu);
-	//}
-
-}

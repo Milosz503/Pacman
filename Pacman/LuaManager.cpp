@@ -14,7 +14,6 @@ LuaManager::LuaManager(World* world)
 		std::cout << "Error calling lua function: " + err << std::endl;
 		return err;
 	});
-	//sol::protected_function::set_default_handler(lua_["errorHandler"]);
 
 	
 	initTypes();
@@ -53,12 +52,12 @@ sol::table LuaManager::createProperties(sol::object object, sol::table propertie
 
 void LuaManager::loadScript(std::string fileName)
 {
-	auto result = lua_.script_file(fileName);
-	if (!result.valid())
+	try {
+		lua_.script_file(fileName);
+	}
+	catch (sol::error e)
 	{
-		sol::error e = result;
-		std::cout << "Error loading script: " << e.what() << std::endl;
-		return;
+		std::cout << "Error loading script " << fileName << " :" << e.what() << std::endl;
 	}
 }
 

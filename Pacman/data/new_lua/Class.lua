@@ -9,4 +9,21 @@ function Class:new(object)
 
 end
 
+function createEntity(name, properties)
+
+	newEntity = entities[name]:new();
+
+	properties = properties or {};
+	mt = {__index = {}}
+	if newEntity.getProperties ~= nil then
+		mt.__index = newEntity.getProperties()
+	end
+	
+	setmetatable(properties, mt)
+	
+	handle = world:createEntityHandle(newEntity, newEntity.category)
+	
+	
+end
+
 

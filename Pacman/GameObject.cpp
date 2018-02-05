@@ -75,12 +75,15 @@ void GameObject::init(sol::table properties)
 		}
 	}
 
+	properties = world_->getLuaManager().createProperties(data_, properties);
+	luaInstance_["properties"] = properties;
+
 	if (initFunction_ != nullptr)
 	{
-		properties = world_->getLuaManager().createProperties(data_, properties);
+		
 
-		std::cout << "calling init: " << name_ << properties["name"].get_or<std::string>("???") << std::endl;
-		auto result = (*initFunction_)(luaInstance_, sol::object(properties));
+		std::cout << "calling init: " << name_ << std::endl;
+		auto result = (*initFunction_)(luaInstance_);
 
 		if (!result.valid())
 		{

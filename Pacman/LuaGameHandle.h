@@ -1,15 +1,9 @@
 #pragma once
 
-#include "World.h"
+#include "sol.hpp"
 
-
-
-#include <LuaBridge.h>
-
-struct ObjectEvent
-{
-
-};
+class World;
+class LuaObjectHandle;
 
 class LuaGameHandle
 {
@@ -23,6 +17,9 @@ public:
 	void addLives(int lives);
 	void removeLive();
 	int getLives();
+
+	LuaObjectHandle* createEntityHandle(sol::table entity, std::string category);
+	LuaObjectHandle* createTileHandle(sol::table tile, int x, int y, std::string category);
 
 	LuaObjectHandle* getTile(int x, int y) const;
 	LuaObjectHandle* findEntity(sol::function condition);

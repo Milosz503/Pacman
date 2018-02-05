@@ -1,7 +1,7 @@
 require "data.new_lua.Class"
 
 Colors = dofile("data/colors.lua")
- 
+
  
 function toPlayerBackCosts(nodes)
 	player = world:getPlayer()
@@ -159,6 +159,9 @@ tiles = {
 		texture = {x = 10, y = 12; color = Colors.green};
 		
 		collide = function (self, object)
+			
+			
+		
 			if object.handle.category == "player" then
 				world:addScore(1)
 				self.handle:remove()

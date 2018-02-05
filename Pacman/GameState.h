@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GameObject.h"
 #include "State.h"
 #include "World.h"
 #include "SystemManager.h"

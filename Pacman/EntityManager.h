@@ -15,6 +15,9 @@ public:
 	Tile* createTile(std::string tileName);
 	Entity* createEntity(std::string entityName);
 
+	Tile* createTile(sol::table luaTile, std::string category);
+	Entity createEntity(sol::table luaEntity, std::string category);
+
 	//const std::map<std::string, Tile*>& getTiles();
 	//const std::map<std::string, Entity*>& getEntities();
 

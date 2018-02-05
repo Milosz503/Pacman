@@ -1,5 +1,6 @@
 #include "LuaGameHandle.h"
-
+#include "World.h"
+#include "GameObject.h"
 #include <cmath>
 
 
@@ -36,6 +37,16 @@ void LuaGameHandle::removeLive()
 int LuaGameHandle::getLives()
 {
 	return world_->getLives();
+}
+
+LuaObjectHandle * LuaGameHandle::createEntityHandle(sol::table entity, std::string category)
+{
+	return nullptr;
+}
+
+LuaObjectHandle * LuaGameHandle::createTileHandle(sol::table tile, int x, int y, std::string category)
+{
+	return nullptr;
 }
 
 LuaObjectHandle*  LuaGameHandle::getTile(int x, int y) const

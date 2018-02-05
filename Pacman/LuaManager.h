@@ -1,6 +1,8 @@
 #pragma once
 
 #include "sol.hpp"
+#include "LuaObjectHandle.h"
+#include "LuaGameHandle.h"
 
 class World;
 class LuaManager

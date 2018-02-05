@@ -21,7 +21,7 @@ World::World(State::Context context) :
 	
 	scene_ = new Scene(this);
 	
-	
+	LevelManager::loadLevel(this, *context.levelFile);
 
 }
 

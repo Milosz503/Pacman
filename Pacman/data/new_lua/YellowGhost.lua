@@ -24,10 +24,11 @@ end
 
 
 
-function YellowGhost:init(properties)
+function YellowGhost:init()
 	
 	handle = self.handle
 	
+	properties = self.properties;
 	--handle = self
 	--self = handle.vars
 	
