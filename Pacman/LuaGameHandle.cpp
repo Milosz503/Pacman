@@ -39,14 +39,18 @@ int LuaGameHandle::getLives()
 	return world_->getLives();
 }
 
-LuaObjectHandle * LuaGameHandle::createEntityHandle(sol::table entity, std::string category)
+LuaObjectHandle & LuaGameHandle::createEntityHandle(sol::table luaInstance, std::string category)
 {
-	return nullptr;
+	Entity* e = world_->getScene()->createEntity(luaInstance, category);
+
+	return e->getHandle();
 }
 
-LuaObjectHandle * LuaGameHandle::createTileHandle(sol::table tile, int x, int y, std::string category)
+LuaObjectHandle & LuaGameHandle::createTileHandle(sol::table luaInstance, std::string category, int x, int y)
 {
-	return nullptr;
+	Tile* t = world_->getScene()->createTile(luaInstance, category, x, y);
+
+	return t->getHandle();
 }
 
 LuaObjectHandle*  LuaGameHandle::getTile(int x, int y) const
@@ -86,7 +90,11 @@ LuaObjectHandle * LuaGameHandle::getPlayer() const
 
 void LuaGameHandle::removeTile(int x, int y)
 {
-	world_->getScene()->removeTile(x, y);
+	Tile* tile = world_->getScene()->getTile(x, y);
+	if (tile)
+	{
+		tile->markToRemove();
+	}
 }
 
 void LuaGameHandle::removeObject(LuaObjectHandle & objectHandle)
@@ -110,14 +118,20 @@ void LuaGameHandle::removeEntities()
 	world_->getScene()->removeEntities();
 }
 
-void LuaGameHandle::spawnEntities()
+void LuaGameHandle::removeTiles()
 {
-	world_->getScene()->arrangeSpawnEntities();
+	world_->getScene()->removeTiles();
 }
+
 
 int LuaGameHandle::getTime()
 {
 	return world_->getFrameNumber();
+}
+
+void LuaGameHandle::setSize(int x, int y)
+{
+	world_->getScene()->setSize(x, y);
 }
 
 

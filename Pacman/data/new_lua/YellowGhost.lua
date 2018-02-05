@@ -74,7 +74,7 @@ function YellowGhost:update()
 			print("end new")
 		end
 		
-		print("new")
+		--print("new")
 		
 	elseif self.state == "base" then
 		

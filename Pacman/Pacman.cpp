@@ -7,7 +7,6 @@
 
 #include "GameState.h"
 #include "MenuState.h"
-#include "LevelManager.h"
 #include "EditState.h"
 #include "LevelChoiceState.h"
 
@@ -27,7 +26,6 @@ int main()
 	ImGui::SFML::Init(*console.getWindow());
 
 
-	LevelManager levelManager;
 
 
 	

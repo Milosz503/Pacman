@@ -17,13 +17,19 @@ World::World(State::Context context) :
 {
 
 	luaHandle_ = new LuaGameHandle(this);
-	entityManager_ = new EntityManager(this);
 	
 	scene_ = new Scene(this);
 	
-	LevelManager::loadLevel(this, *context.levelFile);
+	levelFile_ = *context.levelFile;
+	//LevelManager::loadLevel(this, *context.levelFile);
 
 }
+
+void World::setSystems(SystemManager * systems)
+{
+	systems_ = systems;
+}
+
 
 void World::update()
 {
@@ -36,6 +42,11 @@ void World::update()
 void World::draw()
 {
 	scene_->draw();
+}
+
+std::string World::getLevelFile()
+{
+	return levelFile_;
 }
 
 sf::IntRect World::getBounds()
@@ -88,11 +99,6 @@ Scene * World::getScene()
 	return scene_;
 }
 
-EntityManager * World::getEntityManager()
-{
-	return entityManager_;
-}
-
 LuaGameHandle * World::getLuaGameHandle()
 {
 	return luaHandle_;
@@ -103,10 +109,17 @@ LuaManager & World::getLuaManager()
 	return luaManager_;
 }
 
+SystemManager * World::getSystems()
+{
+	return systems_;
+}
+
 sol::state & World::getLua()
 {
 	return luaManager_.getLua();
 }
+
+
 
 
 World::~World()

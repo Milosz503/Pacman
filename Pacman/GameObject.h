@@ -19,11 +19,8 @@ class GameObject : public ConsoleCharacter
 public:
 	enum Type {Tile, Entity};
 
-	GameObject(const GameObject& obj);
-	GameObject(World* world, Type type, sol::table data);
+	GameObject(World* world, Type type, sol::table luaInstance);
 
-	void init();
-	void init(sol::table properties);
 
 	virtual bool isToRemove();
 	virtual void markToRemove();
@@ -38,12 +35,8 @@ public:
 
 	Type getType();
 
-	void setHp(int hp);
-	int getHp() const;
 
 	
-
-	void collide(GameObject* collidingObject);
 	LuaObjectHandle& getHandle();
 	sol::table& getLuaInstance();
 
@@ -60,30 +53,16 @@ private:
 	World* world_;
 	bool isToRemove_;
 
-	sol::table data_;
-
 	sol::table luaInstance_;
 	LuaObjectHandle luaHandle_;
 
-	std::shared_ptr<sol::protected_function> newFunction_;
-	std::shared_ptr<sol::protected_function> initFunction_;
-	std::shared_ptr<sol::protected_function> collisionFunction_;
-	std::shared_ptr<sol::protected_function> updateFunction_;
 
 	std::string name_;
 	Type type_;
 	std::string category_;
-	
-	int hp_;
 
 	
 
-
-	void setLuaFunctions(sol::table data);
-
-	bool callFunction(std::shared_ptr<sol::protected_function>& func, std::string name);
-
-	
 	
 };
 

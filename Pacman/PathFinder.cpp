@@ -4,15 +4,31 @@
 #include <algorithm>
 
 PathFinder::PathFinder(Scene* scene) :
-	 scene_(scene)
+	 scene_(scene),
+	width_(0),
+	height_(0)
 {
+	resize();
+	
+}
+
+
+PathFinder::~PathFinder()
+{
+}
+
+void PathFinder::resize()
+{
+	if (width_ == scene_->getWidth() && height_ == scene_->getHeight())
+		return;
+
 	cameFrom_.resize(scene_->getWidth());
 
 	for (int i = 0; i < cameFrom_.size(); ++i)
 	{
 		cameFrom_[i].resize(scene_->getHeight());
 
-	
+
 	}
 
 
@@ -22,18 +38,14 @@ PathFinder::PathFinder(Scene* scene) :
 	{
 		cost_[i].resize(scene_->getHeight());
 
-		
+
 	}
-	
-}
-
-
-PathFinder::~PathFinder()
-{
 }
 
 std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
 {
+	resize();
+
 	clearData();
 
 	start = scene_->normalize(start);
@@ -103,6 +115,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
 {
+	resize();
 	//if (start == goal)
 	//	return sf::Vector2i(0, 0);
 
@@ -223,6 +236,7 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 
 sf::Vector2i PathFinder::getDirection(sf::Vector2i pos, sf::Vector2i next)
 {
+
 	sf::Vector2i dir = pos - next;
 
 	if (dir.x > 1) dir.x = -1;
@@ -236,6 +250,7 @@ sf::Vector2i PathFinder::getDirection(sf::Vector2i pos, sf::Vector2i next)
 
 void PathFinder::readPath(sf::Vector2i start, sf::Vector2i goal)
 {
+	resize();
 	sf::Vector2i pos = goal;
 	sf::Vector2i next;
 

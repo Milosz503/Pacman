@@ -5,7 +5,6 @@
 #include "ConsoleWindow.h"
 #include "TextureManager.h"
 #include "PlayerController.h"
-#include "LevelManager.h"
 
 
 class StateStack;

@@ -10,7 +10,7 @@ class SystemManager;
 class System
 {
 public:
-	enum Type{GameLogic, LevelLogic, Physics, PlayerController, EntityController};
+	//enum Type{LevelLogic, Physics, PlayerController, EntityController};
 
 
 	System(SystemManager* systemManager, World* world);

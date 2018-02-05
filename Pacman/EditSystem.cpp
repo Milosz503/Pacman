@@ -85,7 +85,7 @@ void EditSystem::removeTile(sf::Vector2i position)
 {
 	if (scene_->getTile(position.x, position.y) != nullptr)
 	{
-		scene_->removeTile(position.x, position.y);
+		
 
 
 	}

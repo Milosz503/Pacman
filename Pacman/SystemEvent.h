@@ -8,7 +8,7 @@ class Tile;
 
 struct SystemEvent
 {
-	enum Type {staticCollision, dynamicCollision};
+	enum Type {staticCollision, dynamicCollision, onRemove};
 
 	SystemEvent(Type type) : type(type) {}
 
@@ -41,4 +41,14 @@ struct DynamicCollision : public SystemEvent
 	Entity* entity1;
 	Entity* entity2;
 
+};
+
+struct OnRemoveEvent : public SystemEvent
+{
+	OnRemoveEvent(GameObject* object) :
+		SystemEvent(onRemove),
+		object(object)
+	{}
+
+	GameObject* object;
 };

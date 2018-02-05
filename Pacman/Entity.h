@@ -65,33 +65,21 @@ public:
 	sf::Vector2i getNextPosition();
 
 
-	int getHitpoints();
-	void setHitpoints(int hitpoints);
 
-	bool isVulnerable();
-	void setVulnerability(bool isVulnerable, int frames = -1);
+
 
 	bool isReadyToMove();
 
-	void teleport(sf::Vector2i location);
 
 	~Entity();
 
 private:
-	//Type type_;
 
 	sf::Vector2i nextMove_;
 	sf::Vector2i speed_;
 
 	unsigned defaultSpeed_;
-	unsigned visionRange_;
-	int hitpoints_;
-	bool isVulnerable_;
 
-	unsigned long long vulnerbailityTimer_;
-	//AnimationPlayer animations_;
-
-	bool teleported_;
 
 	std::list<sf::Vector2i> path_;
 	sf::Vector2i pathDestination_;

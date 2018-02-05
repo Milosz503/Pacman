@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include <iostream>
 
 EditState::EditState(StateStack & stack, Context context) :
 	State(stack, context),

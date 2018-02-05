@@ -18,8 +18,8 @@ public:
 	void removeLive();
 	int getLives();
 
-	LuaObjectHandle* createEntityHandle(sol::table entity, std::string category);
-	LuaObjectHandle* createTileHandle(sol::table tile, int x, int y, std::string category);
+	LuaObjectHandle& createEntityHandle(sol::table luaInstance, std::string category);
+	LuaObjectHandle& createTileHandle(sol::table luaInstance, std::string category, int x, int y);
 
 	LuaObjectHandle* getTile(int x, int y) const;
 	LuaObjectHandle* findEntity(sol::function condition);
@@ -32,9 +32,11 @@ public:
 
 
 	void removeEntities();
-	void spawnEntities();
+	void removeTiles();
 
 	int getTime();
+
+	void setSize(int x, int y);
 
 
 	~LuaGameHandle();

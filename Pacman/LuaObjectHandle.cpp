@@ -58,7 +58,6 @@ void LuaObjectHandle::setPosition(int x, int y)
 
 void LuaObjectHandle::setColor(int color)
 {
-	std::cout << "SET COLOR" << std::endl;
 
 	int textureY = object_->getTexture().rect.y;
 	textureY = color * 16 + (textureY % 16);
@@ -139,20 +138,19 @@ int LuaObjectHandle::getDefaultSpeed()
 	return 0;
 }
 
-int LuaObjectHandle::getHp()
+void LuaObjectHandle::setPhysical(bool isPhysical)
 {
-	return object_->getHp();
+	if (object_->getType() == GameObject::Tile)
+	{
+		Tile* tile = static_cast<Tile*>(object_);
+		tile->setPhysical(isPhysical);
+	}
+	else
+	{
+		std::cout << "Lua handle: Can not setPhysical on entity" << std::endl;
+	}
 }
 
-void LuaObjectHandle::heal(unsigned hp)
-{
-	object_->setHp(object_->getHp() + hp);
-}
-
-void LuaObjectHandle::damage(unsigned dmg)
-{
-	object_->setHp(object_->getHp() - dmg);
-}
 
 void LuaObjectHandle::guideTo(LuaObjectHandle & destination)
 {

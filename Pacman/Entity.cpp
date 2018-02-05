@@ -10,10 +10,6 @@ Entity::Entity(World* world, sol::table& data) :
 	nextMove_(0, 0),
 	speed_(0, 0),
 	defaultSpeed_(20),
-	visionRange_(5),
-	hitpoints_(1),
-	isVulnerable_(true),
-	teleported_(false),
 	customWages_(nullptr),
 	isGuided_(false),
 	destination_(nullptr)
@@ -33,11 +29,7 @@ void Entity::update()
 	unsigned long long frameNumber = getWorld()->getFrameNumber();
 	getWorld()->getScene()->moveEntity(this, nextMove_);
 
-	//move(nextMove_);
-	if (teleported_ && nextMove_ != sf::Vector2i(0, 0))
-	{
-		teleported_ = false;
-	}
+
 	nextMove_.x = 0;
 	nextMove_.y = 0;
 
@@ -70,31 +62,6 @@ void Entity::update()
 		
 	}
 
-	
-
-	//if (vulnerbailityTimer_ == frameNumber)
-	//{
-	//	isVulnerable_ = Table[type_].isVulnerable;
-	//	
-	//	if (isVulnerable_)
-	//		animations_.play(Animation::Vulnerable);
-	//	else
-	//		animations_.play(Animation::Invulnerable);
-
-	//}
-
-
-	//if (isVulnerable_ != Table[type_].isVulnerable)
-	//{
-	//	setTexture(Table[type_].secondTexture);
-	//}
-	//else
-	//{
-	//	setTexture(Table[type_].texture);
-	//
-	//}
-
-	//animations_.update(frameNumber);
 	
 
 
@@ -321,47 +288,14 @@ sf::Vector2i Entity::getNextPosition()
 
 
 
-int Entity::getHitpoints()
-{
-	return hitpoints_;
-}
 
-void Entity::setHitpoints(int hitpoints)
-{
-	hitpoints_ = hitpoints;
-}
-
-bool Entity::isVulnerable()
-{
-	return isVulnerable_;
-}
-
-void Entity::setVulnerability(bool isVulnerable, int frames)
-{
-	//if (frames != -1)
-	//	vulnerbailityTimer_ = getWorld()->getFrameNumber() + frames;
-
-	//isVulnerable_ = isVulnerable;
-
-	//if (isVulnerable_)
-	//	animations_.play(Animation::Vulnerable);
-	//else
-	//	animations_.play(Animation::Invulnerable);
-}
 
 bool Entity::isReadyToMove()
 {
 	return getWorld()->getFrameNumber() % defaultSpeed_ == 0;
 }
 
-void Entity::teleport(sf::Vector2i location)
-{
-	if (teleported_ == false)
-	{
-		setPosition(location);
-		teleported_ = true;
-	}
-}
+
 
 Entity::~Entity()
 {

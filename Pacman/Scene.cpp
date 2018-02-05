@@ -1,18 +1,14 @@
 #include "Scene.h"
 #include "ConsoleWindow.h"
 #include "World.h"
-#include "LevelManager.h"
-
 
 Scene::Scene(World* world) :
 	world_(world),
 	player_(nullptr),
 	width_(0),
-	height_(0),
-	entitiesToSpawn_(false)
+	height_(0)
 {
 
-	entityManager_ = world_->getEntityManager();
 
 	setSize(20, 20);
 
@@ -22,6 +18,59 @@ Scene::Scene(World* world) :
 
 Scene::~Scene()
 {
+	removeEntities();
+	removeTiles();
+
+	cleanObjects();
+}
+
+void Scene::cleanObjects()
+{
+	for (int x = 0; x < tiles_.size(); ++x)
+	{
+		for (int y = 0; y < tiles_[x].size(); ++y)
+		{
+			if (tiles_[x][y] != nullptr)
+			{
+				if (tiles_[x][y]->isToRemove())
+				{
+					tilesToRemove_.push_back(tiles_[x][y]);
+					tiles_[x][y] = nullptr;
+				}
+				else
+				{
+					tiles_[x][y]->update();
+
+				}
+
+			}
+
+		}
+	}
+
+	for (int i = 0; i < tilesToRemove_.size(); ++i)
+	{
+		world_->getSystems()->sendSystemEvent(new OnRemoveEvent(tilesToRemove_[i]));
+		delete tilesToRemove_[i];
+		tilesToRemove_[i] = nullptr;
+	}
+	tilesToRemove_.erase(std::remove(tilesToRemove_.begin(), tilesToRemove_.end(), nullptr), tilesToRemove_.end());
+
+	for (int i = 0; i < entities_.size(); ++i)
+	{
+		if (entities_[i]->isToRemove())
+		{
+			if (entities_[i]->getCategory() == "player" && entities_[i] == player_)
+				player_ = nullptr;
+
+			world_->getSystems()->sendSystemEvent(new OnRemoveEvent(entities_[i]));
+
+			delete entities_[i];
+			entities_[i] = nullptr;
+		}
+	}
+
+	entities_.erase(std::remove(entities_.begin(), entities_.end(), nullptr), entities_.end());
 }
 
 
@@ -104,6 +153,10 @@ unsigned Scene::getHeight()
 
 void Scene::setSize(int width, int height)
 {
+	removeTiles();
+	removeEntities();
+	cleanObjects();
+
 	int lastW = width_;
 	int lastH = height_;
 
@@ -125,13 +178,44 @@ void Scene::setSize(int width, int height)
 		}
 	}
 
-	entities_.clear();
+
 }
 
-void Scene::addEntity(Entity * entity)
-{
-	entities_.push_back(entity);
 
+
+Tile * Scene::createTile(sol::table luaInstance, std::string category, int x, int y)
+{
+	
+
+	Tile* tile = new Tile(world_, luaInstance);
+	tile->setCategory(category);
+
+	tile->setPosition(x, y);
+
+	if (x < 0 || x >= width_ || y < 0 || y >= height_)
+	{
+		std::cout << "Warning: cannot add tile on position (" << x << ", " << y << ")" << std::endl;
+		tile->markToRemove();
+		tilesToRemove_.push_back(tile);
+		return tile;
+	}
+
+	if (tiles_[x][y] != nullptr)
+	{
+		tiles_[x][y]->markToRemove();
+		tilesToRemove_.push_back(tiles_[x][y]);
+	}
+	tiles_[x][y] = tile;
+
+	return tile;
+}
+
+Entity * Scene::createEntity(sol::table luaInstance, std::string category)
+{
+	Entity* entity = new Entity(world_, luaInstance);
+	entity->setCategory(category);
+
+	entities_.push_back(entity);
 
 	if (entity->getCategory() == "player")
 	{
@@ -139,40 +223,11 @@ void Scene::addEntity(Entity * entity)
 
 		std::cout << "player! " << entity->getCategory() << std::endl;
 	}
-	std::cout << "added " << entity->getCategory() << std::endl;
+
+	return entity;
 }
 
 
-void Scene::addTile(std::string tileName, int x, int y, sol::table & data)
-{
-	Tile* tile = world_->getEntityManager()->createTile(tileName);
-	tile->setPosition(x, y);
-
-	tiles_[x][y] = tile;
-
-	tile->init(data);
-}
-
-void Scene::addTile(Tile * tile)
-{
-	tiles_[tile->getX()][tile->getY()] = tile;
-	tile->init();
-}
-
-
-
-void Scene::removeTile(int x, int y)
-{
-	if (tiles_[x][y] == nullptr)
-	{
-		std::cout << "ERROR cant remove tile, it doesn't exist (x, y): " << x << " " << y << std::endl;
-		return;
-	}
-	tiles_[x][y]->markToRemove();
-	//delete tiles_[x][y];
-	//tiles_[x][y] = nullptr;
-	std::cout << "Tile removed" << std::endl;
-}
 
 void Scene::moveEntity(Entity * entity, sf::Vector2i & move)
 {
@@ -183,37 +238,6 @@ void Scene::moveEntity(Entity * entity, sf::Vector2i & move)
 
 }
 
-void Scene::addSpawn(sf::Vector2i position, std::string entityName, sol::table & data)
-{
-	spawns_.push_back(SpawnPoint());
-
-	spawns_.back().position = position;
-	spawns_.back().entityName = entityName;
-	spawns_.back().data = data;
-}
-
-void Scene::spawnEntity(SpawnPoint* spawn)
-{
-	Entity* entity = entityManager_->createEntity(spawn->entityName);
-	entity->setPosition(spawn->position);
-	entity->init(spawn->data);
-
-	addEntity(entity);
-
-}
-
-void Scene::spawnEntites()
-{
-	for (auto& spawn : spawns_)
-	{
-		spawnEntity(&spawn);
-	}
-}
-
-void Scene::arrangeSpawnEntities()
-{
-	entitiesToSpawn_ = true;
-}
 
 void Scene::removeEntities()
 {
@@ -224,17 +248,24 @@ void Scene::removeEntities()
 
 }
 
+void Scene::removeTiles()
+{
+	for (auto& column : tiles_)
+	{
+		for (auto& tile : column)
+		{
+			if(tile != nullptr)
+				tile->markToRemove();
+		}
+	}
+}
+
 
 
 
 
 void Scene::update()
 {
-	if (entitiesToSpawn_)
-	{
-		entitiesToSpawn_ = false;
-		spawnEntites();
-	}
 
 
 	unsigned long long frameNumber = world_->getFrameNumber();
@@ -246,41 +277,7 @@ void Scene::update()
 		
 	}
 
-	for (int x = 0; x < tiles_.size(); ++x)
-	{
-		for (int y = 0; y < tiles_[x].size(); ++y)
-		{
-			if (tiles_[x][y] != nullptr)
-			{
-				if (tiles_[x][y]->isToRemove())
-				{
-					delete tiles_[x][y];
-					tiles_[x][y] = nullptr;
-				}
-				else
-				{
-					tiles_[x][y]->update();
-
-				}
-				
-			}
-				
-		}
-	}
-
-	for (int i = 0; i < entities_.size(); ++i)
-	{
-		if (entities_[i]->isToRemove())
-		{
-			if (entities_[i]->getCategory() == "player" && entities_[i] == player_)
-				player_ = nullptr;
-
-			delete entities_[i];
-			entities_[i] = nullptr;
-		}
-	}
-
-	entities_.erase(std::remove(entities_.begin(), entities_.end(), nullptr), entities_.end());
+	cleanObjects();
 
 	//std::cout << entities_.size() << std::endl;
 

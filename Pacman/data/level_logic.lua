@@ -34,3 +34,5 @@ levelLogic = {
 	end
 
 }
+
+return levelLogic

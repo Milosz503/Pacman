@@ -14,9 +14,9 @@ Tile::Tile(World* world, sol::table& data) :
 	isPhysical_(false)
 {
 	
-	bool isPhysical = data["isPhysical"].get_or(false);
+	//bool isPhysical = data["isPhysical"].get_or(false);
 
-	setPhysical(isPhysical);
+	//setPhysical(isPhysical);
 
 }
 

@@ -150,18 +150,6 @@
     <ClInclude Include="sol.hpp">
       <Filter>Header Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="LevelLogic.h">
-      <Filter>Header Files\Game\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Header Files\Game\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Header Files\Game\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameLogic.h">
-      <Filter>Header Files\Game\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="PathFinder.h">
       <Filter>Header Files\Game\Managers</Filter>
     </ClInclude>
@@ -173,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="sol_old.hpp">
       <Filter>Header Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaSystem.h">
+      <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,18 +251,6 @@
     <ClCompile Include="SystemManager.cpp">
       <Filter>Source Files\Game\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Source Files\Game\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files\Game\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelLogic.cpp">
-      <Filter>Source Files\Game\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLogic.cpp">
-      <Filter>Source Files\Game\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="PathFinder.cpp">
       <Filter>Source Files\Game\Managers</Filter>
     </ClCompile>
@@ -283,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="LuaManager.cpp">
       <Filter>Source Files\Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaSystem.cpp">
+      <Filter>Source Files\Game\Systems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -40,9 +40,9 @@ public:
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
 
-	int getHp();
-	void heal(unsigned hp);
-	void damage(unsigned dmg);
+	void setPhysical(bool isPhysical);
+
+
 
 	void guideTo(LuaObjectHandle& destination);
 	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);

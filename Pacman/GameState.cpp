@@ -6,10 +6,9 @@
 #include "EntityController.h"
 #include "PlayerController.h"
 #include "Scene.h"
-#include "GameLogic.h"
 #include "EditSystem.h"
 #include "StateStack.h"
-#include "LevelLogic.h"
+#include "LuaSystem.h"
 
 GameState::GameState(StateStack & stack, Context context) :
 	State(stack, context),
@@ -18,6 +17,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	fps_(0),
 	averageUpdate_(0)
 {
+	world_.setSystems(&systems_);
 
 	console_ = getContext().console;
 
@@ -38,9 +38,8 @@ GameState::GameState(StateStack & stack, Context context) :
 	systems_.addSystem<Physics>();
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
-	systems_.addSystem<GameLogic>();
-	systems_.addSystem<EditSystem>();
-	systems_.addSystem<LevelLogic>();
+	systems_.addSystem<LuaSystem>();
+	//systems_.addSystem<EditSystem>();
 
 }
 

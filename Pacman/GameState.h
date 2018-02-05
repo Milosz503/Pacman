@@ -34,7 +34,6 @@ private:
 	float averageUpdate_;
 
 
-	void loadLevel();
 	
 
 };

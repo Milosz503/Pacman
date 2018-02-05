@@ -8,7 +8,7 @@
 LuaManager::LuaManager(World* world)
 {
 
-	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package);
+	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package, sol::lib::table);
 
 	lua_["errorHandler"].set_function([](std::string err) {
 		std::cout << "Error calling lua function: " + err << std::endl;
@@ -31,24 +31,12 @@ LuaManager::~LuaManager()
 {
 }
 
+
 sol::state & LuaManager::getLua()
 {
 	return lua_;
 }
 
-sol::table LuaManager::createProperties(sol::object object, sol::table properties)
-{
-	auto result = createPropertiesLua(object, properties);
-
-	if (result.valid())
-	{
-		return result;
-	}
-	sol::error e = result;
-	std::cout << "Error creating properties " << e.what() << std::endl;
-
-	return properties;
-}
 
 void LuaManager::loadScript(std::string fileName)
 {
@@ -72,11 +60,10 @@ void LuaManager::initTypes()
 		"setColor", &LuaObjectHandle::setColor,
 		"setTexture", &LuaObjectHandle::setTexture,
 		"setSpeed", &LuaObjectHandle::setSpeed,
+		"setPosition", &LuaObjectHandle::setPosition,
+		"setPhysical", & LuaObjectHandle::setPhysical,
 		"getSpeed", &LuaObjectHandle::getSpeed,
 		"defaultSpeed", sol::property(&LuaObjectHandle::getDefaultSpeed, &LuaObjectHandle::setDefaultSpeed),
-		"hp", sol::property(&LuaObjectHandle::getHp),
-		"heal", &LuaObjectHandle::heal,
-		"damage", &LuaObjectHandle::damage,
 		"guideTo", sol::overload(&LuaObjectHandle::guideTo, &LuaObjectHandle::guideToPos),
 		"getDestination", &LuaObjectHandle::getDestination,
 		"isGuided", &LuaObjectHandle::isGuided,
@@ -100,8 +87,10 @@ void LuaManager::initTypes()
 		"removeObject", &LuaGameHandle::removeObject,
 		"getDistance", &LuaGameHandle::getDistance,
 		"removeEntities", &LuaGameHandle::removeEntities,
-		"spawnEntities", &LuaGameHandle::spawnEntities,
-		"getTime", &LuaGameHandle::getTime
+		"getTime", &LuaGameHandle::getTime,
+		"createEntityHandle", &LuaGameHandle::createEntityHandle,
+		"createTileHandle", &LuaGameHandle::createTileHandle,
+		"setSize", &LuaGameHandle::setSize
 		);
 
 	lua_.new_usertype<sf::Vector2i>("Vector2i",
@@ -123,17 +112,8 @@ void LuaManager::includeScripts()
 {
 	loadScript("data/entities.lua");
 	loadScript("data/level_logic.lua");
+	loadScript("data/new_lua/Game.lua");
+	loadScript("data/new_lua/LevelManager.lua");
 
 
-	
-
-	createPropertiesLua = lua_.script(R"(
-		return function(object, properties)
-			properties = properties or {}
-			mt = {__index={}}
-			if object.getProperties ~= nil then mt.__index = object.getProperties() end
-			setmetatable(properties, mt)
-			return properties
-		end
-	)");
 }

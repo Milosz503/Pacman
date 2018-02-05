@@ -35,12 +35,15 @@ public:
 	PathFinder(Scene* scene);
 	~PathFinder();
 
+	void resize();
+
 	std::vector<sf::Vector2i>& findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
 	sf::Vector2i findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
 
 private:
-
 	Scene* scene_;
+	int width_;
+	int height_;
 
 	std::vector<std::vector<sf::Vector2i>> cameFrom_;
 	std::vector<std::vector<int>> cost_;

@@ -10,22 +10,23 @@
 #include "Physics.h"
 #include "EntityController.h"
 #include "Scene.h"
-#include "EntityManager.h"
 #include "LuaGameHandle.h"
+#include "SystemManager.h"
 
 
-
-class EntityManager;
 class LuaGameHandle;
 
 class World
 {
 public:
 	World(State::Context context);
+	void setSystems(SystemManager* systems);
+
 
 	void update();
 	void draw();
 
+	std::string getLevelFile();
 	sf::IntRect getBounds();
 
 	unsigned long long getFrameNumber();
@@ -39,10 +40,11 @@ public:
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
 	Scene* getScene();
-	EntityManager* getEntityManager();
 	LuaGameHandle* getLuaGameHandle();
 	LuaManager& getLuaManager();
+	SystemManager* getSystems();
 	sol::state& getLua();
+
 
 	~World();
 
@@ -55,11 +57,13 @@ private:
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
+	SystemManager* systems_;
 	Scene* scene_;
-	EntityManager* entityManager_;
 	LuaManager luaManager_;
 	LuaGameHandle* luaHandle_;
 
+
+	std::string levelFile_;
 
 	
 
