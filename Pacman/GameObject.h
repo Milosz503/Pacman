@@ -22,7 +22,8 @@ public:
 	GameObject(const GameObject& obj);
 	GameObject(World* world, Type type, sol::table data);
 
-	void init(sol::table& properties);
+	void init();
+	void init(sol::table properties);
 
 	virtual bool isToRemove();
 	virtual void markToRemove();

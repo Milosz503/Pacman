@@ -28,7 +28,7 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 	EntityManager* entityManager = world->getEntityManager();
 	sol::state& lua = world->getLua();
 
-	lua.open_libraries(sol::lib::base);
+	
 	auto result = lua.script_file(fileName, &sol::simple_on_error);
 	if (!result.valid())
 	{
@@ -68,24 +68,27 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 
 		for (int x = 1; x <= width; ++x)
 		{
-			int tileID = level[y][x].get_or(0);
 
-			sol::table tileData = tiles[tileID];
-			if (tileData.valid())
+			sol::table tileData = level[y][x];
+			int tileID = tileData["id"].get_or(0);
+
+
+			sol::optional<std::string> tileName = tiles[tileID];
+
+			if (tileName)
 			{
-				sol::optional<std::string> tileName = tileData["name"];
-				if (tileName)
-				{
-					Tile* tile = entityManager->createTile(tileName.value());
+				Tile* tile = entityManager->createTile(tileName.value());
 
-					sol::table initData = tileData["data"];
+				sol::table properties = tileData["data"];
 
-					tile->setPosition(x, y);
-					tile->init(initData);
-					scene->addTile(tileName.value(), x - 1, y - 1, initData);
+				scene->addTile(tileName.value(), x - 1, y - 1, properties);
 					
-				}
 			}
+			else
+			{
+				std::cout << "Error loading tiles!" << std::endl;
+			}
+			
 
 		}
 	}

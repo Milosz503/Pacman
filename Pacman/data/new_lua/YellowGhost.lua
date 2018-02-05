@@ -15,17 +15,14 @@ function YellowGhost.getProperties()
 	return {
 		
 		homeX = 0,
-		homeY = 0
+		homeY = 0,
+		color = 2
 	
 	}
 	
 end
 
-function YellowGhost:showPosition()
-	
-	print("Position: "..self.handle.x..", "..self.handle.y)
-	
-end
+
 
 function YellowGhost:init(properties)
 	
@@ -34,7 +31,6 @@ function YellowGhost:init(properties)
 	--handle = self
 	--self = handle.vars
 	
-	self.handle = handle
 	
 	self.homeX = properties.homeX
 	self.homeY = properties.homeY
@@ -52,16 +48,17 @@ function YellowGhost:init(properties)
 	handle:guideTo(self.homeX, self.homeY)
 	handle:setGuideType("a_star")
 	
+	
 end
 
 function YellowGhost:update()
 	
 	handle = self.handle
 	
+	--world:getDistance(self, player)
 	--handle = self
 	--self = handle.vars
-	
-	self:showPosition()
+
 	
 	player = world:getPlayer()
 	

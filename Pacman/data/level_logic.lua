@@ -21,7 +21,7 @@ levelLogic = {
 			print("PLAYER - GHOST")
 			
 			if world.lives > 0 then
-			
+				world:removeEntities()
 				world:spawnEntities()
 				world:removeLive()
 			end

@@ -9,3 +9,4 @@ function Class:new(object)
 
 end
 
+

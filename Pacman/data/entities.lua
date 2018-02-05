@@ -45,15 +45,15 @@ entities = {
 		
 		
 		collide = function(self, object)
-		
-			if object.category == "ghost" then
-				print("COLLISION")
-				world:removeEntities()
-			end
 			
-			if object.type == "entity" then
-				print("Entity Col")
-			end
+			-- if object.category == "ghost" then
+				-- print("COLLISION")
+				-- world:removeEntities()
+			-- end
+			
+			-- if object.type == "entity" then
+				-- print("Entity Col")
+			-- end
 			
 
 		
@@ -151,7 +151,7 @@ tiles = {
 		
 	},
 	
-	Point = {
+	Point = Class:new({
 		type = "tile";
 		category = "point";
 		
@@ -165,17 +165,8 @@ tiles = {
 			end
 		
 		end
-	},
+	}),
 	
-	-- Teleport = {
-		-- type = "tile";
-		-- category = "teleport";
-		
-		-- isPhysical = false;
-		-- texture = {x = 5, y = 74};
-		
-		
-	-- },
 	
 	Floor = { 
 		type = "tile";

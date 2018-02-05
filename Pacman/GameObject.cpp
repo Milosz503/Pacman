@@ -49,7 +49,12 @@ GameObject::GameObject(World* world, Type type, sol::table data) :
 	setLuaFunctions(data);
 }
 
-void GameObject::init(sol::table & properties)
+void GameObject::init()
+{
+	init(sol::table(getWorld()->getLua()));
+}
+
+void GameObject::init(sol::table properties)
 {
 	luaInstance_["handle"] = luaHandle_;
 	if (newFunction_ != nullptr)
@@ -72,6 +77,8 @@ void GameObject::init(sol::table & properties)
 
 	if (initFunction_ != nullptr)
 	{
+		properties = world_->getLuaManager().createProperties(data_, properties);
+
 		std::cout << "calling init: " << name_ << properties["name"].get_or<std::string>("???") << std::endl;
 		auto result = (*initFunction_)(luaInstance_, sol::object(properties));
 
@@ -87,55 +94,14 @@ void GameObject::init(sol::table & properties)
 
 
 
-bool GameObject::isToRemove()
-{
-	return isToRemove_;
-}
 
-void GameObject::markToRemove()
-{
-	isToRemove_ = true;
-}
 
 void GameObject::update()
 {
 	callFunction(updateFunction_, "update");
 }
 
-void GameObject::setName(std::string name)
-{
-	name_ = name;
-}
 
-std::string GameObject::getName()
-{
-	return name_;
-}
-
-void GameObject::setCategory(std::string category)
-{
-	category_ = category;
-}
-
-std::string GameObject::getCategory()
-{
-	return category_;
-}
-
-GameObject::Type GameObject::getType()
-{
-	return type_;
-}
-
-void GameObject::setHp(int hp)
-{
-	hp_ = hp;
-}
-
-int GameObject::getHp() const
-{
-	return hp_;
-}
 
 void GameObject::setLuaFunctions(sol::table data)
 {
@@ -203,6 +169,49 @@ bool GameObject::callFunction(std::shared_ptr<sol::protected_function>& func, st
 	}
 
 	return true;
+}
+bool GameObject::isToRemove()
+{
+	return isToRemove_;
+}
+
+void GameObject::markToRemove()
+{
+	isToRemove_ = true;
+}
+void GameObject::setName(std::string name)
+{
+	name_ = name;
+}
+
+std::string GameObject::getName()
+{
+	return name_;
+}
+
+void GameObject::setCategory(std::string category)
+{
+	category_ = category;
+}
+
+std::string GameObject::getCategory()
+{
+	return category_;
+}
+
+GameObject::Type GameObject::getType()
+{
+	return type_;
+}
+
+void GameObject::setHp(int hp)
+{
+	hp_ = hp;
+}
+
+int GameObject::getHp() const
+{
+	return hp_;
 }
 
 World * GameObject::getWorld()

@@ -11,11 +11,14 @@ World::World(State::Context context) :
 	playerLives_(3),
 	console_(context.console),
 	textureManager_(context.textureManager),
-	frameCounter_(0)
+	frameCounter_(0),
+	luaManager_(this)
 	
 {
+
 	luaHandle_ = new LuaGameHandle(this);
 	entityManager_ = new EntityManager(this);
+	
 	scene_ = new Scene(this);
 	
 	
@@ -95,9 +98,14 @@ LuaGameHandle * World::getLuaGameHandle()
 	return luaHandle_;
 }
 
+LuaManager & World::getLuaManager()
+{
+	return luaManager_;
+}
+
 sol::state & World::getLua()
 {
-	return lua_;
+	return luaManager_.getLua();
 }
 
 

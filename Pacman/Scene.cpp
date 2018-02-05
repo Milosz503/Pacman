@@ -156,6 +156,7 @@ void Scene::addTile(std::string tileName, int x, int y, sol::table & data)
 void Scene::addTile(Tile * tile)
 {
 	tiles_[tile->getX()][tile->getY()] = tile;
+	tile->init();
 }
 
 

@@ -3,6 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 
+#include "LuaManager.h"
 #include "State.h"
 #include "Entity.h"
 #include "Tile.h"
@@ -13,7 +14,6 @@
 #include "LuaGameHandle.h"
 
 
-#include "sol.hpp"
 
 class EntityManager;
 class LuaGameHandle;
@@ -41,6 +41,7 @@ public:
 	Scene* getScene();
 	EntityManager* getEntityManager();
 	LuaGameHandle* getLuaGameHandle();
+	LuaManager& getLuaManager();
 	sol::state& getLua();
 
 	~World();
@@ -52,11 +53,11 @@ private:
 	int score_;
 	int playerLives_;
 
-	sol::state lua_;
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
 	Scene* scene_;
 	EntityManager* entityManager_;
+	LuaManager luaManager_;
 	LuaGameHandle* luaHandle_;
 
 

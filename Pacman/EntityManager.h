@@ -23,10 +23,11 @@ public:
 
 private:
 	World* world_;
-	sol::state& lua_;
 	std::map<std::string, Tile*> tileTemplates_;
 
 	std::map<std::string, Entity*> entityTemplates_;
+
+
 
 
 
