@@ -29,13 +29,7 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 	sol::state& lua = world->getLua();
 
 	
-	auto result = lua.script_file(fileName, &sol::simple_on_error);
-	if (!result.valid())
-	{
-		sol::error e = result;
-		std::cout << "Error loading level: " << e.what() << std::endl;
-		return;
-	}
+	world->getLuaManager().loadScript(fileName);
 
 	
 
@@ -79,9 +73,12 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 			{
 				Tile* tile = entityManager->createTile(tileName.value());
 
-				sol::table properties = tileData["data"];
+				sol::optional<sol::table> properties = tileData["data"];
 
-				scene->addTile(tileName.value(), x - 1, y - 1, properties);
+				if(properties)
+					scene->addTile(tileName.value(), x - 1, y - 1, properties.value());
+				else
+					scene->addTile(tileName.value(), x - 1, y - 1, lua.create_table());
 					
 			}
 			else
@@ -119,8 +116,11 @@ void LevelManager::loadLevel(World* world, std::string fileName)
 					entity->init(object);
 
 					scene->addEntity(entity);*/
-					sol::table initData = object["data"];
-					scene->addSpawn(sf::Vector2i(x, y), name.value(), initData);
+					sol::optional<sol::table> initData = object["data"];
+					if(initData)
+						scene->addSpawn(sf::Vector2i(x, y), name.value(), initData.value());
+					else
+						scene->addSpawn(sf::Vector2i(x, y), name.value(), lua.create_table());
 				}
 				else
 				{

@@ -140,7 +140,7 @@ void GameState::loadLevel()
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "Exception: " << e.what() << std::endl;
+		std::cout << "Exception GameState: " << e.what() << std::endl;
 		requestStackClear();
 		requestStackPush(States::Menu);
 	}

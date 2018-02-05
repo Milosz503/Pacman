@@ -55,7 +55,6 @@ function YellowGhost:update()
 	
 	handle = self.handle
 	
-	--world:getDistance(self, player)
 	--handle = self
 	--self = handle.vars
 

@@ -10,13 +10,7 @@ LevelLogic::LevelLogic(SystemManager* systemManager, World* world) :
 {
 	sol::state& lua = getWorld()->getLua();
 
-	auto result = lua.script_file("data/level_logic.lua", &sol::simple_on_error);
-	if (!result.valid())
-	{
-		sol::error e = result;
-		std::cout << "Error loading level logic: " << e.what() << std::endl;
-		return;
-	}
+	
 
 	sol::optional<sol::protected_function> updateFunc = lua["levelLogic"]["update"];
 

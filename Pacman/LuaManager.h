@@ -13,6 +13,8 @@ public:
 	sol::state& getLua();
 	sol::table createProperties(sol::object object, sol::table properties);
 
+	void loadScript(std::string fileName);
+
 private:
 
 	sol::state lua_;

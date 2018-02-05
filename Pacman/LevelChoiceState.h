@@ -2,7 +2,7 @@
 
 #include "State.h"
 
-class LevelChoiceState : State
+class LevelChoiceState : public State
 {
 public:
 	LevelChoiceState(StateStack& stack, Context context, States::ID nextState);

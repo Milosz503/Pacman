@@ -714,7 +714,7 @@ void EditState::loadObjects()
 
 	lua.open_libraries(sol::lib::base, sol::lib::math);
 
-	auto result = lua.script_file("data/entities.lua", &sol::simple_on_error);
+	auto result = lua.script_file("data/entities.lua");
 	if (!result.valid())
 	{
 		sol::error e = result;
@@ -802,7 +802,7 @@ void EditState::loadLevel()
 {
 	//sol::state lua;
 	lua_.open_libraries(sol::lib::base);
-	auto result = lua_.script_file(levelFile_, &sol::simple_on_error);
+	auto result = lua_.script_file(levelFile_);
 	if (!result.valid())
 	{
 		sol::error e = result;
@@ -914,7 +914,7 @@ void EditState::saveLevel()
 {
 	//sol::state lua;
 	lua_.open_libraries(sol::lib::base, sol::lib::io, sol::lib::string, sol::lib::math, sol::lib::table, sol::lib::package);
-	auto result = lua_.script_file("data/scripts/data_generator.lua", &sol::simple_on_error);
+	auto result = lua_.script_file("data/scripts/data_generator.lua");
 	if (!result.valid())
 	{
 		sol::error e = result;
