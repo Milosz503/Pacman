@@ -209,7 +209,7 @@ bool Entity::isGoalMoving()
 
 sf::Vector2i Entity::getGoal()
 {
-	std::cout << "return: ";
+	//std::cout << "return: ";
 	if (destination_ != nullptr)
 	{
 		if (destination_->getType() == GameObject::Entity)
@@ -225,7 +225,7 @@ sf::Vector2i Entity::getGoal()
 	}
 	else
 	{
-		std::cout  << destinationPos_.x << " " << destinationPos_.y << std::endl;
+		//std::cout  << destinationPos_.x << " " << destinationPos_.y << std::endl;
 		return destinationPos_;
 	}
 	return destinationPos_;

@@ -1,6 +1,6 @@
 serpent = require("serpent")
 
-generator = {
+return {
 
 
 
@@ -10,11 +10,10 @@ openFile = function (fileName)
 	io.output(file)
 end,
 
-generate = function (tableName, var)
+generate = function (var)
 
-	io.write(tableName .. " = ")
+	io.write("return ")
 	io.write("\n")
-	print(var.width)
 	io.write(serpent.line(var, {comment=false}))
 	io.write("\n")
 

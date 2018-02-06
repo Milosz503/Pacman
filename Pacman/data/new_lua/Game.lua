@@ -6,14 +6,20 @@ Game.levelLogic = {}
 Game.entityFactory = {}
 Game.tileFactory = {}
 
-Game.objects = {}
+Game.entities = {}
+Game.tiles = {}
 
 
 function Game.init(levelFileName)
 	
 	level = dofile(levelFileName)
 	Game.level = level or {}
-	Game.levelLogic = level.levelLogic or {}
+	
+	if type(level.levelLogic) == "string" then
+		Game.levelLogic = dofile(level.levelLogic) or {}
+	else
+		print("levelLogic ? :"..level.levelLogic)
+	end
 	
 	
 	
@@ -22,25 +28,39 @@ function Game.init(levelFileName)
 	
 	
 	LevelManager.loadLevel(levelFileName)
+	--LevelManager.saveLevel("data/levels/save2.lua")
 	
 end
 
 function Game.update(frameNumber)
 	Game.frameNumber = frameNumber
-	
-	for k,v in ipairs(Game.objects) do
+	--print "update"
+	i = 0
+	for k,v in pairs(Game.entities) do
 		if v.update ~= nil then
 			v:update()
 		end
+		i = i+1
 	end
 	
-	if Game.levelLogic ~= nil then
+	print("updated "..i.." entities")
+	i = 0
+	for k,v in pairs(Game.tiles) do
+		if v.update ~= nil then
+			v:update()
+		end
+		i = i+1
+	end
+	print("updated "..i.." tiles")
+	
+	if Game.levelLogic ~= nil and Game.levelLogic.update ~= nil then
 		Game.levelLogic.update()
 	end
 	
 end
 
 function Game.collision(handle1, handle2)
+	
 	
 	e1 = handle1.self
 	e2 = handle2.self
@@ -49,7 +69,7 @@ function Game.collision(handle1, handle2)
 		e1:collide(e2)
 	end
 	
-	if e2.type == "entity" and e2.collide ~= nil then
+	if e2.collide ~= nil then
 		e2:collide(e1)
 	end
 	
@@ -63,16 +83,34 @@ function Game.initObject(object, properties)
 
 	--set properties
 	properties = properties or {};
-	mt = {__index = {}}
+	-- mt = {__index = {}}
+	-- if object.getProperties ~= nil then
+		-- mt.__index = object.getProperties()
+	-- end
+	-- setmetatable(properties, mt)
+	-- object.properties = properties
+	
+	object.properties = {}
 	if object.getProperties ~= nil then
-		mt.__index = object.getProperties()
+		object.properties = object.getProperties()
 	end
-	setmetatable(properties, mt)
-	object.properties = properties
+	
+	for k, v in pairs(properties) do
+		object.properties[k] = v
+	end
+	
+	
 	
 	
 	--insert to objects
-	table.insert(Game.objects, object)
+	if object.type == "tile" then
+		if object.update ~= nil then
+			table.insert(Game.tiles, object)
+		end
+	else
+		table.insert(Game.entities, object)
+	end
+	
 	
 	--configure
 	if object.texture ~= nil then
@@ -85,6 +123,8 @@ function Game.initObject(object, properties)
 		object.handle:setPhysical(object.isPhysical or false)
 		
 	end
+	
+	
 	
 	
 	--init
@@ -100,6 +140,7 @@ function Game.createEntity(name, properties)
 		return
 	end
 	newEntity = Game.entityFactory[name]
+	newEntity.name = name
 	
 	if newEntity.new ~= nil then
 		newEntity = newEntity:new()
@@ -123,6 +164,7 @@ function Game.createTile(name, properties, x, y)
 		return
 	end
 	newTile = Game.tileFactory[name]
+	newTile.name = name
 	
 	if newTile.new ~= nil then
 		newTile = newTile:new()
@@ -142,10 +184,20 @@ end
 function Game.onRemove(handle)
 	
 	e = handle.self
-
-	for k,v in ipairs(Game.objects) do
+	for k,v in pairs(Game.entities) do
 		if v == e then
-			Game.objects[k] = nil
+			Game.entities[k] = nil
+			print("-")
+			return
 		end
 	end
+	
+	for k,v in pairs(Game.tiles) do
+		if v == e then
+			Game.tiles[k] = nil
+			print("-")
+			return
+		end
+	end
+	
 end

@@ -16,7 +16,7 @@ function YellowGhost.getProperties()
 		
 		homeX = 0,
 		homeY = 0,
-		color = 2
+		color = 4
 	
 	}
 	

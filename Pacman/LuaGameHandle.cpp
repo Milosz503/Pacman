@@ -134,6 +134,16 @@ void LuaGameHandle::setSize(int x, int y)
 	world_->getScene()->setSize(x, y);
 }
 
+int LuaGameHandle::getWidth()
+{
+	return world_->getScene()->getWidth();
+}
+
+int LuaGameHandle::getHeight()
+{
+	return world_->getScene()->getHeight();
+}
+
 
 
 

@@ -5,6 +5,14 @@
 
 class Scene;
 
+enum class BrushType {Tile, Entity};
+
+struct ObjectPrefab
+{
+	std::string name;
+	sol::function properties;
+};
+
 class EditSystem : public System
 {
 public:
@@ -18,13 +26,24 @@ public:
 	~EditSystem();
 
 private:
-	sf::RenderWindow* window_;
-	Scene* scene_;
-	//Tile::Type selectedTile;
 
-	sf::Vector2i getSelectedTile();
-	bool isInsideScene(sf::Vector2i position);
-	void removeTile(sf::Vector2i position);
-	//void addTile(Tile::Type type, sf::Vector2i position);
+	Scene* scene_;
+	sol::state& lua_;
+
+	BrushType brush_;
+	int selectedObject_;
+	sol::table properties_;
+
+	std::vector<ObjectPrefab> tiles_;
+	std::vector<ObjectPrefab> entities_;
+
+
+	void updateBrush();
+
+	void tilePalette();
+	void entitiyPalette();
+	void showProperties();
+
+	void loadPrefabs();
 };
 

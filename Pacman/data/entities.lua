@@ -25,16 +25,10 @@ end
  
 entities = {
 	
-	AggressiveGhost = dofile("data/entities/AggressiveGhost.lua"),
 	
 	YellowGhost = dofile("data/new_lua/YellowGhost.lua"),
 	
-	GuardGhost = dofile("data/entities/GuardGhost.lua"),
-	
-	
-	RedGhost = dofile("data/entities/RedGhost.lua"),
-	
-	GreyGhost = dofile("data/entities/GreyGhost.lua"),	
+
 	
 	Player = {
 		type = "entity";

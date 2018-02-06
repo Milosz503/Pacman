@@ -37,6 +37,8 @@ public:
 	int getTime();
 
 	void setSize(int x, int y);
+	int getWidth();
+	int getHeight();
 
 
 	~LuaGameHandle();

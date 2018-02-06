@@ -8,7 +8,7 @@
 LuaManager::LuaManager(World* world)
 {
 
-	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package, sol::lib::table);
+	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package, sol::lib::table, sol::lib::io, sol::lib::string);
 
 	lua_["errorHandler"].set_function([](std::string err) {
 		std::cout << "Error calling lua function: " + err << std::endl;
@@ -46,6 +46,17 @@ void LuaManager::loadScript(std::string fileName)
 	catch (sol::error e)
 	{
 		std::cout << "Error loading script " << fileName << " :" << e.what() << std::endl;
+	}
+}
+
+void LuaManager::saveLevel(std::string fileName)
+{
+	try {
+		sol::table levelManager = lua_["LevelManager"];
+		auto result = levelManager["saveLevel"](fileName);
+	}
+	catch (sol::error e) {
+		std::cout << "Error saving level " << fileName << " :" << e.what() << std::endl;
 	}
 }
 
@@ -90,7 +101,9 @@ void LuaManager::initTypes()
 		"getTime", &LuaGameHandle::getTime,
 		"createEntityHandle", &LuaGameHandle::createEntityHandle,
 		"createTileHandle", &LuaGameHandle::createTileHandle,
-		"setSize", &LuaGameHandle::setSize
+		"setSize", &LuaGameHandle::setSize,
+		"getWidth", &LuaGameHandle::getWidth,
+		"getHeight", &LuaGameHandle::getHeight
 		);
 
 	lua_.new_usertype<sf::Vector2i>("Vector2i",

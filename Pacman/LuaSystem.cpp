@@ -43,10 +43,12 @@ void LuaSystem::update()
 
 void LuaSystem::onEvent(SystemEvent * event)
 {
+
+	
 	if (event->type == SystemEvent::onRemove)
 	{
 		OnRemoveEvent* e = static_cast<OnRemoveEvent*>(event);
-
+		
 		if (onRemoveLua_.valid())
 		{
 			auto result = onRemoveLua_(e->object->getHandle());
@@ -54,8 +56,9 @@ void LuaSystem::onEvent(SystemEvent * event)
 			checkResult(result);
 		}
 	}
-	else if (event->type == SystemEvent::dynamicCollision || event->type == SystemEvent::dynamicCollision)
+	else if (event->type == SystemEvent::staticCollision || event->type == SystemEvent::dynamicCollision)
 	{
+		
 		GameObject* object1;
 		GameObject* object2;
 
@@ -73,10 +76,11 @@ void LuaSystem::onEvent(SystemEvent * event)
 		}
 
 		
-
+		
 		if (collisionLua_.valid())
 		{
 			auto result = collisionLua_(object1->getHandle(), object2->getHandle());
+			checkResult(result);
 		}
 	}
 }

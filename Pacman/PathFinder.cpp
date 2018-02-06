@@ -155,7 +155,7 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 	{
 		if (start + directions[i] != lastPosition && !isPhysical(start + directions[i]))
 		{
-			//std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal.y << "start:" << start.y << std::endl;
+			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal.y << "start:" << start.y << std::endl;
 
 			return directions[i];
 		}

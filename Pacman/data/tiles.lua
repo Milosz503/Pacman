@@ -91,8 +91,6 @@ return {
 		texture = {x = 10, y = 12; color = Colors.green};
 		
 		collide = function (self, object)
-			
-			
 		
 			if object.handle.category == "player" then
 				world:addScore(1)

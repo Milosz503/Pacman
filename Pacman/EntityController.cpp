@@ -53,6 +53,7 @@ void EntityController::update(Entity * entity)
 
 		if (guideType == A_STAR)
 		{
+			std::cout << "a_star: " << std::endl;
 			std::vector<sf::Vector2i>& path = finder_.findPath(start, destination, lastPosition);
 			if (path.size() > 0)
 			{
@@ -61,6 +62,7 @@ void EntityController::update(Entity * entity)
 		}
 		else if(guideType == DIRECTION)
 		{
+			std::cout << "dir: " << std::endl;
 			sf::Vector2i dir = finder_.findDirectionTo(start, destination, lastPosition);
 			entity->setSpeed((Direction::X)(dir.x), (Direction::Y)(dir.y));
 		}

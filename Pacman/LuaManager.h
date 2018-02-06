@@ -17,6 +17,7 @@ public:
 	sol::state& getLua();
 
 	void loadScript(std::string fileName);
+	void saveLevel(std::string fileName);
 
 private:
 

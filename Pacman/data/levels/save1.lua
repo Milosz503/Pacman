@@ -1,6 +1,6 @@
 return {
 
-levelLogic=dofile("data/level_logic.lua"),
+levelLogic="data/level_logic.lua",
 
 tiles = 
 {{{name="WallLT"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallTR"}, {name="WallLT"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallVer"}, {name="WallTR"}}, 
@@ -42,7 +42,6 @@ tiles =
  
 objects = {
  {name = "Player", x = 14, y = 23}, 
- {name = "YellowGhost", x = 14, y = 14},
  {data = {homeX = 1, homeY = 1, color=1}, name = "YellowGhost", x = 13, y = 14}
  }
  

@@ -4,14 +4,14 @@ levelLogic = {
 	
 	testVar = 1,
 	
-	update = function(vars)
+	update = function()
 		--print("Level LOGIC!")
 
 
 		
 	end,
 	
-	collide = function(vars, object1, object2)
+	collision = function(object1, object2)
 		
 		--print (object1.category .. "  " .. object2.category)
 		
@@ -22,8 +22,8 @@ levelLogic = {
 			
 			if world.lives > 0 then
 				world:removeEntities()
-				world:spawnEntities()
 				world:removeLive()
+				LevelManager.loadEntities()
 			end
 			
 			

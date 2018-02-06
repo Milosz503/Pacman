@@ -39,7 +39,7 @@ GameState::GameState(StateStack & stack, Context context) :
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<LuaSystem>();
-	//systems_.addSystem<EditSystem>();
+	systems_.addSystem<EditSystem>();
 
 }
 
@@ -82,6 +82,12 @@ bool GameState::handleEvent(sf::Event event)
 
 			requestStackPop();
 			requestStackPush(States::Menu);
+
+		}
+		if (event.key.code == Keyboard::S)
+		{
+
+			world_.getLuaManager().saveLevel("data/levels/save2.lua");
 
 		}
 	

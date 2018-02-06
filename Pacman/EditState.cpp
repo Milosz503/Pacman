@@ -713,12 +713,11 @@ void EditState::loadObjects()
 	sol::state lua;
 
 
-	lua.open_libraries(sol::lib::base, sol::lib::math);
-
-	auto result = lua.script_file("data/entities.lua");
-	if (!result.valid())
-	{
-		sol::error e = result;
+	lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package, sol::lib::table, sol::lib::io, sol::lib::string);
+	try {
+		lua.script_file("data/entities.lua");
+	}
+	catch (sol::error e) {
 		std::cout << "Error loading " << "data/entities.lua" << ": " << e.what() << std::endl;
 		return;
 	}
