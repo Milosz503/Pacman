@@ -28,7 +28,7 @@ public:
 	void removeTile(int x, int y);
 	void removeObject(LuaObjectHandle& objectHandle);
 
-	int getDistance(LuaObjectHandle& object1, LuaObjectHandle& object2);
+	int getDistance(LuaObjectHandle* object1, LuaObjectHandle* object2);
 
 
 	void removeEntities();

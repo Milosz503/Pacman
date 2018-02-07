@@ -65,7 +65,7 @@ void LuaManager::initTypes()
 	lua_.new_usertype<LuaObjectHandle>("LuaObjectHandle",
 		"x", sol::property(&LuaObjectHandle::getX),
 		"y", sol::property(&LuaObjectHandle::getY),
-		"name", sol::property(&LuaObjectHandle::getName),
+		"name", sol::property(&LuaObjectHandle::getName, &LuaObjectHandle::setName),
 		"type", sol::property(&LuaObjectHandle::getType),
 		"category", sol::property(&LuaObjectHandle::getCategory),
 		"setColor", &LuaObjectHandle::setColor,

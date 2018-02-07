@@ -10,6 +10,11 @@ struct ObjectPrefab
 {
 	std::string name;
 	sol::function properties;
+
+	inline bool operator<(const ObjectPrefab& a)
+	{
+		return name < a.name;
+	}
 };
 
 struct Brush
@@ -18,7 +23,8 @@ struct Brush
 
 	unsigned index;
 	GameObject* selectedObject;
-	Type type;
+	ObjectPrefab* prefab;
+	Type type = Select;
 	sol::table properties;
 
 };

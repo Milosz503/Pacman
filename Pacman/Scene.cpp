@@ -10,8 +10,6 @@ Scene::Scene(World* world) :
 {
 
 
-	setSize(20, 20);
-
 
 }
 
@@ -164,12 +162,41 @@ unsigned Scene::getHeight()
 
 void Scene::setSize(int width, int height)
 {
-	removeTiles();
-	removeEntities();
-	cleanObjects();
 
-	int lastW = width_;
-	int lastH = height_;
+
+	for (auto& entity : entities_)
+	{
+		if (entity->getX() >= width || entity->getY() >= height)
+		{
+			entity->markToRemove();
+		}
+	}
+	for (int x = width; x < width_; ++x)
+	{
+		for (int y = 0; y < height_; ++y)
+		{
+			if (tiles_[x][y]) {
+				tiles_[x][y]->markToRemove();
+				tilesToRemove_.push_back(tiles_[x][y]);
+				tiles_[x][y] = nullptr;
+				std::cout << "Removed tile: (" << x << ", " << y << ")" << std::endl;
+			}
+		}
+	}
+	for (int x = 0; x < width_; ++x)
+	{
+		for (int y = height; y < height_; ++y)
+		{
+			if (tiles_[x][y]) {
+				tiles_[x][y]->markToRemove();
+				tilesToRemove_.push_back(tiles_[x][y]);
+				tiles_[x][y] = nullptr;
+				std::cout << "Removed tile: (" << x << ", " << y << ")" << std::endl;
+			}
+		}
+	}
+
+
 
 	width_ = width;
 	height_ = height;
@@ -181,14 +208,8 @@ void Scene::setSize(int width, int height)
 		tiles_[x].resize(height_);
 	}
 
-	for (int x = 0; x < width_; ++x)
-	{
-		for (int y = 0; y < height_; ++y)
-		{
-			tiles_[x][y] = nullptr;
-		}
-	}
 
+	cleanObjects();
 
 }
 

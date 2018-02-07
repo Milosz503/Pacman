@@ -35,7 +35,7 @@ entities = {
 		category = "player";
 		
 		speed = 10;
-		texture = {x = 0, y = 2, color = Colors.yellow};
+		texture = {x = 2, y = 2, color = Colors.yellow};
 		
 		
 		collide = function(self, object)

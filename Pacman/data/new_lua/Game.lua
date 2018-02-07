@@ -113,6 +113,10 @@ function Game.initObject(object, properties)
 	
 	
 	--configure
+	handle = object.handle
+	
+	handle.name = object.name
+	
 	if object.texture ~= nil then
 		handle:setTexture(object.texture.x or 0, object.texture.y or 0)
 		handle:setColor(object.texture.color or 0)

@@ -103,10 +103,12 @@ void LuaGameHandle::removeObject(LuaObjectHandle & objectHandle)
 	std::cout << "REMOVED " << objectHandle.getX() << " " << objectHandle.getY() << std::endl;
 }
 
-int LuaGameHandle::getDistance(LuaObjectHandle & object1, LuaObjectHandle & object2)
+int LuaGameHandle::getDistance(LuaObjectHandle * object1, LuaObjectHandle * object2)
 {
-	Vector2i pos1 = object1.getObject()->getPosition();
-	Vector2i pos2 = object2.getObject()->getPosition();
+	if (!object1 || !object2)
+		return 0;
+	Vector2i pos1 = object1->getObject()->getPosition();
+	Vector2i pos2 = object2->getObject()->getPosition();
 
 
 

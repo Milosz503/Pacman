@@ -24,6 +24,11 @@ std::string LuaObjectHandle::getName() const
 	return object_->getName();
 }
 
+void LuaObjectHandle::setName(std::string name)
+{
+	object_->setName(name);
+}
+
 std::string LuaObjectHandle::getType() const
 {
 	if (object_->getType() == GameObject::Entity)
@@ -152,13 +157,17 @@ void LuaObjectHandle::setPhysical(bool isPhysical)
 }
 
 
-void LuaObjectHandle::guideTo(LuaObjectHandle & destination)
+void LuaObjectHandle::guideTo(LuaObjectHandle * destination)
 {
+	if (!destination) {
+		std::cout << "Lua handle: Can not guide object is null" << std::endl;
+		return;
+	}
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(destination.getObject());
+		entity->guideTo(destination->getObject());
 
 	}
 	else

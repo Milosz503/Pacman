@@ -26,6 +26,7 @@ public:
 	int getY() const;
 
 	std::string getName() const;
+	void setName(std::string name);
 	std::string getType() const;
 	std::string getCategory() const;
 	
@@ -44,7 +45,7 @@ public:
 
 
 
-	void guideTo(LuaObjectHandle& destination);
+	void guideTo(LuaObjectHandle* destination);
 	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);
 	void guideToPos(int x, int y);
 
