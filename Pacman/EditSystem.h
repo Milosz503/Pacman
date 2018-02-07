@@ -5,12 +5,22 @@
 
 class Scene;
 
-enum class BrushType {Tile, Entity, Select};
 
 struct ObjectPrefab
 {
 	std::string name;
 	sol::function properties;
+};
+
+struct Brush
+{
+	enum Type { Tile, Entity, Select };
+
+	unsigned index;
+	GameObject* selectedObject;
+	Type type;
+	sol::table properties;
+
 };
 
 class EditSystem : public System
@@ -30,10 +40,8 @@ private:
 	Scene* scene_;
 	sol::state& lua_;
 
-	BrushType brush_;
+	Brush brush_;
 
-	unsigned selectedObject_;
-	sol::table properties_;
 
 	std::vector<ObjectPrefab> tiles_;
 	std::vector<ObjectPrefab> entities_;
@@ -42,14 +50,22 @@ private:
 	void updateTileBrush();
 	virtual void onEvent(SystemEvent* event) override;
 
+	sf::Vector2i getSelectedTile();
 	sf::Vector2i getMousePosition();
 	bool isInside(sf::Vector2i pos);
 
-	void tilePalette();
-	void entitiyPalette();
+	
 	void showPalette();
+	void tilePalette();
+	void entityPalette();
 	void showProperties();
 
 	void loadPrefabs();
+
+	void selectObject();
+	void selectTilePrefab(int index);
+	void selectEntityPrefab(int index);
+
+	sf::Vector2f realPosition(sf::Vector2i tilePosition);
 };
 

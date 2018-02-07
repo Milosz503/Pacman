@@ -32,6 +32,10 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	{
 		cout << "Error creating renderTexture!" << std::endl;
 	}
+	if (!customTexture_.create(width * fontWidth_, height * fontHeight_))
+	{
+		cout << "Error creating renderTexture!" << std::endl;
+	}
 
 
 	if (!shader_.loadFromFile("shader.frag", sf::Shader::Fragment))
@@ -72,6 +76,10 @@ void ConsoleWindow::setFontSize(unsigned size)
 	{
 		cout << "Error creating renderTexture!" << std::endl;
 	}
+	if (!customTexture_.create(width_ * fontWidth_, height_ * fontHeight_))
+	{
+		cout << "Error creating renderTexture!" << std::endl;
+	}
 }
 
 unsigned ConsoleWindow::getFontSize()
@@ -100,6 +108,7 @@ void ConsoleWindow::clear(Color color)
 
 	window_.clear(color);
 	texture_.clear(Color::Transparent);
+	customTexture_.clear(Color::Transparent);
 }
 
 
@@ -236,6 +245,10 @@ void ConsoleWindow::show()
 	shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
 	window_.draw(sprite, &shader_);
 
+	customTexture_.display();
+	sprite.setTexture(customTexture_.getTexture());
+	window_.draw(sprite);
+
 
 	
 
@@ -251,12 +264,12 @@ void ConsoleWindow::display()
 
 void ConsoleWindow::drawsf(const Vertex * vertices, unsigned int vertexCount, PrimitiveType type, const RenderStates & states)
 {
-	window_.draw(vertices, vertexCount, type, states);
+	customTexture_.draw(vertices, vertexCount, type, states);
 }
 
 void ConsoleWindow::drawsf(const Drawable & drawable, const RenderStates & states)
 {
-	window_.draw(drawable, states);
+	customTexture_.draw(drawable, states);
 }
 
 bool ConsoleWindow::pollEvent(Event & event)

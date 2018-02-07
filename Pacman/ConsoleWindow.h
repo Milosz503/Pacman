@@ -62,6 +62,7 @@ private:
 
 
 	sf::RenderTexture texture_;
+	sf::RenderTexture customTexture_;
 	sf::RenderWindow window_;
 
 	sf::Shader shader_;

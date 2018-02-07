@@ -8,9 +8,9 @@ using namespace sf;
 EditSystem::EditSystem(SystemManager * systemManager, World * world) :
 	System(systemManager, world),
 	lua_(world->getLuaManager().getLua()),
-	brush_(BrushType::Entity)
+	brush_()
 {
-	properties_ = lua_.create_table();
+	brush_.properties = lua_.create_table();
 	scene_ = getWorld()->getScene();
 
 	loadPrefabs();
@@ -28,12 +28,41 @@ void EditSystem::draw()
 	ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
 	ImGui::ShowTestWindow();
 
-	tilePalette();
-	entitiyPalette();
 	showProperties();
 	showPalette();
 
 	updateTileBrush();
+
+	Vector2i pos = getSelectedTile();
+	int fontSize = getWorld()->getConsole()->getFontSize();
+
+	if (isInside(pos))
+	{
+		
+		sf::RectangleShape rect(Vector2f(fontSize, fontSize));
+		rect.setFillColor(Color(128, 200, 255, 128));
+		rect.setOutlineColor(Color(128, 128, 128));
+		rect.setOutlineThickness(2);
+		
+		rect.setPosition(realPosition(pos));
+
+		
+		getWorld()->getConsole()->drawsf(rect);
+
+	}
+
+	if (brush_.type == Brush::Select && brush_.selectedObject != nullptr)
+	{
+		sf::RectangleShape rect(Vector2f(fontSize, fontSize));
+		rect.setFillColor(Color(128, 200, 255, 0));
+		rect.setOutlineColor(Color(255, 255, 128));
+		rect.setOutlineThickness(2);
+
+		rect.setPosition(realPosition(brush_.selectedObject->getPosition()));
+
+
+		getWorld()->getConsole()->drawsf(rect);
+	}
 }
 
 EditSystem::~EditSystem()
@@ -44,15 +73,15 @@ void EditSystem::updateTileBrush()
 {
 	if (ImGui::IsMouseHoveringAnyWindow())
 		return;
-	sf::Vector2i pos = getMousePosition();
+	sf::Vector2i pos = getSelectedTile();
 
 	if (Mouse::isButtonPressed(Mouse::Left))
 	{
-		if (brush_ == BrushType::Tile && selectedObject_ < tiles_.size() && isInside(pos))
+		if (brush_.type == Brush::Tile && brush_.index < tiles_.size() && isInside(pos))
 		{
 
 			try {
-				lua_["Game"]["createTile"](tiles_[selectedObject_].name, properties_, pos.x, pos.y);
+				lua_["Game"]["createTile"](tiles_[brush_.index].name, brush_.properties, pos.x, pos.y);
 			}
 			catch (sol::error e) {
 				std::cout << "Error creating tile! " << e.what() << std::endl;
@@ -71,14 +100,14 @@ void EditSystem::onEvent(SystemEvent * e)
 		
 		if (!ImGui::IsMouseHoveringAnyWindow() && event.type == sf::Event::MouseButtonPressed)
 		{
-			sf::Vector2i pos = getMousePosition();
+			sf::Vector2i pos = getSelectedTile();
 
-			if (brush_ == BrushType::Entity && selectedObject_ < entities_.size() && isInside(pos))
+			if (brush_.type == Brush::Entity && brush_.index < entities_.size() && isInside(pos))
 			{
 				
 
 				try {
-					sol::table self = lua_["Game"]["createEntity"](entities_[selectedObject_].name, properties_);
+					sol::table self = lua_["Game"]["createEntity"](entities_[brush_.index].name, brush_.properties);
 					LuaObjectHandle& handle = self["handle"];
 					//std::cout << "Pos: " << pos.x << " " << pos.y << std::endl;
 					handle.setPosition(pos.x, pos.y);
@@ -87,24 +116,15 @@ void EditSystem::onEvent(SystemEvent * e)
 					std::cout << "Error creating tile! " << e.what() << std::endl;
 				}
 			}
-			else if (brush_ == BrushType::Select)
+			else if (brush_.type == Brush::Select)
 			{
-				Entity* entity = scene_->findEntity(pos.x, pos.y);
-				if (entity != nullptr)
-				{
-					try {
-						properties_ = entity->getLuaInstance()["properties"];
-					}
-					catch (sol::error e) {
-						std::cout << "Error selecting entity! " << e.what() << std::endl;
-					}
-				}
+				selectObject();
 			}
 		}
 	}
 }
 
-sf::Vector2i EditSystem::getMousePosition()
+sf::Vector2i EditSystem::getSelectedTile()
 {
 	int fontSize = getWorld()->getConsole()->getFontSize();
 
@@ -116,6 +136,11 @@ sf::Vector2i EditSystem::getMousePosition()
 	pos.y = pos.y / fontSize - offset.y;
 
 	return pos;
+}
+
+sf::Vector2i EditSystem::getMousePosition()
+{
+	return sf::Mouse::getPosition(*getWorld()->getConsole()->getWindow());
 }
 
 bool EditSystem::isInside(sf::Vector2i pos)
@@ -132,70 +157,72 @@ bool EditSystem::isInside(sf::Vector2i pos)
 	return false;
 }
 
-void EditSystem::tilePalette()
-{
-	ImGui::Begin("Tiles");
-	
-	for (int i = 0; i < tiles_.size(); ++i)
-	{
-		const char* name = tiles_[i].name.c_str();
-		if (i == selectedObject_ && brush_ == BrushType::Tile)
-		{
-			ImGui::BulletText(name);
-		}
-		else if (ImGui::Button(name))
-		{
-			brush_ = BrushType::Tile;
-			selectedObject_ = i;
-			if (tiles_[i].properties.valid())
-				properties_ = tiles_[i].properties();
-			else
-				properties_ = lua_.create_table();
-		}
-	}
 
-	ImGui::End();
-}
-
-void EditSystem::entitiyPalette()
-{
-	ImGui::Begin("Entities");
-
-	float num = 1;
-	ImGui::InputFloat("float: ", &num);
-
-	for (int i = 0; i < entities_.size(); ++i)
-	{
-		const char* name = entities_[i].name.c_str();
-		if (i == selectedObject_ && brush_ == BrushType::Entity)
-		{
-			ImGui::BulletText(name);
-		}
-		else if (ImGui::Button(name))
-		{
-			brush_ = BrushType::Entity;
-			selectedObject_ = i;
-			if (entities_[i].properties.valid())
-				properties_ = entities_[i].properties();
-			else
-				properties_ = lua_.create_table();
-		}
-	}
-
-	ImGui::End();
-}
 
 void EditSystem::showPalette()
 {
 	ImGui::Begin("Palette");
 
-	if (ImGui::Button("select"))
+	if (brush_.type == Brush::Select)
 	{
-		brush_ = BrushType::Select;
-		properties_ = sol::nil;
+		ImGui::Bullet();
 	}
 
+	if (ImGui::Button("select"))
+	{
+		brush_.type = Brush::Select;
+		brush_.properties = sol::nil;
+	}
+
+	ImGui::Separator();
+	entityPalette();
+	ImGui::Separator();
+	tilePalette();
+
+
 	ImGui::End();
+}
+void EditSystem::tilePalette()
+{
+	ImGui::Text("Tiles:");
+	ImGui::Spacing();
+
+	for (int i = 0; i < tiles_.size(); ++i)
+	{
+		const char* name = tiles_[i].name.c_str();
+		if (i == brush_.index && brush_.type == Brush::Tile)
+		{
+			ImGui::Bullet();
+		}
+
+		if (ImGui::Button(name))
+		{
+			selectTilePrefab(i);
+		}
+	}
+
+}
+
+void EditSystem::entityPalette()
+{
+	ImGui::Text("Entities:");
+	ImGui::Spacing();
+
+
+	for (int i = 0; i < entities_.size(); ++i)
+	{
+		const char* name = entities_[i].name.c_str();
+		if (i == brush_.index && brush_.type == Brush::Entity)
+		{
+			ImGui::Bullet();
+		}
+
+		if (ImGui::Button(name))
+		{
+			selectEntityPrefab(i);
+		}
+	}
+
 }
 
 void EditSystem::showProperties()
@@ -204,8 +231,8 @@ void EditSystem::showProperties()
 
 	try {
 
-		if (properties_.valid()) {
-			for (auto& p : properties_)
+		if (brush_.properties.valid()) {
+			for (auto& p : brush_.properties)
 			{
 
 				std::string name = p.first.as<std::string>();
@@ -227,9 +254,9 @@ void EditSystem::showProperties()
 					if (ImGui::InputFloat(id, &num, 0, 0, precision))
 					{
 						if(precision == 0)
-							properties_[name] = (int)num;
+							brush_.properties[name] = (int)num;
 						else
-							properties_[name] = num;
+							brush_.properties[name] = num;
 					}
 					
 				}
@@ -239,7 +266,7 @@ void EditSystem::showProperties()
 					char buff[64]; sprintf_s(buff, "%s", str.c_str());
 					if (ImGui::InputText(id, buff, 64))
 					{
-						properties_[name] = buff;
+						brush_.properties[name] = buff;
 					}
 				}
 				if (value.get_type() == sol::type::boolean)
@@ -247,7 +274,7 @@ void EditSystem::showProperties()
 					bool boolean = value.as<bool>();
 					if (ImGui::Checkbox(id, &boolean))
 					{
-						properties_[name] = boolean;
+						brush_.properties[name] = boolean;
 					}
 				}
 
@@ -258,7 +285,7 @@ void EditSystem::showProperties()
 		std::cout << "Error showing properties! " << e.what() << std::endl;
 	}
 
-	Vector2i pos = getMousePosition();
+	Vector2i pos = getSelectedTile();
 
 	ImGui::Separator();
 	ImGui::Text("Tile x:%d, y:%d, %d", pos.x, pos.y, ImGui::IsMouseHoveringAnyWindow());
@@ -314,5 +341,56 @@ void EditSystem::loadPrefabs()
 
 }
 
+void EditSystem::selectObject()
+{
+	brush_.type = Brush::Select;
 
+	Vector2i pos = getSelectedTile();
+
+	Entity* entity = scene_->findEntity(pos.x, pos.y);
+	if (entity != nullptr)
+	{
+		brush_.selectedObject = entity;
+
+		try {
+			brush_.properties = entity->getLuaInstance()["properties"];
+		}
+		catch (sol::error e) {
+			std::cout << "Error selecting entity! " << e.what() << std::endl;
+		}
+	}
+
+}
+
+void EditSystem::selectTilePrefab(int index)
+{
+	brush_.type = Brush::Tile;
+	brush_.index = index;
+	if (tiles_[index].properties.valid())
+		brush_.properties = tiles_[index].properties();
+	else
+		brush_.properties = lua_.create_table();
+}
+
+void EditSystem::selectEntityPrefab(int index)
+{
+	brush_.type = Brush::Entity;
+	brush_.index = index;
+	if (entities_[index].properties.valid())
+		brush_.properties = entities_[index].properties();
+	else
+		brush_.properties = lua_.create_table();
+}
+
+sf::Vector2f EditSystem::realPosition(sf::Vector2i tilePosition)
+{
+	Vector2i offset(2, 4); // DO ZMIANY!
+	int fontSize = getWorld()->getConsole()->getFontSize();
+
+	tilePosition += offset;
+
+	tilePosition *= fontSize;
+
+	return Vector2f(tilePosition.x, tilePosition.y);
+}
 
