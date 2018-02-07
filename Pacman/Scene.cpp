@@ -126,6 +126,17 @@ Tile * Scene::getTile(int x, int y) const
 	return tiles_[pos.x][pos.y];
 }
 
+Entity * Scene::findEntity(int x, int y) const
+{
+	for (auto& entity : entities_)
+	{
+		if (entity->getX() == x && entity->getY() == y)
+			return entity;
+	}
+
+	return nullptr;
+}
+
 std::vector<Entity*>& Scene::getEntities()
 {
 	return entities_;

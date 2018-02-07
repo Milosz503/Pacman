@@ -5,7 +5,7 @@
 
 class Scene;
 
-enum class BrushType {Tile, Entity};
+enum class BrushType {Tile, Entity, Select};
 
 struct ObjectPrefab
 {
@@ -31,17 +31,23 @@ private:
 	sol::state& lua_;
 
 	BrushType brush_;
-	int selectedObject_;
+
+	unsigned selectedObject_;
 	sol::table properties_;
 
 	std::vector<ObjectPrefab> tiles_;
 	std::vector<ObjectPrefab> entities_;
 
 
-	void updateBrush();
+	void updateTileBrush();
+	virtual void onEvent(SystemEvent* event) override;
+
+	sf::Vector2i getMousePosition();
+	bool isInside(sf::Vector2i pos);
 
 	void tilePalette();
 	void entitiyPalette();
+	void showPalette();
 	void showProperties();
 
 	void loadPrefabs();

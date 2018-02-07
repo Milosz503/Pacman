@@ -21,6 +21,7 @@ public:
 	bool isTilePhysical(int x, int y);
 	bool isTilePhysicalF(sf::Vector2i& pos);
 	Tile* getTile(int x, int y) const;
+	Entity* findEntity(int x, int y) const;
 
 	std::vector<Entity*>& getEntities();
 
@@ -31,8 +32,6 @@ public:
 	void setSize(int width, int height);
 
 
-	void addEntity(Entity* entity);
-	void addTile(Tile* tile, int x, int y);
 
 	Tile* createTile(sol::table luaInstance, std::string category, int x, int y);
 	Entity* createEntity(sol::table luaInstance, std::string category);

@@ -8,7 +8,7 @@ using namespace sf;
 EditSystem::EditSystem(SystemManager * systemManager, World * world) :
 	System(systemManager, world),
 	lua_(world->getLuaManager().getLua()),
-	brush_(BrushType::Tile)
+	brush_(BrushType::Entity)
 {
 	properties_ = lua_.create_table();
 	scene_ = getWorld()->getScene();
@@ -19,39 +19,36 @@ EditSystem::EditSystem(SystemManager * systemManager, World * world) :
 void EditSystem::update()
 {
 
+	
+
+}
+
+void EditSystem::draw()
+{
 	ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
 	ImGui::ShowTestWindow();
 
 	tilePalette();
 	entitiyPalette();
 	showProperties();
-	
-	updateBrush();
+	showPalette();
 
-}
-
-void EditSystem::draw()
-{
+	updateTileBrush();
 }
 
 EditSystem::~EditSystem()
 {
 }
 
-void EditSystem::updateBrush()
+void EditSystem::updateTileBrush()
 {
-	int fontSize = getWorld()->getConsole()->getFontSize();
+	if (ImGui::IsMouseHoveringAnyWindow())
+		return;
+	sf::Vector2i pos = getMousePosition();
 
-	sf::Vector2i offset(2, 4); // do zmiany!
-
-	Vector2i pos = sf::Mouse::getPosition(*getWorld()->getConsole()->getWindow());
-
-	pos.x = pos.x / fontSize - offset.x;
-	pos.y = pos.y / fontSize - offset.y;
-
-	if (brush_ == BrushType::Tile)
+	if (Mouse::isButtonPressed(Mouse::Left))
 	{
-		if (Mouse::isButtonPressed(Mouse::Left))
+		if (brush_ == BrushType::Tile && selectedObject_ < tiles_.size() && isInside(pos))
 		{
 
 			try {
@@ -66,6 +63,75 @@ void EditSystem::updateBrush()
 	
 }
 
+void EditSystem::onEvent(SystemEvent * e)
+{
+	if (e->type == SystemEvent::input)
+	{
+		sf::Event& event = static_cast<InputEvent*>(e)->event;
+		
+		if (!ImGui::IsMouseHoveringAnyWindow() && event.type == sf::Event::MouseButtonPressed)
+		{
+			sf::Vector2i pos = getMousePosition();
+
+			if (brush_ == BrushType::Entity && selectedObject_ < entities_.size() && isInside(pos))
+			{
+				
+
+				try {
+					sol::table self = lua_["Game"]["createEntity"](entities_[selectedObject_].name, properties_);
+					LuaObjectHandle& handle = self["handle"];
+					//std::cout << "Pos: " << pos.x << " " << pos.y << std::endl;
+					handle.setPosition(pos.x, pos.y);
+				}
+				catch (sol::error e) {
+					std::cout << "Error creating tile! " << e.what() << std::endl;
+				}
+			}
+			else if (brush_ == BrushType::Select)
+			{
+				Entity* entity = scene_->findEntity(pos.x, pos.y);
+				if (entity != nullptr)
+				{
+					try {
+						properties_ = entity->getLuaInstance()["properties"];
+					}
+					catch (sol::error e) {
+						std::cout << "Error selecting entity! " << e.what() << std::endl;
+					}
+				}
+			}
+		}
+	}
+}
+
+sf::Vector2i EditSystem::getMousePosition()
+{
+	int fontSize = getWorld()->getConsole()->getFontSize();
+
+	sf::Vector2i offset(2, 4); // do zmiany!
+
+	Vector2i pos = sf::Mouse::getPosition(*getWorld()->getConsole()->getWindow());
+
+	pos.x = pos.x / fontSize - offset.x;
+	pos.y = pos.y / fontSize - offset.y;
+
+	return pos;
+}
+
+bool EditSystem::isInside(sf::Vector2i pos)
+{
+	int width = scene_->getWidth();
+	int height = scene_->getHeight();
+
+	if (pos.x >= 0 && pos.x < width &&
+		pos.y >= 0 && pos.y < height)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void EditSystem::tilePalette()
 {
 	ImGui::Begin("Tiles");
@@ -73,12 +139,13 @@ void EditSystem::tilePalette()
 	for (int i = 0; i < tiles_.size(); ++i)
 	{
 		const char* name = tiles_[i].name.c_str();
-		if (i == selectedObject_)
+		if (i == selectedObject_ && brush_ == BrushType::Tile)
 		{
 			ImGui::BulletText(name);
 		}
 		else if (ImGui::Button(name))
 		{
+			brush_ = BrushType::Tile;
 			selectedObject_ = i;
 			if (tiles_[i].properties.valid())
 				properties_ = tiles_[i].properties();
@@ -94,21 +161,38 @@ void EditSystem::entitiyPalette()
 {
 	ImGui::Begin("Entities");
 
+	float num = 1;
+	ImGui::InputFloat("float: ", &num);
+
 	for (int i = 0; i < entities_.size(); ++i)
 	{
 		const char* name = entities_[i].name.c_str();
-		if (i == selectedObject_)
+		if (i == selectedObject_ && brush_ == BrushType::Entity)
 		{
 			ImGui::BulletText(name);
 		}
 		else if (ImGui::Button(name))
 		{
+			brush_ = BrushType::Entity;
 			selectedObject_ = i;
 			if (entities_[i].properties.valid())
 				properties_ = entities_[i].properties();
 			else
 				properties_ = lua_.create_table();
 		}
+	}
+
+	ImGui::End();
+}
+
+void EditSystem::showPalette()
+{
+	ImGui::Begin("Palette");
+
+	if (ImGui::Button("select"))
+	{
+		brush_ = BrushType::Select;
+		properties_ = sol::nil;
 	}
 
 	ImGui::End();
@@ -126,6 +210,46 @@ void EditSystem::showProperties()
 
 				std::string name = p.first.as<std::string>();
 				ImGui::Text(name.c_str());
+				int dist = (10 - name.length()) * 7;
+				if (dist < 5)
+					dist = 5;
+				ImGui::SameLine(0, dist);
+
+				sol::object value = p.second;
+				char id[32]; sprintf_s(id, "##%s", name.c_str());
+
+				if (value.get_type() == sol::type::number)
+				{
+					float num = value.as<float>();
+					int precision = 5;
+					if (floor(num) == num)
+						precision = 0;
+					if (ImGui::InputFloat(id, &num, 0, 0, precision))
+					{
+						if(precision == 0)
+							properties_[name] = (int)num;
+						else
+							properties_[name] = num;
+					}
+					
+				}
+				if (value.get_type() == sol::type::string)
+				{
+					std::string str = value.as<std::string>();
+					char buff[64]; sprintf_s(buff, "%s", str.c_str());
+					if (ImGui::InputText(id, buff, 64))
+					{
+						properties_[name] = buff;
+					}
+				}
+				if (value.get_type() == sol::type::boolean)
+				{
+					bool boolean = value.as<bool>();
+					if (ImGui::Checkbox(id, &boolean))
+					{
+						properties_[name] = boolean;
+					}
+				}
 
 			}
 		}
@@ -133,6 +257,11 @@ void EditSystem::showProperties()
 	catch (sol::error e) {
 		std::cout << "Error showing properties! " << e.what() << std::endl;
 	}
+
+	Vector2i pos = getMousePosition();
+
+	ImGui::Separator();
+	ImGui::Text("Tile x:%d, y:%d, %d", pos.x, pos.y, ImGui::IsMouseHoveringAnyWindow());
 
 	ImGui::End();
 }

@@ -16,7 +16,10 @@ function YellowGhost.getProperties()
 		
 		homeX = 0,
 		homeY = 0,
-		color = 4
+		color = 4,
+		data = "qwerty",
+		sth = true,
+		someVeryLongProperty = 32.5
 	
 	}
 	
@@ -39,6 +42,7 @@ function YellowGhost:init()
 	self.focusTime = properties.focusTime or 8
 	self.focusTime = self.focusTime*60
 	
+	print("Color "..properties.color)
 	handle:setColor(properties.color)
 	
 	

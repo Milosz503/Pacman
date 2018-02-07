@@ -93,6 +93,8 @@ bool GameState::handleEvent(sf::Event event)
 	
 	}
 
+	systems_.sendSystemEvent(new InputEvent(event));
+
 
 	return false;
 }
