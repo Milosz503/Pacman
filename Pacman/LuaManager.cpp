@@ -130,8 +130,8 @@ void LuaManager::initTypes()
 		"createEntityHandle", &LuaGameHandle::createEntityHandle,
 		"createTileHandle", &LuaGameHandle::createTileHandle,
 		"setSize", &LuaGameHandle::setSize,
-		"getWidth", &LuaGameHandle::getWidth,
-		"getHeight", &LuaGameHandle::getHeight
+		"width", sol::property(&LuaGameHandle::getWidth),
+		"height", sol::property(&LuaGameHandle::getHeight)
 		);
 
 	lua_.new_usertype<sf::Vector2i>("Vector2i",

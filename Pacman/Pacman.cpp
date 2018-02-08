@@ -87,6 +87,11 @@ int main()
 			stack.update(timeSinceLasUpdate);
 			
 			timeSinceLasUpdate -= TimePerFrame;
+
+			if (timeSinceLasUpdate > TimePerFrame)
+			{
+				timeSinceLasUpdate = TimePerFrame;
+			}
 			//stack.update(TimePerFrame);
 
 			if (stack.isEmpty())

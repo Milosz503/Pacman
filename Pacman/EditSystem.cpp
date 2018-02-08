@@ -90,6 +90,16 @@ void EditSystem::updateTileBrush()
 			}
 		}
 	}
+	else if (Mouse::isButtonPressed(Mouse::Right) && brush_.type == Brush::Tile)
+	{
+		sf::Vector2i pos = getSelectedTile();
+		if (isInside(pos))
+		{
+			Tile* tile = scene_->getTile(pos.x, pos.y);
+			if (tile)
+				tile->markToRemove();
+		}
+	}
 
 	
 }
@@ -102,26 +112,31 @@ void EditSystem::onEvent(SystemEvent * e)
 		
 		if (!ImGui::IsMouseHoveringAnyWindow() && event.type == sf::Event::MouseButtonPressed)
 		{
-			sf::Vector2i pos = getSelectedTile();
-
-			if (brush_.type == Brush::Entity && brush_.index < entities_.size() && isInside(pos))
+			if (event.mouseButton.button == Mouse::Left)
 			{
-				
+				sf::Vector2i pos = getSelectedTile();
 
-				try {
-					sol::table self = lua_["Game"]["createEntity"](entities_[brush_.index].name, brush_.properties);
-					LuaObjectHandle& handle = self["handle"];
-					//std::cout << "Pos: " << pos.x << " " << pos.y << std::endl;
-					handle.setPosition(pos.x, pos.y);
+				if (brush_.type == Brush::Entity && brush_.index < entities_.size() && isInside(pos))
+				{
+
+
+					try {
+						sol::table self = lua_["Game"]["createEntity"](entities_[brush_.index].name, brush_.properties);
+						LuaObjectHandle& handle = self["handle"];
+						//std::cout << "Pos: " << pos.x << " " << pos.y << std::endl;
+						handle.setPosition(pos.x, pos.y);
+					}
+					catch (sol::error e) {
+						std::cout << "Error creating tile! " << e.what() << std::endl;
+					}
 				}
-				catch (sol::error e) {
-					std::cout << "Error creating tile! " << e.what() << std::endl;
+				else if (brush_.type == Brush::Select)
+				{
+					selectObject();
 				}
 			}
-			else if (brush_.type == Brush::Select)
-			{
-				selectObject();
-			}
+
+			
 		}
 	}
 
@@ -160,6 +175,9 @@ bool EditSystem::isInside(sf::Vector2i pos)
 {
 	int width = scene_->getWidth();
 	int height = scene_->getHeight();
+
+	if (!getWorld()->getConsole()->getWindow()->hasFocus())
+		return false;
 
 	if (pos.x >= 0 && pos.x < width &&
 		pos.y >= 0 && pos.y < height)

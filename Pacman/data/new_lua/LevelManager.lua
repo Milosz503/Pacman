@@ -66,8 +66,8 @@ function LevelManager.saveLevel(fileName)
 	tiles = {}
 	entities = {}
 	
-	width = world:getWidth()
-	height = world:getHeight()
+	width = world.width
+	height = world.height
 	
 	tiles.width = width
 	tiles.height = height
@@ -82,6 +82,7 @@ function LevelManager.saveLevel(fileName)
 			tile = world:getTile(x-1, y-1)
 			if tile ~= nil then
 				cell.name = tile.self.name or ""
+				cell.data = tile.self.properties
 				tiles[y][x] = cell
 			end
 		end
