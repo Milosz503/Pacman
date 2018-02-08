@@ -13,16 +13,19 @@ public:
 	LuaManager(World* world);
 	~LuaManager();
 
+	void init();
+
 
 	sol::state& getLua();
 
 	void loadScript(std::string fileName);
 	void saveLevel(std::string fileName);
+	void loadLevel(std::string fileName);
 
 private:
 
 	sol::state lua_;
-
+	World* world_;
 
 	void initTypes();
 	void includeScripts();

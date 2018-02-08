@@ -10,7 +10,7 @@
 #include "StateStack.h"
 #include "LuaSystem.h"
 
-GameState::GameState(StateStack & stack, Context context) :
+GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 	State(stack, context),
 	world_(context),
 	systems_(&world_),
@@ -39,7 +39,8 @@ GameState::GameState(StateStack & stack, Context context) :
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<LuaSystem>();
-	systems_.addSystem<EditSystem>();
+	if(isEditor)
+		systems_.addSystem<EditSystem>();
 
 }
 
@@ -49,8 +50,11 @@ bool GameState::update(sf::Time dt)
 	sf::Clock clock;
 	clock.restart();
 
-
-	systems_.update();
+	if (!world_.isEditMode())
+	{
+		systems_.update();
+		
+	}
 	world_.update();
 	
 

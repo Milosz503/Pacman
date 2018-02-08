@@ -35,9 +35,9 @@ int main()
 
 	StateStack stack(context);
 
-	stack.registerState<GameState>(States::Game);
+	stack.registerState<GameState>(States::Game, false);
 	stack.registerState<MenuState>(States::Menu);
-	stack.registerState<EditState>(States::Editor);
+	stack.registerState<GameState>(States::Editor, true);
 	stack.registerState<LevelChoiceState>(States::LevelChoiceGame, States::Game);
 	stack.registerState<LevelChoiceState>(States::LevelChoiceEditor, States::Editor);
 

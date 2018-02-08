@@ -9,18 +9,18 @@
 World::World(State::Context context) :
 	score_(0),
 	playerLives_(3),
+	isEditMode_(false),
+	levelFile_(*context.levelFile),
 	console_(context.console),
 	textureManager_(context.textureManager),
 	frameCounter_(0),
+	scene_(this),
 	luaManager_(this)
 	
 {
 
-	luaHandle_ = new LuaGameHandle(this);
-	
-	scene_ = new Scene(this);
-	
-	levelFile_ = *context.levelFile;
+
+	luaManager_.init();
 	//LevelManager::loadLevel(this, *context.levelFile);
 
 }
@@ -33,7 +33,7 @@ void World::setSystems(SystemManager * systems)
 
 void World::update()
 {
-	scene_->update();
+	scene_.update();
 
 	++frameCounter_;
 	
@@ -41,7 +41,7 @@ void World::update()
 
 void World::draw()
 {
-	scene_->draw();
+	scene_.draw();
 }
 
 std::string World::getLevelFile()
@@ -51,7 +51,7 @@ std::string World::getLevelFile()
 
 sf::IntRect World::getBounds()
 {
-	return sf::IntRect(0, 0, scene_->getWidth(), scene_->getHeight());
+	return sf::IntRect(0, 0, scene_.getWidth(), scene_.getHeight());
 }
 
 unsigned long long World::getFrameNumber()
@@ -96,13 +96,10 @@ TextureManager * World::getTextureManager()
 
 Scene * World::getScene()
 {
-	return scene_;
+	return &scene_;
 }
 
-LuaGameHandle * World::getLuaGameHandle()
-{
-	return luaHandle_;
-}
+
 
 LuaManager & World::getLuaManager()
 {
@@ -121,6 +118,16 @@ sol::state & World::getLua()
 
 
 
+
+bool World::isEditMode()
+{
+	return isEditMode_;
+}
+
+void World::setEditMode(bool isEdit)
+{
+	isEditMode_ = isEdit;
+}
 
 World::~World()
 {

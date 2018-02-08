@@ -11,10 +11,12 @@ EditSystem::EditSystem(SystemManager * systemManager, World * world) :
 	lua_(world->getLuaManager().getLua()),
 	brush_()
 {
-	brush_.properties = lua_.create_table();
+	brush_.properties = sol::nil;
 	scene_ = getWorld()->getScene();
 
 	loadPrefabs();
+
+	world->setEditMode(true);
 }
 
 void EditSystem::update()
@@ -177,14 +179,43 @@ void EditSystem::showPalette()
 	ImGui::Begin("Palette", NULL, window_flags);
 
 	bool openResize = false;
+	bool saveAs = false;
 	if (ImGui::BeginMenuBar())
 	{
 
-		if (ImGui::BeginMenu("Edit"))
+		if (ImGui::BeginMenu("Level"))
 		{
 			openResize = ImGui::MenuItem("Resize");
-				
+			
+			saveAs = ImGui::MenuItem("Save as");
+
+			if (ImGui::MenuItem("Save"))
+			{
+				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelFile());
+			}
+
+			ImGui::Separator();
+
+			
+
 			ImGui::EndMenu();
+		}
+		if (getWorld()->isEditMode())
+		{
+			if (ImGui::Button("Play"))
+			{
+				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelFile());
+				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelFile());
+				getWorld()->setEditMode(false);
+			}
+		}
+		else
+		{
+			if (ImGui::Button("Stop"))
+			{
+				getWorld()->setEditMode(true);
+				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelFile());
+			}
 		}
 
 		ImGui::EndMenuBar();
@@ -198,6 +229,31 @@ void EditSystem::showPalette()
 		width = scene_->getWidth();
 		height = scene_->getHeight();
 		ImGui::OpenPopup("Resize");
+	}
+
+	static char levelFile[128];
+	if (saveAs)
+	{
+		
+		sprintf_s(levelFile, "%s", getWorld()->getLevelFile().c_str());
+		ImGui::OpenPopup("Save as");
+	}
+
+	if (ImGui::BeginPopupModal("Save as"))
+	{
+		ImGui::InputText("File", levelFile, 128);
+
+		if (ImGui::Button("Save"))
+		{
+			getWorld()->getLuaManager().saveLevel(std::string(levelFile));
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
 
 	if (ImGui::BeginPopupModal("Resize"))
@@ -312,11 +368,15 @@ void EditSystem::showProperties()
 				object->setPosition(x, y);
 			}
 			ImGui::Separator();
+			if(ImGui::Button("remove"))
+			{
+				brush_.selectedObject->markToRemove();
+			}
 		}
 	}
 
 	std::vector<std::string> keys;
-
+	bool changed = false;
 	try {
 
 		if (brush_.properties.valid()) {
@@ -348,6 +408,8 @@ void EditSystem::showProperties()
 						precision = 0;
 					if (ImGui::InputFloat(id, &num, 0, 0, precision))
 					{
+						changed = true;
+
 						if(precision == 0)
 							brush_.properties[name] = (int)num;
 						else
@@ -361,6 +423,7 @@ void EditSystem::showProperties()
 					char buff[64]; sprintf_s(buff, "%s", str.c_str());
 					if (ImGui::InputText(id, buff, 64))
 					{
+						changed = true;
 						brush_.properties[name] = buff;
 					}
 				}
@@ -369,6 +432,7 @@ void EditSystem::showProperties()
 					bool boolean = value.as<bool>();
 					if (ImGui::Checkbox(id, &boolean))
 					{
+						changed = true;
 						brush_.properties[name] = boolean;
 					}
 				}
@@ -378,6 +442,20 @@ void EditSystem::showProperties()
 	}
 	catch (sol::error e) {
 		std::cout << "Error showing properties! " << e.what() << std::endl;
+	}
+
+	if (changed && brush_.type == Brush::Select && brush_.selectedObject)
+	{
+		try {
+			sol::function init = brush_.selectedObject->getLuaInstance()["init"];
+			if (init.valid())
+			{
+				init(brush_.selectedObject->getLuaInstance());
+			}
+		}
+		catch (sol::error e) {
+			std::cout << "Error in init! " << e.what() << std::endl;
+		}
 	}
 
 	Vector2i pos = getSelectedTile();

@@ -29,6 +29,8 @@ struct Brush
 
 };
 
+
+
 class EditSystem : public System
 {
 public:
@@ -47,7 +49,7 @@ private:
 	sol::state& lua_;
 
 	Brush brush_;
-
+	
 
 	std::vector<ObjectPrefab> tiles_;
 	std::vector<ObjectPrefab> entities_;

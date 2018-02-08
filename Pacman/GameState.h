@@ -7,7 +7,7 @@
 class GameState : public State
 {
 public:
-	GameState(StateStack& stack, Context context);
+	GameState(StateStack& stack, Context context, bool isEditor);
 
 
 	virtual bool update(sf::Time dt) override;

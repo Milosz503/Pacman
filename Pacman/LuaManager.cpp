@@ -3,9 +3,10 @@
 
 #include "LuaObjectHandle.h"
 #include "LuaGameHandle.h"
+#include "World.h"
 
-
-LuaManager::LuaManager(World* world)
+LuaManager::LuaManager(World* world) :
+	world_(world)
 {
 
 	lua_.open_libraries(sol::lib::base, sol::lib::math, sol::lib::package, sol::lib::table, sol::lib::io, sol::lib::string);
@@ -22,6 +23,14 @@ LuaManager::LuaManager(World* world)
 
 	includeScripts();
 
+	try {
+		sol::table luaGame = lua_["Game"];
+		luaGame["init"]();
+	}
+	catch (sol::error e) {
+		std::cout << "Error init lua game: " << e.what() << std::endl;
+	}
+
 	
 
 }
@@ -29,7 +38,14 @@ LuaManager::LuaManager(World* world)
 
 LuaManager::~LuaManager()
 {
+	
 }
+
+void LuaManager::init()
+{
+	loadLevel(world_->getLevelFile());
+}
+
 
 
 sol::state & LuaManager::getLua()
@@ -57,6 +73,17 @@ void LuaManager::saveLevel(std::string fileName)
 	}
 	catch (sol::error e) {
 		std::cout << "Error saving level " << fileName << " :" << e.what() << std::endl;
+	}
+}
+
+void LuaManager::loadLevel(std::string fileName)
+{
+	try {
+		sol::table luaLevel = lua_["LevelManager"];
+		luaLevel["loadLevel"](fileName);
+	}
+	catch (sol::error e) {
+		std::cout << "Error loading level: " << e.what() << std::endl;
 	}
 }
 
@@ -98,6 +125,7 @@ void LuaManager::initTypes()
 		"removeObject", &LuaGameHandle::removeObject,
 		"getDistance", &LuaGameHandle::getDistance,
 		"removeEntities", &LuaGameHandle::removeEntities,
+		"removeTiles", &LuaGameHandle::removeTiles,
 		"getTime", &LuaGameHandle::getTime,
 		"createEntityHandle", &LuaGameHandle::createEntityHandle,
 		"createTileHandle", &LuaGameHandle::createTileHandle,

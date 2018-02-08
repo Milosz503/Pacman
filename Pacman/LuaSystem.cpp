@@ -10,12 +10,8 @@ LuaSystem::LuaSystem(SystemManager * systemManager, World * world) :
 
 	try {
 
+		
 		sol::table luaGame = lua["Game"];
-
-		sol::protected_function init = luaGame["init"];
-		auto result = init(world->getLevelFile());
-		checkResult(result);
-
 
 		updateLua_ = luaGame["update"];
 		collisionLua_ = luaGame["collision"];

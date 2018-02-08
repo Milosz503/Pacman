@@ -39,18 +39,18 @@ int LuaGameHandle::getLives()
 	return world_->getLives();
 }
 
-LuaObjectHandle & LuaGameHandle::createEntityHandle(sol::table luaInstance, std::string category)
+LuaObjectHandle * LuaGameHandle::createEntityHandle(sol::table luaInstance, std::string category)
 {
 	Entity* e = world_->getScene()->createEntity(luaInstance, category);
 
-	return e->getHandle();
+	return &e->getHandle();
 }
 
-LuaObjectHandle & LuaGameHandle::createTileHandle(sol::table luaInstance, std::string category, int x, int y)
+LuaObjectHandle * LuaGameHandle::createTileHandle(sol::table luaInstance, std::string category, int x, int y)
 {
 	Tile* t = world_->getScene()->createTile(luaInstance, category, x, y);
 
-	return t->getHandle();
+	return &t->getHandle();
 }
 
 LuaObjectHandle*  LuaGameHandle::getTile(int x, int y) const
@@ -97,10 +97,10 @@ void LuaGameHandle::removeTile(int x, int y)
 	}
 }
 
-void LuaGameHandle::removeObject(LuaObjectHandle & objectHandle)
+void LuaGameHandle::removeObject(LuaObjectHandle * objectHandle)
 {
-	objectHandle.getObject()->markToRemove();
-	std::cout << "REMOVED " << objectHandle.getX() << " " << objectHandle.getY() << std::endl;
+	objectHandle->getObject()->markToRemove();
+	std::cout << "REMOVED " << objectHandle->getX() << " " << objectHandle->getY() << std::endl;
 }
 
 int LuaGameHandle::getDistance(LuaObjectHandle * object1, LuaObjectHandle * object2)

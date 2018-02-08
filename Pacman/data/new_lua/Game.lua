@@ -1,6 +1,6 @@
 Game = {frameNumber = 0}
 
-Game.level = {}
+Game.levelLogicFile = ""
 Game.levelLogic = {}
 
 Game.entityFactory = {}
@@ -10,24 +10,13 @@ Game.entities = {}
 Game.tiles = {}
 
 
-function Game.init(levelFileName)
-	
-	level = dofile(levelFileName)
-	Game.level = level or {}
-	
-	if type(level.levelLogic) == "string" then
-		Game.levelLogic = dofile(level.levelLogic) or {}
-	else
-		print("levelLogic ? :"..level.levelLogic)
-	end
+function Game.init()
 	
 	
 	
 	Game.entityFactory = dofile("data/entities.lua") or {}
 	Game.tileFactory = dofile("data/tiles.lua") or {}
 	
-	
-	LevelManager.loadLevel(levelFileName)
 	--LevelManager.saveLevel("data/levels/save2.lua")
 	
 end
@@ -43,7 +32,7 @@ function Game.update(frameNumber)
 		i = i+1
 	end
 	
-	--print("updated "..i.." entities")
+	print("updated "..i.." entities")
 	i = 0
 	for k,v in pairs(Game.tiles) do
 		if v.update ~= nil then
@@ -96,7 +85,9 @@ function Game.initObject(object, properties)
 	end
 	
 	for k, v in pairs(properties) do
-		object.properties[k] = v
+		if object.properties[k] ~= nil then
+			object.properties[k] = v
+		end
 	end
 	
 	
@@ -143,13 +134,16 @@ function Game.createEntity(name, properties)
 		print("Error name is not a string!")
 		return
 	end
-	newEntity = Game.entityFactory[name]
-	newEntity.name = name
+	prefab = Game.entityFactory[name]
+	newEntity = {}
 	
 	if newEntity.new ~= nil then
-		newEntity = newEntity:new()
+		newEntity = prefab:new()
+	else 
+		setmetatable(newEntity, {__index = prefab})
 	end
 	
+	newEntity.name = name
 
 	--set handle
 	handle = world:createEntityHandle(newEntity, newEntity.category)
@@ -167,12 +161,16 @@ function Game.createTile(name, properties, x, y)
 		print("Error name is not a string!")
 		return
 	end
-	newTile = Game.tileFactory[name]
-	newTile.name = name
+	prefab = Game.tileFactory[name]
+	newTile = {}
 	
 	if newTile.new ~= nil then
-		newTile = newTile:new()
+		newTile = prefab:new()
+	else
+		setmetatable(newTile, {__index = prefab})
 	end
+	
+	newTile.name = name
 	
 	--set handle
 	handle = world:createTileHandle(newTile, newTile.category, x or 0, y or 0)
@@ -190,9 +188,10 @@ function Game.onRemove(handle)
 	e = handle.self
 	for k,v in pairs(Game.entities) do
 		if v == e then
+			Game.entities[k].handle:remove()
 			Game.entities[k] = nil
 			print("-")
-			return
+			--return
 		end
 	end
 	

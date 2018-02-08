@@ -58,7 +58,7 @@ void Scene::cleanObjects()
 	{
 		if (entities_[i]->isToRemove())
 		{
-			if (entities_[i]->getCategory() == "player" && entities_[i] == player_)
+			if (entities_[i] == player_)
 				player_ = nullptr;
 
 			world_->getSystems()->sendSystemEvent(new OnRemoveEvent(entities_[i]));

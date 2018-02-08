@@ -17,9 +17,7 @@ function YellowGhost.getProperties()
 		homeX = 0,
 		homeY = 0,
 		color = 4,
-		data = "qwerty",
-		sth = true,
-		someVeryLongProperty = 32.5
+
 	
 	}
 	

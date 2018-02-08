@@ -67,12 +67,55 @@ return {
 
 	
 	
-	Wall = {
+	Wall = Class:new({
 		type = "tile";
 		category = "wall";
 		
 		isPhysical = true;
 		texture = {x = 4, y = 3; color = Colors.blue};
+		
+		init = function(self)
+			x = self.handle.x
+			y = self.handle.y
+			
+			self:updateGFX()
+			
+			handle = world:getTile(x+1, y)
+			
+			if handle ~= nil then
+				if handle.self.updateGFX ~= nil then
+					handle.self:updateGFX()
+					
+				end
+			end
+			
+		end,
+		
+		updateGFX = function(self)
+			x = self.handle.x
+			y = self.handle.y
+			
+			tileL = world:getTile(x-1, y).self
+			tileR = world:getTile(x+1, y).self
+			tileT = world:getTile(x, y-1).self
+			tileB = world:getTile(x, y+1).self
+			
+			
+			if tileL.category == "wall" and tileT.category == "wall" then --LT
+				self.handle:setTexture(2, 9)
+			elseif tileR.category == "wall" and tileT.category == "wall" then --RT
+				self.handle:setTexture(15, 8)
+			elseif tileL.category == "wall" and tileB.category == "wall" then --LB
+				self.handle:setTexture(12, 8)
+			elseif tileR.category == "wall" and tileB.category == "wall" then --RB
+				self.handle:setTexture(9, 8)
+			elseif tileL.category == "wall" and tileR.category == "wall" then --Hor
+				self.handle:setTexture(5, 8)
+			elseif tileT.category == "wall" and tileB.category == "wall" then --Ver
+				self.handle:setTexture(6, 8)
+			end
+			
+		end,
 		
 		collide = function (self)
 			-- print("collide wall ".. self.x .. " " .. self.y .. " " .. self.name .. " " .. self.type)
@@ -81,7 +124,7 @@ return {
 			
 		end
 		
-	},
+	}),
 	
 	Point = Class:new({
 		type = "tile";

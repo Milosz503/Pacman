@@ -37,6 +37,7 @@ entities = {
 		speed = 10;
 		texture = {x = 2, y = 2, color = Colors.yellow};
 		
+
 		
 		collide = function(self, object)
 			

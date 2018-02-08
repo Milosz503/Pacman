@@ -2,9 +2,20 @@ LevelManager = {levelFile = "", tiles = {}, entities = {}}
 
 
 function LevelManager.loadLevel(fileName)
+	world:removeEntities()
+	world:removeTiles()
+
 	LevelManager.levelFile = fileName
 	
 	level = dofile(fileName)
+	
+	if type(level.levelLogic) == "string" then
+		Game.levelLogic = dofile(level.levelLogic) or {}
+		Game.levelLogicFile = level.levelLogic
+	else
+		print("Error loading levelLogic :"..level.levelLogic)
+	end
+	
 	
 	tiles = level.tiles
 	
@@ -75,9 +86,9 @@ function LevelManager.saveLevel(fileName)
 			end
 		end
 	end
-	
+	print("tiles saved")
 	for k,entity in pairs(Game.entities) do
-		
+		print("saving entity "..entity.name)
 		cell = {}
 		
 		cell.name = entity.name
@@ -88,11 +99,11 @@ function LevelManager.saveLevel(fileName)
 		table.insert(entities, cell)
 		
 	end
-	
+	print("entites saved")
 	level = {}
 	level.tiles = tiles
 	level.objects = entities
-	level.levelLogic = Game.level.levelLogic
+	level.levelLogic = Game.levelLogicFile
 	
 	generator = dofile("data/scripts/data_generator.lua")
 	generator.openFile(fileName)

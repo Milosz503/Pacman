@@ -40,11 +40,12 @@ public:
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
 	Scene* getScene();
-	LuaGameHandle* getLuaGameHandle();
 	LuaManager& getLuaManager();
 	SystemManager* getSystems();
 	sol::state& getLua();
 
+	bool isEditMode();
+	void setEditMode(bool isEdit);
 
 	~World();
 
@@ -54,16 +55,18 @@ private:
 
 	int score_;
 	int playerLives_;
+	bool isEditMode_;
+
+	std::string levelFile_;
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
 	SystemManager* systems_;
-	Scene* scene_;
+	Scene scene_;
 	LuaManager luaManager_;
-	LuaGameHandle* luaHandle_;
 
 
-	std::string levelFile_;
+	
 
 	
 
