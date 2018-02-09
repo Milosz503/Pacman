@@ -34,11 +34,12 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 
 	
-
-	systems_.addSystem<Physics>();
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<LuaSystem>();
+	systems_.addSystem<Physics>();
+
+
 	if(isEditor)
 		systems_.addSystem<EditSystem>();
 
@@ -50,13 +51,14 @@ bool GameState::update(sf::Time dt)
 	sf::Clock clock;
 	clock.restart();
 
+	std::cout << "Start update" << std::endl;
 	if (!world_.isEditMode())
 	{
 		systems_.update();
 		
 	}
 	world_.update();
-	
+	std::cout << "End update" << std::endl;
 
 
 	if (world_.getFrameNumber() % 20 == 0)

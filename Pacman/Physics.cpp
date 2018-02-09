@@ -15,10 +15,38 @@ Physics::Physics(SystemManager* systemManager, World* world) :
 
 void Physics::update()
 {
+	std::cout << "Physics update" << std::endl;
+
+	std::vector<Entity*>& entities = scene_->getEntities();
+
+	int frameNumber = getWorld()->getFrameNumber();
+	//update next move
+	for (auto& entity : entities)
+	{
+		int defaultSpeed = entity->getDefaultSpeed();
+
+		if (defaultSpeed != 0 && frameNumber % defaultSpeed == 0)
+		{
+			entity->setNextMove(entity->getSpeed());
+		}
+		else
+		{
+			entity->setNextMove(Vector2i(0, 0));
+		}
+	}
+
+
+
 	checkStaticCollisions(std::list<StaticPair>());
 	checkDynamicCollisions(std::list<DynamicPair>());
 
+	//move
+	for (auto& entity : entities)
+	{
+		Vector2i nextMove = entity->getNextMove();
 
+		getWorld()->getScene()->moveEntity(entity, nextMove);
+	}
 
 }
 

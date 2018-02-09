@@ -15,6 +15,8 @@ EntityController::EntityController(SystemManager* systemManager, World* world) :
 
 void EntityController::update()
 {
+	std::cout << "Entity update" << std::endl;
+
 	std::vector<Entity*> entities = scene_->getEntities();
 
 	for (auto& e : entities)
@@ -36,7 +38,7 @@ void EntityController::update(Entity * entity)
 		
 		
 
-		sf::Vector2i start = entity->getPosition() + entity->getNextMove();
+		sf::Vector2i start = entity->getPosition();// + entity->getNextMove();
 
 		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
 

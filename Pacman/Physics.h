@@ -31,6 +31,7 @@ private:
 
 	Scene* scene_;
 
+	
 	void checkMove(Entity* entity, std::list < StaticPair >& collisions);
 
 	void addPair(std::list < StaticPair >& collisions, Entity* entity, int tileX, int tileY);
