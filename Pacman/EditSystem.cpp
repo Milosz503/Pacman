@@ -83,7 +83,10 @@ void EditSystem::updateTileBrush()
 		{
 
 			try {
-				lua_["Game"]["createTile"](tiles_[brush_.index].name, brush_.properties, pos.x, pos.y);
+				sol::table self = lua_["Game"]["createTile"](tiles_[brush_.index].name, brush_.properties, pos.x, pos.y);
+				//sol::function editInit = self["editInit"];
+				//if (editInit.valid())
+				//	editInit(self);
 			}
 			catch (sol::error e) {
 				std::cout << "Error creating tile! " << e.what() << std::endl;
@@ -122,6 +125,9 @@ void EditSystem::onEvent(SystemEvent * e)
 
 					try {
 						sol::table self = lua_["Game"]["createEntity"](entities_[brush_.index].name, brush_.properties);
+						//sol::function editInit = self["editInit"];
+						//if (editInit.valid())
+						//	editInit(self);
 						LuaObjectHandle& handle = self["handle"];
 						//std::cout << "Pos: " << pos.x << " " << pos.y << std::endl;
 						handle.setPosition(pos.x, pos.y);
@@ -386,11 +392,32 @@ void EditSystem::showProperties()
 				object->setPosition(x, y);
 			}
 			ImGui::Separator();
-			if(ImGui::Button("remove"))
+			if (ImGui::Button("remove"))
 			{
 				brush_.selectedObject->markToRemove();
 			}
 		}
+	}
+
+	if (brush_.type == Brush::Entity || brush_.type == Brush::Tile)
+	{
+		if (ImGui::Button("default"))
+		{
+			try {
+				if (brush_.type == Brush::Entity && entities_[brush_.index].getProperties.valid())
+				{
+					brush_.properties = entities_[brush_.index].getProperties();
+				}
+				else if(tiles_[brush_.index].getProperties.valid())
+				{
+					brush_.properties = tiles_[brush_.index].getProperties();
+				}
+			}
+			catch (sol::error e) {
+				std::cout << "Error restoring properties! " << e.what() << std::endl;
+			}
+		}
+		ImGui::Separator();
 	}
 
 	std::vector<std::string> keys;
@@ -502,7 +529,8 @@ void EditSystem::loadPrefabs()
 			prefab.name = name;
 			if (getProperties)
 			{
-				prefab.properties = getProperties.value();
+				prefab.getProperties = getProperties.value();
+				prefab.properties = prefab.getProperties();
 			}
 
 			tiles_.push_back(prefab);
@@ -519,7 +547,8 @@ void EditSystem::loadPrefabs()
 			prefab.name = name;
 			if (getProperties)
 			{
-				prefab.properties = getProperties.value();
+				prefab.getProperties = getProperties.value();
+				prefab.properties = prefab.getProperties();
 			}
 
 			entities_.push_back(prefab);
@@ -578,7 +607,7 @@ void EditSystem::selectTilePrefab(int index)
 	brush_.index = index;
 	brush_.prefab = &tiles_[index];
 	if (tiles_[index].properties.valid())
-		brush_.properties = tiles_[index].properties();
+		brush_.properties = tiles_[index].properties;
 	else
 		brush_.properties = lua_.create_table();
 }
@@ -589,7 +618,7 @@ void EditSystem::selectEntityPrefab(int index)
 	brush_.index = index;
 	brush_.prefab = &entities_[index];
 	if (entities_[index].properties.valid())
-		brush_.properties = entities_[index].properties();
+		brush_.properties = entities_[index].properties;
 	else
 		brush_.properties = lua_.create_table();
 }

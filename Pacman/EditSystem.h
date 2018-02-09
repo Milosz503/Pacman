@@ -9,7 +9,8 @@ class Scene;
 struct ObjectPrefab
 {
 	std::string name;
-	sol::function properties;
+	sol::function getProperties;
+	sol::table properties;
 
 	inline bool operator<(const ObjectPrefab& a)
 	{

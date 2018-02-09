@@ -116,6 +116,8 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
 {
 	resize();
+
+	start_ = start;
 	//if (start == goal)
 	//	return sf::Vector2i(0, 0);
 

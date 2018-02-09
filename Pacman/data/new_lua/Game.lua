@@ -93,7 +93,7 @@ function Game.initObject(object, properties)
 	
 	
 	
-	--insert to objects
+	--insert
 	if object.type == "tile" then
 		if object.update ~= nil then
 			table.insert(Game.tiles, object)
