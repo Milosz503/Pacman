@@ -40,8 +40,4 @@ private:
 
 
 
-	sf::Vector2i lastPosition_;
-	sf::Vector2i goal_;
-	sf::Vector2i start_;
-
 };

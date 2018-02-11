@@ -28,8 +28,9 @@ void EntityController::update()
 
 void EntityController::update(Entity * entity)
 {
-	if (entity->getCategory() == "ghost" && entity->isGuided())// && entity->isPathEmpty() && entity->isReadyToMove())
+	if (entity->getCategory() == "ghost" && entity->isGuided() && entity->isReadyToMove())
 	{
+		
 		
 
 		sf::Vector2i destination = entity->getDestination();
@@ -37,7 +38,7 @@ void EntityController::update(Entity * entity)
 		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
 		GuideType guideType = entity->getGuideType();
 
-
+		std::cout << "Start: " << start.x << " " << start.y << " last: " << lastPosition.x << " " << lastPosition.y << std::endl;
 
 		finder_.init(start, destination, lastPosition);
 		if (guideType == GuideType::PathToPlayer)
@@ -71,6 +72,13 @@ void EntityController::update(Entity * entity)
 			}
 		}
 
+		if (entity->isReadyToMove() && !entity->isPathEmpty())
+		{
+			auto path = entity->getPath();
+			entity->setSpeed((Direction::X)path.front().x, (Direction::Y)path.front().y);
+			path.pop_front();
+		}
+
 	
 
 	}
@@ -81,21 +89,21 @@ void EntityController::update(Entity * entity)
 void EntityController::draw()
 {
 	
-	ConsoleCharacter character(TextureManager::getTexture(L'*', CharacterColor::Red));
+	//ConsoleCharacter character(TextureManager::getTexture(L'*', CharacterColor::Red));
 
-	character.setPosition(goal_);
-	//getWorld()->getConsole()->draw(character);
+	//character.setPosition(goal_);
+	////getWorld()->getConsole()->draw(character);
 
-	character.setPosition(start_);
-	character.setTexture(TextureManager::getTexture(L's', CharacterColor::Grey));
-	//getWorld()->getConsole()->draw(character);
+	//character.setPosition(start_);
+	//character.setTexture(TextureManager::getTexture(L's', CharacterColor::Grey));
+	////getWorld()->getConsole()->draw(character);
 
 
-	character.setPosition(lastPosition_);
-	character.setTexture(TextureManager::getTexture(L'l', CharacterColor::White));
-	//getWorld()->getConsole()->draw(character);
+	//character.setPosition(lastPosition_);
+	//character.setTexture(TextureManager::getTexture(L'l', CharacterColor::White));
+	////getWorld()->getConsole()->draw(character);
 
-	
+	//
 }
 
 EntityController::~EntityController()

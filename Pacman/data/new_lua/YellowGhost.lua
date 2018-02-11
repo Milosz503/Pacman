@@ -37,7 +37,7 @@ function YellowGhost:init()
 	self.homeX = properties.homeX
 	self.homeY = properties.homeY
 	
-	self.focusTime = properties.focusTime or 8
+	self.focusTime = properties.focusTime or 60
 	self.focusTime = self.focusTime*60
 	
 	print("Color "..properties.color)
@@ -88,12 +88,12 @@ function YellowGhost:update()
 	elseif self.state == "player" then
 		
 		if distance > (self.visionRange + 2) then
-			handle:guideToTile(self.homeX, self.homeY)
+			handle:guideToPath(self.homeX, self.homeY)
 			self.state = "base"
 		end
 		
 		if (world:getTime() - self.start) > self.focusTime then
-			handle:guideToTile(self.homeX, self.homeY)
+			handle:guideToPath(self.homeX, self.homeY)
 			self.state = "new"
 		end
 		

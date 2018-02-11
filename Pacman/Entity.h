@@ -39,6 +39,7 @@ public:
 	void setPath(std::list<sf::Vector2i>& path, sf::Vector2i pathDestination);
 	bool isPathEmpty();
 	int getPathSize();
+	std::list<sf::Vector2i>& getPath();
 	sf::Vector2i getPathDestination();
 	
 	bool isGuided();

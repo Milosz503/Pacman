@@ -26,36 +26,36 @@ void Entity::update()
 {
 	
 
-	unsigned long long frameNumber = getWorld()->getFrameNumber();
-	//getWorld()->getScene()->moveEntity(this, nextMove_);
+	//unsigned long long frameNumber = getWorld()->getFrameNumber();
+	////getWorld()->getScene()->moveEntity(this, nextMove_);
 
 
-	//nextMove_.x = 0;
-	//nextMove_.y = 0;
+	////nextMove_.x = 0;
+	////nextMove_.y = 0;
 
-	if (defaultSpeed_ != 0 && frameNumber % defaultSpeed_ == 0)
-	{
-		GameObject::update();
-		if (!path_.empty())
-		{
-			speed_ = path_.front();
-			path_.pop_front();
+	//if (defaultSpeed_ != 0 && frameNumber % defaultSpeed_ == 0)
+	//{
+	//	GameObject::update();
+	//	if (!path_.empty())
+	//	{
+	//		speed_ = path_.front();
+	//		path_.pop_front();
 
-		}
+	//	}
 
-		//if (speed_.x != 0)
-		//{
-		//	nextMove_.x += speed_.x;
-		//}
-		//if (speed_.y != 0)
-		//{
-		//	nextMove_.y += speed_.y;
-		//}
+	//	//if (speed_.x != 0)
+	//	//{
+	//	//	nextMove_.x += speed_.x;
+	//	//}
+	//	//if (speed_.y != 0)
+	//	//{
+	//	//	nextMove_.y += speed_.y;
+	//	//}
 
-		
+	//	
 
-		
-	}
+	//	
+	//}
 
 	
 
@@ -72,9 +72,14 @@ void Entity::draw()
 	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
 
 	sf::Vector2i pos = getPosition()+getNextMove();
-
+	bool first = true;
 	for (auto& node : path_)
 	{
+		if (first)
+		{
+			first = false;
+			continue;
+		}
 		pos += node;
 		pos = getWorld()->getScene()->normalize(pos);
 		character.setPosition(pos);
@@ -109,7 +114,7 @@ void Entity::setSpeed(Direction::X x, Direction::Y y)
 
 sf::Vector2i Entity::getSpeed()
 {
-	if(getName() == "Player")
+	if(getName() != "Player")
 		std::cout << "speed: " << speed_.x << " " << speed_.y << std::endl;
 	return speed_;
 }
@@ -129,6 +134,11 @@ bool Entity::isPathEmpty()
 int Entity::getPathSize()
 {
 	return path_.size();
+}
+
+std::list<sf::Vector2i>& Entity::getPath()
+{
+	return path_;
 }
 
 sf::Vector2i Entity::getPathDestination()
@@ -235,6 +245,7 @@ sf::Vector2i Entity::getNextPosition()
 
 bool Entity::isReadyToMove()
 {
+	if (defaultSpeed_ == 0) return false;
 	return getWorld()->getFrameNumber() % defaultSpeed_ == 0;
 }
 
