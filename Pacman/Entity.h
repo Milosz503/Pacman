@@ -15,6 +15,8 @@ namespace Direction
 	enum Y { Up = -1, ZeroY = 0, Down = 1 };
 }
 
+enum class GuideType {None, PathToPlayer, PathToTile, DirectionToTile};
+
 
 
 class Entity : public GameObject
@@ -29,32 +31,31 @@ public:
 
 	virtual void draw() override;
 
-
+	//physics
 	void setSpeed(Direction::X x, Direction::Y y);
 	sf::Vector2i getSpeed();
 
+	//EntityController
 	void setPath(std::list<sf::Vector2i>& path, sf::Vector2i pathDestination);
 	bool isPathEmpty();
 	int getPathSize();
 	sf::Vector2i getPathDestination();
 	
-
 	bool isGuided();
-	void guideTo(GameObject* destination, sol::protected_function customWages);
-	void guideTo(sf::Vector2i destination);
-	void guideTo(GameObject* destination);
 	void stopGuide();
-	GameObject* getDestination();
 
-	bool isGoalMoving();
-	sf::Vector2i getGoal();
-	std::string getGuideType();
+	sf::Vector2i getDestination();
+	GuideType getGuideType();
 
-	void setGuideType(std::string type);
+	int getPlayerFrontCost();
+	int getPlayerBackCost();
+
+	void guideToPlayer(int frontCost, int backCost);
+	void guideToPath(int x, int y);
+	void guideToDirection(int x, int y);
 
 
 
-	std::vector<NodeCost> getWages();
 
 	void setDefaultSpeed(int speed);
 	int getDefaultSpeed();
@@ -75,19 +76,18 @@ public:
 
 private:
 
-	sf::Vector2i nextMove_;
+	//physics
 	sf::Vector2i speed_;
-
+	sf::Vector2i nextMove_;
 	unsigned defaultSpeed_;
 
-
+	//EntityController
 	std::list<sf::Vector2i> path_;
 	sf::Vector2i pathDestination_;
-
-	sol::protected_function* customWages_;
-	std::string guideType_;
-	bool isGuided_;
-	GameObject* destination_;
-	sf::Vector2i destinationPos_;
+	GuideType guideType_;
+	sf::Vector2i destination_;
+	int playerFrontCost_;
+	int playerBackCost_;
+	int priority_;
 };
 

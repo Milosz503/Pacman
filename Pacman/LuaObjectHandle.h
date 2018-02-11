@@ -32,6 +32,7 @@ public:
 	
 
 	void setPosition(int x, int y);
+	sf::Vector2i getPosition();
 
 	void setColor(int color);
 	void setTexture(int x, int y);
@@ -45,14 +46,10 @@ public:
 
 
 
-	void guideTo(LuaObjectHandle* destination);
-	void guideTo_costs(LuaObjectHandle& destination, sol::protected_function customWages);
-	void guideToPos(int x, int y);
+	void guideToPlayer(int frontCost, int backCost);
+	void guideToPath(int x, int y);
+	void guideToDirection(int x, int y);
 
-	void setGuideType(std::string type);
-
-	LuaObjectHandle* getDestination();
-	bool isGuided();
 
 
 	void remove();

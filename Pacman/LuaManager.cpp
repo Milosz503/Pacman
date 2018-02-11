@@ -99,13 +99,13 @@ void LuaManager::initTypes()
 		"setTexture", &LuaObjectHandle::setTexture,
 		"setSpeed", &LuaObjectHandle::setSpeed,
 		"setPosition", &LuaObjectHandle::setPosition,
+		"getPosition", &LuaObjectHandle::getPosition,
 		"setPhysical", & LuaObjectHandle::setPhysical,
 		"getSpeed", &LuaObjectHandle::getSpeed,
 		"defaultSpeed", sol::property(&LuaObjectHandle::getDefaultSpeed, &LuaObjectHandle::setDefaultSpeed),
-		"guideTo", sol::overload(&LuaObjectHandle::guideTo, &LuaObjectHandle::guideToPos),
-		"getDestination", &LuaObjectHandle::getDestination,
-		"isGuided", &LuaObjectHandle::isGuided,
-		"setGuideType", &LuaObjectHandle::setGuideType,
+		"guideToPlayer", &LuaObjectHandle::guideToPlayer,
+		"guideToPath", &LuaObjectHandle::guideToPath,
+		"guideToDirection", &LuaObjectHandle::guideToDirection,
 		"remove", &LuaObjectHandle::remove,
 		"self", sol::property(&LuaObjectHandle::getLuaInstance)
 

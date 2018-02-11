@@ -61,6 +61,11 @@ void LuaObjectHandle::setPosition(int x, int y)
 	}
 }
 
+sf::Vector2i LuaObjectHandle::getPosition()
+{
+	return object_->getPosition();
+}
+
 void LuaObjectHandle::setColor(int color)
 {
 
@@ -157,31 +162,14 @@ void LuaObjectHandle::setPhysical(bool isPhysical)
 }
 
 
-void LuaObjectHandle::guideTo(LuaObjectHandle * destination)
-{
-	if (!destination) {
-		std::cout << "Lua handle: Can not guide object is null" << std::endl;
-		return;
-	}
-	if (object_->getType() == GameObject::Entity)
-	{
-		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(destination->getObject());
-
-	}
-	else
-	{
-		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
-	}
-}
-void LuaObjectHandle::guideTo_costs(LuaObjectHandle & destination, sol::protected_function customWages)
+void LuaObjectHandle::guideToPlayer(int frontCost, int backCost)
 {
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(destination.getObject(), customWages);
+		entity->guideToPlayer(frontCost, backCost);
 
 	}
 	else
@@ -190,13 +178,13 @@ void LuaObjectHandle::guideTo_costs(LuaObjectHandle & destination, sol::protecte
 	}
 }
 
-void LuaObjectHandle::guideToPos(int x, int y)
+void LuaObjectHandle::guideToPath(int x, int y)
 {
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->guideTo(sf::Vector2i(x, y));
+		entity->guideToPath(x, y);
 
 	}
 	else
@@ -205,13 +193,13 @@ void LuaObjectHandle::guideToPos(int x, int y)
 	}
 }
 
-void LuaObjectHandle::setGuideType(std::string type)
+void LuaObjectHandle::guideToDirection(int x, int y)
 {
 	if (object_->getType() == GameObject::Entity)
 	{
 		Entity* entity = static_cast<Entity*>(object_);
 
-		entity->setGuideType(type);
+		entity->guideToDirection(x, y);
 
 	}
 	else
@@ -220,26 +208,10 @@ void LuaObjectHandle::setGuideType(std::string type)
 	}
 }
 
-LuaObjectHandle* LuaObjectHandle::getDestination()
-{
-	if (object_->getType() == GameObject::Entity)
-	{
-		Entity* entity = static_cast<Entity*>(object_);
 
-		return &entity->getDestination()->getHandle();
 
-	}
-	else
-	{
-		std::cout << "Lua handle: Can not guide 'tile', it have not destination" << std::endl;
-	}
-	return nullptr;
-}
 
-bool LuaObjectHandle::isGuided()
-{
-	return false;
-}
+
 
 void LuaObjectHandle::remove()
 {

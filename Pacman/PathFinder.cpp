@@ -17,6 +17,32 @@ PathFinder::~PathFinder()
 {
 }
 
+void PathFinder::init(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
+{
+	start_ = start;
+	goal_ = goal;
+	lastPosition_ = lastPosition;
+
+	playerFrontCost_ = 1;
+	playerBackCost_ = 1;
+
+	resize();
+	clearData();
+
+}
+
+void PathFinder::setPlayerFront(sf::Vector2i pos, int cost)
+{
+	playerFront_ = pos;
+	playerFrontCost_ = cost;
+}
+
+void PathFinder::setPlayerBack(sf::Vector2i pos, int cost)
+{
+	playerBack_ = pos;
+	playerBackCost_ = cost;
+}
+
 void PathFinder::resize()
 {
 	if (width_ == scene_->getWidth() && height_ == scene_->getHeight())
@@ -42,19 +68,23 @@ void PathFinder::resize()
 	}
 }
 
-std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
+void PathFinder::clearData()
 {
-	resize();
+	for (int x = 0; x < cost_.size(); ++x)
+	{
+		for (int y = 0; y < cost_[x].size(); ++y)
+		{
+			cost_[x][y] = std::numeric_limits<int>::max();
+		}
+	}
 
-	clearData();
+	path_.clear();
 
-	start = scene_->normalize(start);
-	goal = scene_->normalize(goal);
+	nodes_ = NodeQueue();
+}
 
-	start_ = start;
-	goal_ = goal;
-
-
+std::vector<sf::Vector2i>& PathFinder::findPath()
+{
 	std::array<sf::Vector2i, 4> neighbors;
 
 	neighbors[0] = sf::Vector2i(1, 0);
@@ -63,12 +93,10 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 	neighbors[3] = sf::Vector2i(0, -1);
 
 
-
-
 	
-	cost_[start.x][start.y] = 0;
+	cost_[start_.x][start_.y] = 0;
 
-	nodes_.push(NodePair(0, start));
+	nodes_.push(NodePair(0, start_));
 
 	bool found = false;
 	int iterations = 0;
@@ -79,7 +107,8 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 
 		sf::Vector2i pos = node.second;
 
-		if (pos == goal) {
+		if (pos == goal_) {
+			std::cout << "Found" << iterations << std::endl;
 			found = true;
 			break;
 		}
@@ -87,9 +116,20 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 		for (int i = 0; i < neighbors.size(); ++i)
 		{
 
-			if (pos + neighbors[i] != lastPosition)
+			if (pos + neighbors[i] != lastPosition_)
 			{
-				addNeighbor(pos, pos + neighbors[i], 1);
+				int cost = 1;
+
+				if (pos + neighbors[i] == playerFront_)
+				{
+					cost = playerFrontCost_;
+				}
+				else if (pos + neighbors[i] == playerBack_)
+				{
+					cost = playerBackCost_;
+				}
+
+				addNeighbor(pos, pos + neighbors[i], cost);
 				
 			}
 			else
@@ -102,9 +142,11 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 		++iterations;
 	}
 
+	std::cout << "Path iterations: " << iterations << std::endl;
+
 	if (found)
 	{
-		readPath(start, goal);
+		readPath();
 
 		std::reverse(path_.begin(), path_.end());
 	}
@@ -113,15 +155,10 @@ std::vector<sf::Vector2i>& PathFinder::findPath(sf::Vector2i start, sf::Vector2i
 	return path_;
 }
 
-sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition)
+sf::Vector2i PathFinder::findDirection()
 {
-	resize();
 
-	start_ = start;
-	//if (start == goal)
-	//	return sf::Vector2i(0, 0);
-
-	sf::Vector2i distance((goal.x - start.x), (goal.y - start.y));
+	sf::Vector2i distance((goal_.x - start_.x), (goal_.y - start_.y));
 
 	std::array<sf::Vector2i, 4> directions;
 
@@ -136,7 +173,7 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 	if (distance.y < 0) direction.y = -1;
 	else /*if (distance.y > 0)*/ direction.y = 1;
 
-	sf::Vector2i nextMove = start;
+	sf::Vector2i nextMove = start_;
 
 	if (x > y)
 	{
@@ -155,9 +192,9 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 
 	for (int i = 0; i < directions.size(); ++i)
 	{
-		if (start + directions[i] != lastPosition && !isPhysical(start + directions[i]))
+		if (start_ + directions[i] != lastPosition_ && !isPhysical(start_ + directions[i]))
 		{
-			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal.y << "start:" << start.y << std::endl;
+			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal_.y << "start:" << start_.y << std::endl;
 
 			return directions[i];
 		}
@@ -165,73 +202,6 @@ sf::Vector2i PathFinder::findDirectionTo(sf::Vector2i start, sf::Vector2i goal, 
 	}
 
 	return directions[0];
-
-	if (x > y)
-	{
-		nextMove.x += direction.x;
-		if (!isPhysical(nextMove))
-		{
-			return sf::Vector2i(direction.x, 0);
-		}
-		else
-		{
-			nextMove = start;
-			nextMove.y += direction.y;
-
-			if (!isPhysical(nextMove))
-			{
-				return sf::Vector2i(0, direction.y);
-			}
-			else
-			{
-				nextMove = start;
-				nextMove.y -= direction.y;
-
-				if (!isPhysical(nextMove))
-				{
-					return sf::Vector2i(0, -direction.y);
-				}
-				else
-				{
-					return sf::Vector2i(-direction.x, 0);
-				}
-			}
-		}
-	}
-	else
-	{
-		nextMove.y += direction.y;
-		if (!isPhysical(nextMove))
-		{
-			return sf::Vector2i(0, direction.y);
-		}
-		else
-		{
-			nextMove = start;
-			nextMove.x += direction.x;
-
-			if (!isPhysical(nextMove))
-			{
-				return sf::Vector2i(direction.x, 0);
-			}
-			else
-			{
-				nextMove = start;
-				nextMove.y -= direction.x;
-
-				if (!isPhysical(nextMove))
-				{
-					return sf::Vector2i(-direction.x, 0);
-				}
-				else
-				{
-					return sf::Vector2i(0, -direction.y);
-				}
-			}
-		}
-	}
-
-	return sf::Vector2i(0, 0);
 }
 
 
@@ -250,13 +220,13 @@ sf::Vector2i PathFinder::getDirection(sf::Vector2i pos, sf::Vector2i next)
 	return dir;
 }
 
-void PathFinder::readPath(sf::Vector2i start, sf::Vector2i goal)
+void PathFinder::readPath()
 {
-	resize();
-	sf::Vector2i pos = goal;
+
+	sf::Vector2i pos = goal_;
 	sf::Vector2i next;
 
-	while (pos != start)
+	while (pos != start_)
 	{
 		next = cameFrom_[pos.x][pos.y];
 		path_.push_back(getDirection(pos, next));
@@ -267,20 +237,7 @@ void PathFinder::readPath(sf::Vector2i start, sf::Vector2i goal)
 	}
 }
 
-void PathFinder::clearData()
-{
-	for (int x = 0; x < cost_.size(); ++x)
-	{
-		for (int y = 0; y < cost_[x].size(); ++y)
-		{
-			cost_[x][y] = std::numeric_limits<int>::max();
-		}
-	}
 
-	path_.clear();
-
-	nodes_ = NodeQueue();
-}
 
 void PathFinder::addNeighbor(sf::Vector2i currentPos, sf::Vector2i neighbor, int neighborCost)
 {
@@ -290,7 +247,7 @@ void PathFinder::addNeighbor(sf::Vector2i currentPos, sf::Vector2i neighbor, int
 
 	if (/*!scene_->isTilePhysical(neighbor.x, neighbor.y)*/ !isPhysical(neighbor) && cost_[neighbor.x][neighbor.y] > newCost)
 	{
-		float priority = newCost + heuristic(neighbor, goal_, start_);
+		float priority = newCost + heuristic(neighbor);
 
 		nodes_.push(NodePair(priority, neighbor));
 		cameFrom_[neighbor.x][neighbor.y] = currentPos;
@@ -316,15 +273,15 @@ float length(sf::Vector2i vector)
 	return std::sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
-float PathFinder::heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start)
+float PathFinder::heuristic(sf::Vector2i current)
 {
-	float dx1 = current.x - goal.x;
-	float dy1 = current.y - goal.y;
-	float dx2 = start.x - goal.x;
-	float dy2 = start.y - goal.y;
+	float dx1 = current.x - goal_.x;
+	float dy1 = current.y - goal_.y;
+	float dx2 = start_.x - goal_.x;
+	float dy2 = start_.y - goal_.y;
 	float cross = abs(dx1*dy2 - dx2*dy1);
 
-	sf::Vector2i distance = getDistance(current, goal);
+	sf::Vector2i distance = getDistance(current, goal_);
 
 	//return 0;
 	return cross*0.0000001 + (1.00001)*(distance.x + distance.y);//(abs(current.x - goal.x) + abs(current.y - goal.y));

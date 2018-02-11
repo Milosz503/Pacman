@@ -48,9 +48,8 @@ function YellowGhost:init()
 	self.visionRange = 15
 	self.state = "new"
 	
-	handle:guideTo(self.homeX, self.homeY)
-	handle:setGuideType("a_star")
-	
+	handle:guideToPath(self.homeX, self.homeY)
+
 	
 end
 
@@ -70,7 +69,7 @@ function YellowGhost:update()
 	if self.state == "new" then
 		
 		if handle.x == self.homeX and handle.y == self.homeY then
-			handle:setGuideType("direction")
+			handle:guideToDirection(self.homeX, self.homeY)
 			self.state = "base"
 			
 			print("end new")
@@ -81,7 +80,7 @@ function YellowGhost:update()
 	elseif self.state == "base" then
 		
 		if distance <= self.visionRange then
-			handle:guideTo(player)
+			handle:guideToPlayer(1, 1)
 			self.start = world:getTime()
 			self.state = "player"
 		end
@@ -89,17 +88,27 @@ function YellowGhost:update()
 	elseif self.state == "player" then
 		
 		if distance > (self.visionRange + 2) then
-			handle:guideTo(self.homeX, self.homeY)
+			handle:guideToTile(self.homeX, self.homeY)
 			self.state = "base"
 		end
 		
 		if (world:getTime() - self.start) > self.focusTime then
-			handle:guideTo(self.homeX, self.homeY)
+			handle:guideToTile(self.homeX, self.homeY)
 			self.state = "new"
 		end
 		
 	end
 	
+	pos = player:getPosition()
+	speed = player:getSpeed()
+	
+	pos.x = pos.x + speed.x
+	pos.y = pos.y + speed.y
+	
+	print(speed.x.." "..speed.y.." "..pos.x.." "..pos.y)
+	
+	-- handle:guideTo(pos.x, pos.y)
+	-- handle:setGuideType("a_star")
 end
 
 

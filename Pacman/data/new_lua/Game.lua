@@ -32,7 +32,7 @@ function Game.update(frameNumber)
 		i = i+1
 	end
 	
-	print("updated "..i.." entities")
+	--print("updated "..i.." entities")
 	i = 0
 	for k,v in pairs(Game.tiles) do
 		if v.update ~= nil then

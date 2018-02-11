@@ -10,9 +10,9 @@ Entity::Entity(World* world, sol::table& data) :
 	nextMove_(0, 0),
 	speed_(0, 0),
 	defaultSpeed_(20),
-	customWages_(nullptr),
-	isGuided_(false),
-	destination_(nullptr)
+	guideType_(GuideType::None),
+	playerFrontCost_(1),
+	playerBackCost_(1)
 	
 {
 	int speed = data["speed"].get_or(20);
@@ -41,11 +41,6 @@ void Entity::update()
 			speed_ = path_.front();
 			path_.pop_front();
 
-		}
-		else if(isGuided_)
-		{
-			//speed_.x = 0;
-			//speed_.y = 0;
 		}
 
 		if (speed_.x != 0)
@@ -87,7 +82,7 @@ void Entity::draw()
 		getWorld()->getConsole()->draw(character);
 	}
 
-	character.setPosition(destinationPos_);
+	character.setPosition(destination_);
 	getWorld()->getConsole()->draw(character);
 }
 
@@ -114,12 +109,14 @@ void Entity::setSpeed(Direction::X x, Direction::Y y)
 
 sf::Vector2i Entity::getSpeed()
 {
+	if(getName() == "Player")
+		std::cout << "speed: " << speed_.x << " " << speed_.y << std::endl;
 	return speed_;
 }
 
 void Entity::setPath(std::list<sf::Vector2i>& path, sf::Vector2i pathDestination)
 {
-	std::cout << "Set path" << std::endl;
+	//std::cout << "Set path" << std::endl;
 	path_ = path;
 	pathDestination_ = pathDestination;
 }
@@ -141,124 +138,70 @@ sf::Vector2i Entity::getPathDestination()
 
 bool Entity::isGuided()
 {
-	return isGuided_;
+	return guideType_ != GuideType::None;
 }
 
-void Entity::guideTo(GameObject * destination, sol::protected_function customWages)
-{
-	if (destination_ != destination)
-	{
-		isGuided_ = true;
-		destination_ = destination;
-		path_.clear();
-		if (customWages.valid())
-			customWages_ = new sol::protected_function(customWages);
-		else
-			customWages_ = nullptr;
-	}
-	
-}
-
-void Entity::guideTo(sf::Vector2i destination)
-{
-	isGuided_ = true;
-	if (destinationPos_ != destination || destination_ != nullptr)
-	{
-		destination_ = nullptr;
-		destinationPos_ = destination;
-
-		path_.clear();
-		customWages_ = nullptr;
-	}
-}
-
-void Entity::guideTo(GameObject * destination)
-{
-	if (destination_ != destination)
-	{
-		isGuided_ = true;
-		destination_ = destination;
-		path_.clear();
-		customWages_ = nullptr;
-	}
-}
 
 void Entity::stopGuide()
 {
-	isGuided_ = false;
-	destination_ = nullptr;
+	guideType_ = GuideType::None;
 	path_.clear();
-	customWages_ = nullptr;
 }
 
-GameObject * Entity::getDestination()
+
+sf::Vector2i Entity::getDestination()
 {
+	if (guideType_ == GuideType::PathToPlayer)
+	{
+		Entity* player = getWorld()->getScene()->getPlayer();
+		if (player)
+			return player->getPosition();
+	}
 	return destination_;
 }
 
-bool Entity::isGoalMoving()
-{
-	if (destination_ == nullptr)
-		return false;
-
-	if (destination_->getType() == GameObject::Tile)
-		return false;
-
-	return true;
-}
-
-sf::Vector2i Entity::getGoal()
-{
-	//std::cout << "return: ";
-	if (destination_ != nullptr)
-	{
-		if (destination_->getType() == GameObject::Entity)
-		{
-			Entity* e = static_cast<Entity*>(destination_);
-			return e->getPosition() + e->getNextMove();
-		}
-		else
-		{
-			return destination_->getPosition();
-		}
-		
-	}
-	else
-	{
-		//std::cout  << destinationPos_.x << " " << destinationPos_.y << std::endl;
-		return destinationPos_;
-	}
-	return destinationPos_;
-}
-
-std::string Entity::getGuideType()
+GuideType Entity::getGuideType()
 {
 	return guideType_;
 }
 
-void Entity::setGuideType(std::string type)
+int Entity::getPlayerFrontCost()
 {
-	guideType_ = type;
+	return playerFrontCost_;
 }
 
-std::vector<NodeCost> Entity::getWages()
+int Entity::getPlayerBackCost()
 {
-	std::vector<NodeCost> nodes;
-
-	if (customWages_ != nullptr)
-	{
-		auto result = (*customWages_)(nodes);
-		if (!result.valid())
-		{
-			sol::error e = result;
-			std::cout << "Error function custom costs: " << e.what() << std::endl;
-		}
-	}
-		
-
-	return nodes;
+	return playerBackCost_;
 }
 
+void Entity::guideToPlayer(int frontCost, int backCost)
+{
+	guideType_ = GuideType::PathToPlayer;
+	playerFrontCost_ = frontCost;
+	playerBackCost_ = backCost;
+
+	path_.clear();
+
+}
+
+void Entity::guideToPath(int x, int y)
+{
+	guideType_ = GuideType::PathToTile;
+	destination_.x = x;
+	destination_.y = y;
+
+	path_.clear();
+}
+
+void Entity::guideToDirection(int x, int y)
+{
+	guideType_ = GuideType::DirectionToTile;
+	destination_.x = x;
+	destination_.y = y;
+
+	path_.clear();
+}
 
 
 void Entity::setDefaultSpeed(int speed)

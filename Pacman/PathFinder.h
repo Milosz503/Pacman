@@ -35,10 +35,12 @@ public:
 	PathFinder(Scene* scene);
 	~PathFinder();
 
-	void resize();
-
-	std::vector<sf::Vector2i>& findPath(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
-	sf::Vector2i findDirectionTo(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
+	void init(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
+	void setPlayerFront(sf::Vector2i pos, int cost);
+	void setPlayerBack(sf::Vector2i pos, int cost);
+	
+	std::vector<sf::Vector2i>& findPath();
+	sf::Vector2i findDirection();
 
 private:
 	Scene* scene_;
@@ -50,18 +52,27 @@ private:
 	std::vector<sf::Vector2i> path_;
 	NodeQueue nodes_;
 
+	sf::Vector2i playerBack_;
+	int playerBackCost_;
+
+	sf::Vector2i playerFront_;
+	int playerFrontCost_;
 
 	sf::Vector2i goal_;
 	sf::Vector2i start_;
+	sf::Vector2i lastPosition_;
+
+	void resize();
+	void clearData();
 
 	sf::Vector2i getDirection(sf::Vector2i pos, sf::Vector2i next);
-	void readPath(sf::Vector2i start, sf::Vector2i goal);
-	void clearData();
+	void readPath();
+	
 
 	void addNeighbor(sf::Vector2i currentPos, sf::Vector2i neighbor, int neighborCost);
 
 	sf::Vector2i getDistance(sf::Vector2i& start, sf::Vector2i& goal);
-	float heuristic(sf::Vector2i current, sf::Vector2i goal, sf::Vector2i start);
+	float heuristic(sf::Vector2i current);
 
 	bool isPhysical(sf::Vector2i pos);
 };
