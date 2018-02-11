@@ -27,11 +27,11 @@ void Entity::update()
 	
 
 	unsigned long long frameNumber = getWorld()->getFrameNumber();
-	getWorld()->getScene()->moveEntity(this, nextMove_);
+	//getWorld()->getScene()->moveEntity(this, nextMove_);
 
 
-	nextMove_.x = 0;
-	nextMove_.y = 0;
+	//nextMove_.x = 0;
+	//nextMove_.y = 0;
 
 	if (defaultSpeed_ != 0 && frameNumber % defaultSpeed_ == 0)
 	{
@@ -43,14 +43,14 @@ void Entity::update()
 
 		}
 
-		if (speed_.x != 0)
-		{
-			nextMove_.x += speed_.x;
-		}
-		if (speed_.y != 0)
-		{
-			nextMove_.y += speed_.y;
-		}
+		//if (speed_.x != 0)
+		//{
+		//	nextMove_.x += speed_.x;
+		//}
+		//if (speed_.y != 0)
+		//{
+		//	nextMove_.y += speed_.y;
+		//}
 
 		
 
@@ -66,7 +66,7 @@ void Entity::update()
 
 void Entity::draw()
 {
-	return;
+
 
 	ConsoleCharacter character;
 	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));

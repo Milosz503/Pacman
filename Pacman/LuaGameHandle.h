@@ -29,7 +29,7 @@ public:
 	void removeObject(LuaObjectHandle* objectHandle);
 
 	int getDistance(LuaObjectHandle* object1, LuaObjectHandle* object2);
-
+	
 
 	void removeEntities();
 	void removeTiles();
