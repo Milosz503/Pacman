@@ -1,7 +1,7 @@
 #include "Tile.h"
 
 #include "World.h"
-
+#include "Scene.h"
 
 
 
@@ -45,6 +45,13 @@ bool Tile::isPhysical()
 void Tile::setPhysical(bool physical)
 {
 	isPhysical_ = physical;
+}
+
+void Tile::markToRemove()
+{
+	GameObject::markToRemove();
+
+	getWorld()->getScene()->removeTile(this);
 }
 
 

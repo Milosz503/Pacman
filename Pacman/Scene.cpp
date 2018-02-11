@@ -24,27 +24,27 @@ Scene::~Scene()
 
 void Scene::cleanObjects()
 {
-	for (int x = 0; x < tiles_.size(); ++x)
-	{
-		for (int y = 0; y < tiles_[x].size(); ++y)
-		{
-			if (tiles_[x][y] != nullptr)
-			{
-				if (tiles_[x][y]->isToRemove())
-				{
-					tilesToRemove_.push_back(tiles_[x][y]);
-					tiles_[x][y] = nullptr;
-				}
-				else
-				{
-					tiles_[x][y]->update();
+	//for (int x = 0; x < tiles_.size(); ++x)
+	//{
+	//	for (int y = 0; y < tiles_[x].size(); ++y)
+	//	{
+	//		if (tiles_[x][y] != nullptr)
+	//		{
+	//			if (tiles_[x][y]->isToRemove())
+	//			{
+	//				tilesToRemove_.push_back(tiles_[x][y]);
+	//				tiles_[x][y] = nullptr;
+	//			}
+	//			else
+	//			{
+	//				tiles_[x][y]->update();
 
-				}
+	//			}
 
-			}
+	//		}
 
-		}
-	}
+	//	}
+	//}
 
 	for (int i = 0; i < tilesToRemove_.size(); ++i)
 	{
@@ -176,9 +176,7 @@ void Scene::setSize(int width, int height)
 		for (int y = 0; y < height_; ++y)
 		{
 			if (tiles_[x][y]) {
-				tiles_[x][y]->markToRemove();
-				tilesToRemove_.push_back(tiles_[x][y]);
-				tiles_[x][y] = nullptr;
+				removeTile(tiles_[x][y]);
 				std::cout << "Removed tile: (" << x << ", " << y << ")" << std::endl;
 			}
 		}
@@ -188,9 +186,7 @@ void Scene::setSize(int width, int height)
 		for (int y = height; y < height_; ++y)
 		{
 			if (tiles_[x][y]) {
-				tiles_[x][y]->markToRemove();
-				tilesToRemove_.push_back(tiles_[x][y]);
-				tiles_[x][y] = nullptr;
+				removeTile(tiles_[x][y]);
 				std::cout << "Removed tile: (" << x << ", " << y << ")" << std::endl;
 			}
 		}
@@ -287,8 +283,17 @@ void Scene::removeTiles()
 		for (auto& tile : column)
 		{
 			if(tile != nullptr)
-				tile->markToRemove();
+				removeTile(tile);
 		}
+	}
+}
+
+void Scene::removeTile(Tile * tile)
+{
+	if (tile != nullptr && tile == tiles_[tile->getX()][tile->getY()])
+	{
+		tilesToRemove_.push_back(tile);
+		tiles_[tile->getX()][tile->getY()] = nullptr;
 	}
 }
 

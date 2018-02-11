@@ -43,6 +43,7 @@ public:
 
 	void removeEntities();
 	void removeTiles();
+	void removeTile(Tile* tile);
 
 	void update();
 	void draw();

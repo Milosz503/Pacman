@@ -22,7 +22,7 @@ public:
 
 
 
-
+	virtual void markToRemove() override;
 
 
 
