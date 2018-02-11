@@ -82,7 +82,8 @@ void TextureManager::generateTileset()
 	colors[CharacterColor::Grey] = sf::Color(128, 128, 128);
 	colors[CharacterColor::DarkGrey] = sf::Color(64, 64, 64);
 	colors[CharacterColor::LightGrey] = sf::Color(192, 192, 192);
-
+	colors[CharacterColor::Pink] = sf::Color(255, 128, 255);
+	colors[CharacterColor::Cyan] = sf::Color(0, 255, 255);
 
 	sf::RenderTexture tileset;
 	tileset.create(144, 144 * CharacterColor::Count);

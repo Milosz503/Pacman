@@ -53,7 +53,9 @@ void LuaObjectHandle::setPosition(int x, int y)
 {
 	if(object_->getType() == GameObject::Entity)
 	{
-		object_->setPosition(x, y);
+		sf::Vector2i pos(x, y);
+		pos = object_->getWorld()->getScene()->normalize(pos);
+		object_->setPosition(pos.x, pos.y);
 	}
 	else
 	{
@@ -205,6 +207,31 @@ void LuaObjectHandle::guideToDirection(int x, int y)
 	else
 	{
 		std::cout << "Lua handle: Can not guide 'tile'" << std::endl;
+	}
+}
+
+void LuaObjectHandle::setGuidePriority(int priority)
+{
+	
+	if (object_->getType() == GameObject::Entity)
+	{
+		static_cast<Entity*>(object_)->priority = priority;
+	}
+	else
+	{
+		std::cout << "Error can not guide priority to 'tile'!" << std::endl;
+	}
+}
+
+void LuaObjectHandle::setCanMoveBack(bool canMoveBack)
+{
+	if (object_->getType() == GameObject::Entity)
+	{
+		static_cast<Entity*>(object_)->canMoveBack = canMoveBack;
+	}
+	else
+	{
+		std::cout << "Error can not set move back to 'tile'!" << std::endl;
 	}
 }
 

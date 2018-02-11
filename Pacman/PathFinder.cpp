@@ -25,6 +25,7 @@ void PathFinder::init(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPo
 
 	playerFrontCost_ = 1;
 	playerBackCost_ = 1;
+	canMoveBack_ = false;
 
 	resize();
 	clearData();
@@ -43,8 +44,14 @@ void PathFinder::setPlayerBack(sf::Vector2i pos, int cost)
 	playerBackCost_ = cost;
 }
 
+void PathFinder::setCanMoveBack(bool canMoveBack)
+{
+	canMoveBack_ = canMoveBack;
+}
+
 void PathFinder::resize()
 {
+
 	if (width_ == scene_->getWidth() && height_ == scene_->getHeight())
 		return;
 
@@ -116,7 +123,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath()
 		for (int i = 0; i < neighbors.size(); ++i)
 		{
 
-			if (pos + neighbors[i] != lastPosition_)
+			if (pos + neighbors[i] != lastPosition_ || canMoveBack_)
 			{
 				int cost = 1;
 
@@ -192,7 +199,7 @@ sf::Vector2i PathFinder::findDirection()
 
 	for (int i = 0; i < directions.size(); ++i)
 	{
-		if (start_ + directions[i] != lastPosition_ && !isPhysical(start_ + directions[i]))
+		if ((start_ + directions[i] != lastPosition_ || canMoveBack_) && !isPhysical(start_ + directions[i]))
 		{
 			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal_.y << "start:" << start_.y << std::endl;
 

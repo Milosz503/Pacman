@@ -12,12 +12,15 @@ Entity::Entity(World* world, sol::table& data) :
 	defaultSpeed_(20),
 	guideType_(GuideType::None),
 	playerFrontCost_(1),
-	playerBackCost_(1)
+	playerBackCost_(1),
+	priority(1),
+	framesSinceLastUpdate(0),
+	canMoveBack(false)
 	
 {
-	int speed = data["speed"].get_or(20);
+	//int speed = data["speed"].get_or(20);
 
-	setDefaultSpeed(speed);
+	//setDefaultSpeed(speed);
 
 
 }
@@ -68,27 +71,27 @@ void Entity::draw()
 {
 
 
-	ConsoleCharacter character;
-	character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
+	//ConsoleCharacter character;
+	//character.setTexture(TextureManager::getTexture(L'.', CharacterColor::Red));
 
-	sf::Vector2i pos = getPosition()+getNextMove();
-	bool first = true;
-	for (auto& node : path_)
-	{
-		if (first)
-		{
-			first = false;
-			continue;
-		}
-		pos += node;
-		pos = getWorld()->getScene()->normalize(pos);
-		character.setPosition(pos);
+	//sf::Vector2i pos = getPosition()+getNextMove();
+	//bool first = true;
+	//for (auto& node : path_)
+	//{
+	//	if (first)
+	//	{
+	//		first = false;
+	//		continue;
+	//	}
+	//	pos += node;
+	//	pos = getWorld()->getScene()->normalize(pos);
+	//	character.setPosition(pos);
 
-		getWorld()->getConsole()->draw(character);
-	}
+	//	getWorld()->getConsole()->draw(character);
+	//}
 
-	character.setPosition(destination_);
-	getWorld()->getConsole()->draw(character);
+	//character.setPosition(destination_);
+	//getWorld()->getConsole()->draw(character);
 }
 
 
@@ -191,6 +194,7 @@ void Entity::guideToPlayer(int frontCost, int backCost)
 	playerFrontCost_ = frontCost;
 	playerBackCost_ = backCost;
 
+	framesSinceLastUpdate = 1000000;
 	path_.clear();
 
 }
@@ -201,6 +205,7 @@ void Entity::guideToPath(int x, int y)
 	destination_.x = x;
 	destination_.y = y;
 
+	framesSinceLastUpdate = 1000000;
 	path_.clear();
 }
 
@@ -210,6 +215,7 @@ void Entity::guideToDirection(int x, int y)
 	destination_.x = x;
 	destination_.y = y;
 
+	framesSinceLastUpdate = 1000000;
 	path_.clear();
 }
 
@@ -238,6 +244,7 @@ sf::Vector2i Entity::getNextPosition()
 {
 	return getPosition() + nextMove_;
 }
+
 
 
 

@@ -117,6 +117,8 @@ function Game.initObject(object, properties)
 		
 		object.handle:setPhysical(object.isPhysical or false)
 		
+	elseif object.type == "entity" then
+		object.handle.defaultSpeed = object.speed or 2
 	end
 	
 	

@@ -16,7 +16,7 @@ struct TextureCharacter
 
 namespace CharacterColor
 {
-	enum Color : unsigned int { White = 0, Red, Green, Blue, Yellow, Grey, DarkGrey, LightGrey, Count };
+	enum Color : unsigned int { White = 0, Red, Green, Blue, Yellow, Grey, DarkGrey, LightGrey, Pink, Cyan, Count };
 }
 
 

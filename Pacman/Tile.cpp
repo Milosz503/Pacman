@@ -11,7 +11,8 @@
 
 Tile::Tile(World* world, sol::table& data) :
 	GameObject(world, GameObject::Tile, data),
-	isPhysical_(false)
+	isPhysical_(false),
+	isAddedToRemove_(false)
 {
 	
 	//bool isPhysical = data["isPhysical"].get_or(false);
@@ -50,8 +51,15 @@ void Tile::setPhysical(bool physical)
 void Tile::markToRemove()
 {
 	GameObject::markToRemove();
+	if (!isAddedToRemove_)
+	{
+		getWorld()->getScene()->removeTile(this);
+	}
+}
 
-	getWorld()->getScene()->removeTile(this);
+void Tile::addedToRemove()
+{
+	isAddedToRemove_ = true;
 }
 
 

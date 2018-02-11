@@ -49,6 +49,8 @@ public:
 	void guideToPlayer(int frontCost, int backCost);
 	void guideToPath(int x, int y);
 	void guideToDirection(int x, int y);
+	void setGuidePriority(int priority);
+	void setCanMoveBack(bool canMoveBack);
 
 
 

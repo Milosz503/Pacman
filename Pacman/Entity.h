@@ -69,7 +69,6 @@ public:
 
 
 
-
 	bool isReadyToMove();
 
 
@@ -89,6 +88,10 @@ private:
 	sf::Vector2i destination_;
 	int playerFrontCost_;
 	int playerBackCost_;
-	int priority_;
+
+public:
+	int priority;
+	int framesSinceLastUpdate;
+	bool canMoveBack;
 };
 

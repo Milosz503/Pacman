@@ -38,6 +38,7 @@ public:
 	void init(sf::Vector2i start, sf::Vector2i goal, sf::Vector2i lastPosition);
 	void setPlayerFront(sf::Vector2i pos, int cost);
 	void setPlayerBack(sf::Vector2i pos, int cost);
+	void setCanMoveBack(bool canMoveBack);
 	
 	std::vector<sf::Vector2i>& findPath();
 	sf::Vector2i findDirection();
@@ -57,6 +58,8 @@ private:
 
 	sf::Vector2i playerFront_;
 	int playerFrontCost_;
+
+	bool canMoveBack_;
 
 	sf::Vector2i goal_;
 	sf::Vector2i start_;

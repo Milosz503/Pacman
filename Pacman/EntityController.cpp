@@ -30,7 +30,8 @@ void EntityController::update(Entity * entity)
 {
 	if (entity->getCategory() == "ghost" && entity->isGuided() && entity->isReadyToMove())
 	{
-		
+		entity->framesSinceLastUpdate++;
+	
 		
 
 		sf::Vector2i destination = entity->getDestination();
@@ -40,7 +41,9 @@ void EntityController::update(Entity * entity)
 
 		std::cout << "Start: " << start.x << " " << start.y << " last: " << lastPosition.x << " " << lastPosition.y << std::endl;
 
+		//init finder
 		finder_.init(start, destination, lastPosition);
+		finder_.setCanMoveBack(entity->canMoveBack);
 		if (guideType == GuideType::PathToPlayer)
 		{
 			Entity* player = scene_->getPlayer();
@@ -54,7 +57,8 @@ void EntityController::update(Entity * entity)
 
 		std::cout << "destination: " << destination.x << " " << destination.y << std::endl;
 
-		if (guideType == GuideType::DirectionToTile)
+		//guide to
+		if (guideType == GuideType::DirectionToTile) //direction
 		{
 			//std::cout << "dir: " << std::endl;
 			sf::Vector2i dir = finder_.findDirection();
@@ -62,8 +66,11 @@ void EntityController::update(Entity * entity)
 
 			
 		}
-		else
+		else if(entity->framesSinceLastUpdate >= entity->priority || entity->isPathEmpty()) //path
 		{
+
+			entity->framesSinceLastUpdate = 0;
+
 			//std::cout << "a_star: " << std::endl;
 			std::vector<sf::Vector2i>& path = finder_.findPath();
 			if (path.size() > 0)
@@ -72,9 +79,10 @@ void EntityController::update(Entity * entity)
 			}
 		}
 
+		//move entity with path
 		if (entity->isReadyToMove() && !entity->isPathEmpty())
 		{
-			auto path = entity->getPath();
+			auto& path = entity->getPath();
 			entity->setSpeed((Direction::X)path.front().x, (Direction::Y)path.front().y);
 			path.pop_front();
 		}

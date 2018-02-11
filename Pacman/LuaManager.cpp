@@ -106,6 +106,8 @@ void LuaManager::initTypes()
 		"guideToPlayer", &LuaObjectHandle::guideToPlayer,
 		"guideToPath", &LuaObjectHandle::guideToPath,
 		"guideToDirection", &LuaObjectHandle::guideToDirection,
+		"guidePriority", sol::property(&LuaObjectHandle::setGuidePriority),
+		"canMoveBack", sol::property(&LuaObjectHandle::setCanMoveBack),
 		"remove", &LuaObjectHandle::remove,
 		"self", sol::property(&LuaObjectHandle::getLuaInstance)
 

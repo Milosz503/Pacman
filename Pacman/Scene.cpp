@@ -223,15 +223,13 @@ Tile * Scene::createTile(sol::table luaInstance, std::string category, int x, in
 	if (x < 0 || x >= width_ || y < 0 || y >= height_)
 	{
 		std::cout << "Warning: cannot add tile on position (" << x << ", " << y << ")" << std::endl;
-		tile->markToRemove();
 		tilesToRemove_.push_back(tile);
 		return tile;
 	}
 
 	if (tiles_[x][y] != nullptr)
 	{
-		tiles_[x][y]->markToRemove();
-		tilesToRemove_.push_back(tiles_[x][y]);
+		removeTile(tiles_[x][y]);
 	}
 	tiles_[x][y] = tile;
 
@@ -292,6 +290,8 @@ void Scene::removeTile(Tile * tile)
 {
 	if (tile != nullptr && tile == tiles_[tile->getX()][tile->getY()])
 	{
+		tile->addedToRemove();
+		tile->markToRemove();
 		tilesToRemove_.push_back(tile);
 		tiles_[tile->getX()][tile->getY()] = nullptr;
 	}

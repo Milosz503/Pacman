@@ -23,10 +23,11 @@ public:
 
 
 	virtual void markToRemove() override;
-
+	void addedToRemove();
 
 
 private:
 	bool isPhysical_;
+	bool isAddedToRemove_;
 };
 
