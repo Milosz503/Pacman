@@ -1,5 +1,8 @@
 #pragma once
 #include "State.h"
+#include "Container.h"
+#include "Button.h"
+
 class MenuState :
 	public State
 {
@@ -12,5 +15,8 @@ public:
 	virtual void draw() override;
 
 	~MenuState();
+
+private:
+	GUI::Container menu_;
 };
 

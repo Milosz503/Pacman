@@ -26,11 +26,10 @@ function PinkGhost:init()
 	
 	handle = self.handle
 	
-	
-	
+
 	
 	handle:guideToPlayer(1, 100)
-	handle.guidePriority = 100
+	handle.guidePriority = 1
 
 	
 end

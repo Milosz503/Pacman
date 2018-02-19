@@ -6,6 +6,14 @@
 MenuState::MenuState(StateStack & stack, Context context) :
 	State(stack, context)
 {
+
+	menu_.addItem((new GUI::Button(L"Play", CharacterColor::Cyan)));
+	menu_.addItem((new GUI::Button(L"Editor", CharacterColor::Cyan)));
+	menu_.addItem((new GUI::Button(L"Settings", CharacterColor::Cyan)));
+	menu_.addItem((new GUI::Button(L"Exit", CharacterColor::Cyan)));
+
+	menu_.setPosition(2, 5);
+
 }
 
 bool MenuState::update(sf::Time dt)
@@ -15,6 +23,8 @@ bool MenuState::update(sf::Time dt)
 
 bool MenuState::handleEvent(sf::Event event)
 {
+	menu_.handleEvent(event);
+
 	if (event.type == Event::KeyPressed)
 	{
 		if (event.key.code == Keyboard::Escape)
@@ -83,6 +93,8 @@ void MenuState::draw()
 	getContext().console->draw(optionSettings);
 	getContext().console->draw(optionEditor);
 	getContext().console->draw(optionExit);
+
+	menu_.draw(getContext().console);
 }
 
 MenuState::~MenuState()

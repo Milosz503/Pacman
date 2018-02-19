@@ -64,6 +64,12 @@
     <Filter Include="Source Files\Game\Managers">
       <UniqueIdentifier>{fae76d03-f9cc-4e4e-9223-6eeb181237e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{af783403-ae66-4658-9511-583e42af1980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{29b8ec5d-8f9d-4a98-a1d9-05466403bfb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -165,6 +171,15 @@
     <ClInclude Include="LuaSystem.h">
       <Filter>Header Files\Game\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -265,6 +280,15 @@
     </ClCompile>
     <ClCompile Include="LuaSystem.cpp">
       <Filter>Source Files\Game\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Container.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
