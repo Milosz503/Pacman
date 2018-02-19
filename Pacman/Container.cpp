@@ -1,12 +1,13 @@
 #include "Container.h"
-
+#include <iostream>
 
 namespace GUI
 {
 
 
 
-Container::Container()
+Container::Container() :
+	spacing_(0)
 {
 
 }
@@ -25,6 +26,12 @@ void Container::addItem(Item * item)
 		item->setFocus(false);
 	focusedItem_ = 0;
 
+	onPositionChange();
+}
+
+void Container::setSpacing(int spacing)
+{
+	spacing_ = spacing;
 	onPositionChange();
 }
 
@@ -57,15 +64,23 @@ void Container::onEvent(sf::Event event)
 	}
 }
 
+
+
 void Container::onPositionChange()
 {
 	int lastY = getY();
+	int middleX = getX() + getSize().x / 2;
 
 	for (auto& item : items_)
 	{
-		item->setPosition(getX(), lastY);
-		lastY++;
+		item->setPosition(middleX - item->getSize().x/2, lastY);
+		lastY += spacing_+1;
 	}
+}
+
+void Container::onSizeChange()
+{
+	onPositionChange();
 }
 
 void Container::focusUp()

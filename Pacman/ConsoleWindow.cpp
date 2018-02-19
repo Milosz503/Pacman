@@ -139,8 +139,12 @@ void ConsoleWindow::draw(ConsoleText & consoleText)
 
 	if (y >= 0 && y < height_)
 	{
-		for (int i = 0; i < text.length() && i + x < width_; ++i)
+		for (int i = 0; i < text.length() && i + x < (int)width_; ++i)
 		{
+			
+			if (x + i < 0)
+				continue;
+
 			TextureCharacter& texture = textureManager_->getTexture(text[i], consoleText.getColor());
 
 			textures_[y][i+x] = texture.rect;

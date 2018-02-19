@@ -3,21 +3,41 @@
 namespace GUI
 {
 
-Button::Button(std::wstring name, CharacterColor::Color color) :
-	text_(name, color)
+Button::Button(std::wstring name, CharacterColor::Color color, std::function<void()> callback) :
+	text_("  " + name, color),
+	name_(name),
+	callback_(callback)
 {
-
+	setSize(4 + name.length(), 1);
 }
 
 void Button::draw(ConsoleWindow * console)
 {
 	if (isFocused())
-		text_.setColor(CharacterColor::Red);
+	{
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+			text_.setText(" -" + name_ + "- ");
+		else
+			text_.setText("- " + name_ + " -");
+	}
 	else
-		text_.setColor(CharacterColor::Cyan);
+		text_.setText("  " + name_);
 
 	text_.setPosition(getPosition());
 	console->draw(text_);
+}
+
+void Button::onEvent(sf::Event event)
+{
+	if (isFocused())
+	{
+		if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Return)
+		{
+			if (callback_ != nullptr)
+				callback_();
+		}
+	}
+
 }
 
 }
