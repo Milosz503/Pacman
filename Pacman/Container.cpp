@@ -20,11 +20,13 @@ Container::~Container()
 void Container::addItem(Item * item)
 {
 	items_.push_back(item);
-	if (items_.size() == 1)
+	if (items_.size() == 1 || !items_[focusedItem_]->isFocusable())
+	{
 		item->setFocus(true);
+		focusedItem_ = items_.size() - 1;
+	}	
 	else
 		item->setFocus(false);
-	focusedItem_ = 0;
 
 	onPositionChange();
 }
@@ -85,21 +87,35 @@ void Container::onSizeChange()
 
 void Container::focusUp()
 {
-	if (focusedItem_ > 0)
+	int newFocus = focusedItem_;
+	while (newFocus > 0)
 	{
-		items_[focusedItem_]->setFocus(false);
-		focusedItem_--;
-		items_[focusedItem_]->setFocus(true);
+		newFocus--;
+		if (items_[newFocus]->isFocusable())
+		{
+			items_[focusedItem_]->setFocus(false);
+			focusedItem_ = newFocus;
+			items_[focusedItem_]->setFocus(true);
+			break;
+		}
 	}
+
 }
 
 void Container::focusDown()
 {
-	if (focusedItem_ < items_.size()-1)
+	int newFocus = focusedItem_;
+
+	while (newFocus < items_.size()-1)
 	{
-		items_[focusedItem_]->setFocus(false);
-		focusedItem_++;
-		items_[focusedItem_]->setFocus(true);
+		newFocus++;
+		if (items_[newFocus]->isFocusable())
+		{
+			items_[focusedItem_]->setFocus(false);
+			focusedItem_ = newFocus;
+			items_[focusedItem_]->setFocus(true);
+			break;
+		}
 	}
 }
 

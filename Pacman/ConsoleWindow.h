@@ -27,6 +27,7 @@ public:
 	void clear(sf::Color color = sf::Color::Black);
 	void draw(ConsoleCharacter& character);
 	void draw(ConsoleText& consoleText);
+	void draw(ConsoleObject& consoleObject);
 	void show();
 	void display();
 

@@ -10,7 +10,7 @@ namespace GUI
 class Item
 {
 public:
-	Item();
+	Item(bool isFocusable = true);
 	~Item();
 
 	void setPosition(int x, int y);
@@ -23,6 +23,7 @@ public:
 
 	void setFocus(bool isFocused);
 	bool isFocused();
+	bool isFocusable();
 
 	void handleEvent(sf::Event event);
 

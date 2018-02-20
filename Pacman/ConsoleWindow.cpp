@@ -127,7 +127,7 @@ void ConsoleWindow::draw(ConsoleCharacter & character)
 		background_[y][x] = character.getTexture().backgroundColor;
 	}
 
-	character.draw();
+	character.draw(*this);
 }
 
 void ConsoleWindow::draw(ConsoleText & consoleText)
@@ -152,8 +152,13 @@ void ConsoleWindow::draw(ConsoleText & consoleText)
 		}
 	}
 
-	consoleText.draw();
+	consoleText.draw(*this);
 
+}
+
+void ConsoleWindow::draw(ConsoleObject & consoleObject)
+{
+	consoleObject.draw(*this);
 }
 
 void ConsoleWindow::show()

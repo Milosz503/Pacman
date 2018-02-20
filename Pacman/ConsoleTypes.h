@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+class ConsoleWindow;
 
 class ConsoleObject
 {
@@ -22,7 +23,7 @@ public:
 	int getX() const;
 	int getY() const;
 
-	virtual void draw();
+	virtual void draw(ConsoleWindow& console);
 
 private:
 	

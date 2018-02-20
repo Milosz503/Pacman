@@ -180,6 +180,12 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleRectangle.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -289,6 +295,12 @@
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleRectangle.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

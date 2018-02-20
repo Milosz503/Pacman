@@ -1,22 +1,20 @@
 #include "MenuState.h"
-
-
+#include "Text.h"
+#include "ConsoleRectangle.h"
 
 
 MenuState::MenuState(StateStack & stack, Context context) :
-	State(stack, context)
+	State(stack, context),
+	console_(context.console)
 {
 
-	menu_.addItem((new GUI::Button(L"Play", CharacterColor::White, 
-		[&](){
-		requestStackPop();
-		requestStackPush(States::LevelChoiceGame); }
-		)));
-	menu_.addItem((new GUI::Button(L"Editor", CharacterColor::White)));
-	menu_.addItem((new GUI::Button(L"Settings", CharacterColor::White)));
-	menu_.addItem((new GUI::Button(L"Exit", CharacterColor::White)));
 
-	menu_.setPosition(5, 5);
+	menu_.addItem(new GUI::Button(L"Play", CharacterColor::White, std::bind(&MenuState::callbackPlay, this)));
+	menu_.addItem(new GUI::Button(L"Editor", CharacterColor::White, std::bind(&MenuState::callbackEditor, this)));
+	menu_.addItem(new GUI::Button(L"Settings", CharacterColor::White, std::bind(&MenuState::callbackSettings, this)));
+	menu_.addItem(new GUI::Button(L"Exit", CharacterColor::White, std::bind(&MenuState::callbackExit, this)));
+
+	menu_.setPosition(console_->getWidth()/2 - 6, 13);
 	menu_.setSize(12, 10);
 	menu_.setSpacing(1);
 
@@ -37,42 +35,6 @@ bool MenuState::handleEvent(sf::Event event)
 		{
 			requestStackPop();
 		}
-		if (event.key.code == Keyboard::Return)
-		{
-			/*requestStackPop();
-			requestStackPush(States::LevelChoiceGame);*/
-		}
-
-		switch (event.key.code)
-		{
-		case Keyboard::Num1:
-			requestStackPop();
-			requestStackPush(States::LevelChoiceGame);
-			break;
-
-		case Keyboard::Num2:
-		{
-			unsigned scale = getContext().console->getFontSize() / 8;
-
-			if (scale < 4)
-				scale++;
-			else
-				scale = 1;
-
-			getContext().console->setFontSize(scale * 8);
-
-			break;
-		}
-
-		case Keyboard::Num3:
-			requestStackPop();
-			requestStackPush(States::LevelChoiceEditor);
-			break;
-		
-		case Keyboard::Num4:
-			requestStackPop();
-			break;
-		}
 	}
 
 	return true;
@@ -80,29 +42,52 @@ bool MenuState::handleEvent(sf::Event event)
 
 void MenuState::draw()
 {
-	ConsoleText info(L"Wybierz opcje:", CharacterColor::Green);
 
-	ConsoleText optionPlay(L"1. Play", CharacterColor::White);
-	ConsoleText optionSettings(L"2. Settings", CharacterColor::White);
-	ConsoleText optionEditor(L"3. Editor", CharacterColor::White);
-	ConsoleText optionExit(L"4. Exit", CharacterColor::White);
+	int centerX = console_->getWidth() / 2;
 
-	info.setPosition(0, 1);
+	menu_.draw(console_);
+	TextureCharacter texture = getContext().textureManager->getTexture(L'-', CharacterColor::White);
 
-	optionPlay.setPosition(2, 3);
-	optionSettings.setPosition(2, 4);
-	optionEditor.setPosition(2, 5);
-	optionExit.setPosition(2, 6);
+	ConsoleRectangle rect(centerX - 5, 7, 10, 1, texture);
+	//console_->draw(rect);
 
-	getContext().console->draw(info);
-	//getContext().console->draw(optionPlay);
-	//getContext().console->draw(optionSettings);
-	//getContext().console->draw(optionEditor);
-	//getContext().console->draw(optionExit);
+	rect = ConsoleRectangle(centerX - 5, 9, 10, 1, texture);
+	console_->draw(rect);
 
-	menu_.draw(getContext().console);
+	ConsoleText title(L"PACMAN", CharacterColor::Yellow);
+	title.setPosition(centerX - 3, 8);
+	console_->draw(title);
 }
 
 MenuState::~MenuState()
 {
+}
+
+void MenuState::callbackPlay()
+{
+	requestStackPop();
+	requestStackPush(States::LevelChoiceGame);
+}
+
+void MenuState::callbackEditor()
+{
+	requestStackPop();
+	requestStackPush(States::LevelChoiceEditor);
+}
+
+void MenuState::callbackSettings()
+{
+	unsigned scale = getContext().console->getFontSize() / 8;
+
+	if (scale < 4)
+		scale++;
+	else
+		scale = 1;
+
+	getContext().console->setFontSize(scale * 8);
+}
+
+void MenuState::callbackExit()
+{
+	requestStackPop();
 }

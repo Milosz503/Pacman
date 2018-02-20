@@ -67,7 +67,7 @@ void Entity::update()
 
 }
 
-void Entity::draw()
+void Entity::draw(ConsoleWindow& console)
 {
 
 

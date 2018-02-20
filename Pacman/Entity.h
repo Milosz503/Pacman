@@ -29,7 +29,7 @@ public:
 
 	virtual void update();// override;
 
-	virtual void draw() override;
+	virtual void draw(ConsoleWindow& console) override;
 
 	//physics
 	void setSpeed(Direction::X x, Direction::Y y);

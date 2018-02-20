@@ -3,7 +3,8 @@
 namespace GUI
 {
 
-Item::Item()
+Item::Item(bool isFocusable) :
+	isFocusable_(isFocusable)
 {
 }
 
@@ -62,6 +63,11 @@ void Item::setFocus(bool isFocused)
 bool Item::isFocused()
 {
 	return isFocused_;
+}
+
+bool Item::isFocusable()
+{
+	return isFocusable_;
 }
 
 void Item::handleEvent(sf::Event event)

@@ -3,6 +3,7 @@
 #include "State.h"
 #include "World.h"
 #include "SystemManager.h"
+#include "ConsoleRectangle.h"
 
 class GameState : public State
 {
@@ -21,7 +22,6 @@ private:
 	World world_;
 	SystemManager systems_;
 	ConsoleWindow* console_;
-
 
 	ConsoleText scoreText_;
 	ConsoleText livesText_;

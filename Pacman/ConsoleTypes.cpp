@@ -44,9 +44,10 @@ int ConsoleObject::getY() const
 	return position_.y;
 }
 
-void ConsoleObject::draw()
+void ConsoleObject::draw(ConsoleWindow & console)
 {
 }
+
 
 
 // ----------------------------

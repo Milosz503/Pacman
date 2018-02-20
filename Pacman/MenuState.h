@@ -17,6 +17,12 @@ public:
 	~MenuState();
 
 private:
+	ConsoleWindow * console_;
 	GUI::Container menu_;
+
+	void callbackPlay();
+	void callbackEditor();
+	void callbackSettings();
+	void callbackExit();
 };
 

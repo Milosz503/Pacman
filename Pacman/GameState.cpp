@@ -21,6 +21,7 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 	console_ = getContext().console;
 
+
 	scoreText_.setPosition(2, 2);
 	livesText_.setPosition(12, 2);
 
@@ -135,6 +136,25 @@ void GameState::draw()
 
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + 
 		L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
+
+	TextureCharacter texture = getContext().textureManager->getTexture(L'.', CharacterColor::DarkGrey);
+	texture.rect.x = 11;
+	texture.rect.y = 10 + 16*6;
+	//texture.backgroundColor = sf::Color(128, 128, 128);
+	//ConsoleRectangle rect(2, 3, world_.getBounds().width, 1, texture);
+	ConsoleRectangle rect(1, 3, world_.getBounds().width+2, world_.getBounds().height+2, texture);
+	console_->draw(rect);
+	rect.setPosition(2, 3 + world_.getBounds().height+1);
+	//console_->draw(rect);
+
+	//texture = getContext().textureManager->getTexture(L'.', CharacterColor::DarkGrey);
+	rect.setPosition(1, 4);
+	rect.setSize(1, world_.getBounds().height);
+	rect.setTexture(texture);
+	//console_->draw(rect);
+
+	rect.setPosition(world_.getBounds().width + 2, 4);
+	//console_->draw(rect);
 
 }
 
