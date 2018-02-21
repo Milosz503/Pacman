@@ -4,7 +4,8 @@ namespace GUI
 {
 
 Item::Item(bool isFocusable) :
-	isFocusable_(isFocusable)
+	isFocusable_(isFocusable),
+	alignment_(Alignment::Center)
 {
 }
 
@@ -68,6 +69,16 @@ bool Item::isFocused()
 bool Item::isFocusable()
 {
 	return isFocusable_;
+}
+
+void Item::setAlignment(Alignment alignment)
+{
+	alignment_ = alignment;
+}
+
+Alignment Item::getAlignment()
+{
+	return alignment_;
 }
 
 void Item::handleEvent(sf::Event event)

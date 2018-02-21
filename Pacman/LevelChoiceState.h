@@ -1,6 +1,9 @@
 #pragma once
 
 #include "State.h"
+#include "Container.h"
+#include "Button.h"
+#include "Text.h"
 
 class LevelChoiceState : public State
 {
@@ -16,5 +19,11 @@ private:
 	const std::string PATH_TO_LEVEL = "data/levels/";
 
 	States::ID nextState_;
+
+	GUI::Container menu_;
+	int pageNumber_;
+
+	void changePage();
+
 };
 

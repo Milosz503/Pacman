@@ -6,6 +6,7 @@
 
 namespace GUI
 {
+	enum class Alignment {Left, Center, Right};
 
 class Item
 {
@@ -25,6 +26,9 @@ public:
 	bool isFocused();
 	bool isFocusable();
 
+	void setAlignment(Alignment alignment);
+	Alignment getAlignment();
+
 	void handleEvent(sf::Event event);
 
 	virtual void draw(ConsoleWindow* console) = 0;
@@ -39,6 +43,7 @@ protected:
 private:
 	bool isFocusable_;
 	bool isFocused_;
+	Alignment alignment_;
 
 	sf::Vector2i position_;
 	sf::Vector2i size_;

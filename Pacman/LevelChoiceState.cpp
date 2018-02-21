@@ -4,8 +4,15 @@
 
 LevelChoiceState::LevelChoiceState(StateStack& stack, Context context, States::ID nextState) :
 	State(stack, context),
-	nextState_(nextState)
+	nextState_(nextState),
+	pageNumber_(0)
 {
+	ConsoleWindow* console = getContext().console;
+	menu_.setSpacing(1);
+	menu_.setPosition(console->getWidth() / 2-15, 4);
+	menu_.setSize(30, 20);
+
+	changePage();
 
 }
 
@@ -22,6 +29,8 @@ bool LevelChoiceState::update(sf::Time dt)
 
 bool LevelChoiceState::handleEvent(sf::Event event)
 {
+	menu_.handleEvent(event);
+
 	if (event.type == Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
 
@@ -41,6 +50,22 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 			requestStackPush(nextState_);
 		}
 
+		if (event.key.code == Keyboard::Left)
+		{
+			if (pageNumber_ > 0)
+			{
+				pageNumber_--;
+				changePage();
+			}
+		}
+		else if (event.key.code == Keyboard::Right)
+		{
+			if (pageNumber_ < 3)
+			{
+				pageNumber_++;
+				changePage();
+			}
+		}
 
 
 	}
@@ -50,7 +75,7 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 
 void LevelChoiceState::draw()
 {
-	ConsoleText text;
+	/*ConsoleText text;
 
 	for (int i = 1; i <= 9; ++i)
 	{
@@ -58,6 +83,52 @@ void LevelChoiceState::draw()
 		text.setPosition(3, i * 2 + 3);
 
 		getContext().console->draw(text);
+	}*/
+
+
+	menu_.draw(getContext().console);
+
+}
+
+void LevelChoiceState::changePage()
+{
+	menu_.removeItems();
+
+	menu_.addItem(new GUI::Text(L"Choose a level:", CharacterColor::Yellow));
+	menu_.addItem(new GUI::Text(L""));
+	menu_.addItem(new GUI::Text(L""));
+
+	for (int i = pageNumber_*5+1; i <= pageNumber_ * 5 + 5; ++i)
+	{
+		GUI::Button* button = new GUI::Button(L"Save " + std::to_wstring(i), CharacterColor::White,
+			[=]() {
+
+			*(getContext().levelFile) = PATH_TO_LEVEL + "save" + std::to_string(i) + ".lua";
+
+			requestStackClear();
+			requestStackPush(nextState_);
+		}
+		);
+
+		button->setAlignment(GUI::Alignment::Center);
+
+		menu_.addItem(button);
+
+		GUI::Text* text = new GUI::Text(L"High score: 0", CharacterColor::Grey);
+		text->setAlignment(GUI::Alignment::Center);
+		menu_.addItem(text);
+
+		menu_.addItem(new GUI::Text(L""));
+
+
 	}
 
+	menu_.addItem(new GUI::Text(L""));
+
+	if(pageNumber_ == 0)
+		menu_.addItem(new GUI::Text(L"   " + std::to_wstring(pageNumber_+1) + L" >>", CharacterColor::Cyan));
+	else if(pageNumber_ == 3)
+		menu_.addItem(new GUI::Text(L"<< " + std::to_wstring(pageNumber_ + 1) + L"   ", CharacterColor::Cyan));
+	else
+		menu_.addItem(new GUI::Text(L"<< " + std::to_wstring(pageNumber_ + 1) + L" >>", CharacterColor::Cyan));
 }

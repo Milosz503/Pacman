@@ -14,7 +14,7 @@ Container::Container() :
 
 Container::~Container()
 {
-
+	items_.clear();
 }
 
 void Container::addItem(Item * item)
@@ -35,6 +35,17 @@ void Container::setSpacing(int spacing)
 {
 	spacing_ = spacing;
 	onPositionChange();
+}
+
+void Container::removeItems()
+{
+	focusedItem_ = 0;
+
+	for (int i = 0; i < items_.size(); ++i)
+	{
+		delete items_[i];
+	}
+	items_.clear();
 }
 
 void Container::draw(ConsoleWindow * console)
@@ -71,11 +82,25 @@ void Container::onEvent(sf::Event event)
 void Container::onPositionChange()
 {
 	int lastY = getY();
-	int middleX = getX() + getSize().x / 2;
 
 	for (auto& item : items_)
 	{
-		item->setPosition(middleX - item->getSize().x/2, lastY);
+		switch (item->getAlignment())
+		{
+		case Alignment::Left:
+			item->setPosition(getX(), lastY);
+			break;
+
+		case Alignment::Center:
+			item->setPosition(getX() + getSize().x / 2 - item->getSize().x / 2, lastY);
+			break;
+
+		case Alignment::Right:
+			item->setPosition(getX() + getSize().x - item->getSize().x, lastY);
+			break;
+		}
+
+		
 		lastY += spacing_+1;
 	}
 }

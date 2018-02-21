@@ -16,6 +16,7 @@ public:
 
 	void addItem(Item* item);
 	void setSpacing(int spacing);
+	void removeItems();
 
 	virtual void draw(ConsoleWindow* console) override;
 

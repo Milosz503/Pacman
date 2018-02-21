@@ -1,5 +1,9 @@
 LevelManager = {levelFile = "", tiles = {}, entities = {}}
 
+function LevelManager.fileExists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
 
 function LevelManager.loadLevel(fileName)
 	world:removeEntities()
@@ -7,27 +11,31 @@ function LevelManager.loadLevel(fileName)
 
 	LevelManager.levelFile = fileName
 	
-	level = dofile(fileName)
+	local level = {}
+	if LevelManager.fileExists(fileName) then
+		level = dofile(fileName)
+	end
 	
-	if type(level.levelLogic) == "string" then
+	if level.levelLogic ~= nil and type(level.levelLogic) == "string" then
 		Game.levelLogic = dofile(level.levelLogic) or {}
 		Game.levelLogicFile = level.levelLogic
 	else
-		print("Error loading levelLogic :"..level.levelLogic)
+		Game.levelLogicFile = "data/level_logic.lua"
+		Game.levelLogic = dofile(Game.levelLogicFile) or {}
 	end
 	
 	
-	tiles = level.tiles
+	tiles = level.tiles or {}
 	
 	LevelManager.tiles = tiles
-	LevelManager.objects = level.objects
+	LevelManager.objects = level.objects or {}
 	
 	width = tiles.width or 0
 	height = tiles.height or 0
 	
 	world:setSize(width, height)
 	
-	for y=1,height or 0 do
+	for y=1,height do
 		
 		for x=1,width do
 			cell = tiles[y][x]	
