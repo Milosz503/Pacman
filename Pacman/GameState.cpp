@@ -22,8 +22,8 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 	console_ = getContext().console;
 
 
-	scoreText_.setPosition(2, 2);
-	livesText_.setPosition(12, 2);
+	
+
 
 
 	updateTime_.setPosition(0, 47);
@@ -31,7 +31,7 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 	fpsText_.setColor(CharacterColor::Grey);
 	fpsText_.setBackground(sf::Color::Black);
-	fpsText_.setPosition(0, 45);
+	fpsText_.setPosition(0, 0);
 
 
 	
@@ -112,10 +112,27 @@ void GameState::draw()
 	sf::Clock clock;
 	clock.restart();
 
+	sf::Vector2i offset;
+	offset.x = console_->getWidth() / 2 - world_.getBounds().width / 2;
+	offset.y = console_->getHeight() / 2 - world_.getBounds().height / 2;
+
+	
+
 
 	scoreText_.setText(L"Score: " + std::to_wstring(world_.getScore()));
+	scoreText_.setColor(CharacterColor::White);
 	livesText_.setText(L"Lives: " + std::to_wstring(world_.getLives()));
-	livesText_.setPosition(scoreText_.getX() + scoreText_.getWidth() + 3, livesText_.getY());
+	livesText_.setColor(CharacterColor::White);
+
+	int width = world_.getBounds().width-2;
+	if (width < scoreText_.getWidth() + livesText_.getWidth() + 3)
+		width = scoreText_.getWidth() + livesText_.getWidth() + 3;
+
+	int x = (console_->getWidth() - width) / 2;
+
+	scoreText_.setPosition(x, offset.y - 4);
+	livesText_.setPosition(x + width - livesText_.getWidth(), offset.y - 4);
+	
 
 	fpsText_.setText(L"fps: " + std::to_string(fps_));
 
@@ -123,10 +140,10 @@ void GameState::draw()
 	console_->draw(fpsText_);
 	console_->draw(scoreText_);
 	console_->draw(livesText_);
-	console_->draw(updateTime_);
-	console_->draw(drawTime_);
+	//console_->draw(updateTime_);
+	//console_->draw(drawTime_);
 
-	console_->setOffset(2, 4);
+	console_->setOffset(offset.x, offset.y);
 
 	world_.draw();
 	systems_.draw();
@@ -137,24 +154,21 @@ void GameState::draw()
 	drawTime_.setText(L"Draw time: " + std::to_wstring(clock.getElapsedTime().asSeconds()) + 
 		L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
 
-	TextureCharacter texture = getContext().textureManager->getTexture(L'.', CharacterColor::DarkGrey);
-	texture.rect.x = 11;
-	texture.rect.y = 10 + 16*6;
+	TextureCharacter texture;
+	texture.rect.x = 12;
+	texture.rect.y = 0 + 16* CharacterColor::LightGrey;
 	//texture.backgroundColor = sf::Color(128, 128, 128);
 	//ConsoleRectangle rect(2, 3, world_.getBounds().width, 1, texture);
-	ConsoleRectangle rect(1, 3, world_.getBounds().width+2, world_.getBounds().height+2, texture);
+	ConsoleRectangle rect(x-2, offset.y-3, width+4, 1, texture);
 	console_->draw(rect);
-	rect.setPosition(2, 3 + world_.getBounds().height+1);
-	//console_->draw(rect);
 
-	//texture = getContext().textureManager->getTexture(L'.', CharacterColor::DarkGrey);
-	rect.setPosition(1, 4);
-	rect.setSize(1, world_.getBounds().height);
+	texture.rect.y = 10 + 16 * CharacterColor::DarkGrey;
 	rect.setTexture(texture);
-	//console_->draw(rect);
+	rect.setSize(world_.getBounds().width + 2, world_.getBounds().height + 2);
+	rect.setPosition(offset.x-1, offset.y - 1);
+	console_->draw(rect);
 
-	rect.setPosition(world_.getBounds().width + 2, 4);
-	//console_->draw(rect);
+
 
 }
 
