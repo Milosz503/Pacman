@@ -5,9 +5,10 @@
 
 MenuState::MenuState(StateStack & stack, Context context) :
 	State(stack, context),
-	console_(context.console)
+	console_(context.console),
+	menu_(context.sounds)
 {
-
+	getContext().music->play(MusicID::MenuTheme);
 
 	menu_.addItem(new GUI::Button(L"Play", CharacterColor::White, std::bind(&MenuState::callbackPlay, this)));
 	menu_.addItem(new GUI::Button(L"Editor", CharacterColor::White, std::bind(&MenuState::callbackEditor, this)));
@@ -17,6 +18,8 @@ MenuState::MenuState(StateStack & stack, Context context) :
 	menu_.setPosition(console_->getWidth()/2 - 6, 13);
 	menu_.setSize(12, 10);
 	menu_.setSpacing(1);
+
+	
 
 }
 
@@ -35,6 +38,7 @@ bool MenuState::handleEvent(sf::Event event)
 		{
 			requestStackPop();
 		}
+
 	}
 
 	return true;
@@ -65,26 +69,26 @@ MenuState::~MenuState()
 
 void MenuState::callbackPlay()
 {
-	requestStackPop();
+	//requestStackPop();
 	requestStackPush(States::LevelChoiceGame);
 }
 
 void MenuState::callbackEditor()
 {
-	requestStackPop();
+	//requestStackPop();
 	requestStackPush(States::LevelChoiceEditor);
 }
 
 void MenuState::callbackSettings()
 {
-	unsigned scale = getContext().console->getFontSize() / 8;
+	unsigned scale = getContext().console->getScale();
 
 	if (scale < 4)
 		scale++;
 	else
 		scale = 1;
 
-	getContext().console->setFontSize(scale * 8);
+	getContext().console->setScale(scale);
 }
 
 void MenuState::callbackExit()

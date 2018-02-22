@@ -11,6 +11,7 @@ Button::Button(std::wstring name, CharacterColor::Color color, std::function<voi
 	setSize(4 + name.length(), 1);
 }
 
+
 void Button::draw(ConsoleWindow * console)
 {
 	if (isFocused())
@@ -33,6 +34,8 @@ void Button::onEvent(sf::Event event)
 	{
 		if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Return)
 		{
+			getSounds()->play(SoundID::MenuSelect);
+
 			if (callback_ != nullptr)
 				callback_();
 		}

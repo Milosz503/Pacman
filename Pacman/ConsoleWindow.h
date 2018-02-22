@@ -5,7 +5,7 @@
 #include "TextureManager.h"
 #include "ConsoleTypes.h"
 #include "ConsoleSprite.h"
-
+#include <vector>
 
 class ConsoleWindow;
 
@@ -19,10 +19,15 @@ class ConsoleWindow
 public:
 	ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager, std::string title);
 
-	void setFontSize(unsigned size);
-	unsigned getFontSize();
+	//void setFontSize(unsigned size);
+	void setScale(float scale);
+	float getScale();
+	float getFontSize();
+	
 
 	void setOffset(int x, int y);
+	sf::Vector2i getOffset();
+	sf::Vector2i getPosition();
 
 	void clear(sf::Color color = sf::Color::Black);
 	void draw(ConsoleCharacter& character);
@@ -54,9 +59,12 @@ private:
 
 	unsigned width_;
 	unsigned height_;
+	int startX_;
+	int startY_;
 
-	unsigned fontHeight_;
-	unsigned fontWidth_;
+	float fontHeight_;
+	float fontWidth_;
+	float scale_;
 
 	int offsetX_;
 	int offsetY_;
@@ -73,10 +81,11 @@ private:
 	sf::Font font_;
 	sf::Texture tileset_;
 
-	wchar_t** buffer_;
-	sf::Color** colors_;
-	sf::Color** background_;
-	sf::Vector2i** textures_;
+
+	std::vector<std::vector<sf::Color>> background_;
+	std::vector<std::vector<sf::Vector2i>> textures_;
+
+	void updatePosition();
 
 
 };

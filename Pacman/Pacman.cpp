@@ -11,6 +11,7 @@
 #include "LevelChoiceState.h"
 
 
+
 //Po setPosition entity moze przeskoczyc przez sciane
 //Brak wsparcia dla przesuniecia swiata prze EntityController
 //Po zmianie kierunku i nacisnieciu szybko strzalki gracz moze sie zatrzymac
@@ -22,15 +23,15 @@ int main()
 	TextureManager textureManager;
 	textureManager.generateTileset();
 	textureManager.loadTextures();
-	ConsoleWindow console(50, 50, &textureManager, "Pacman");
+	ConsoleWindow console(66, 42, &textureManager, "Pacman");
 	ImGui::SFML::Init(*console.getWindow());
 
-
-
+	MusicPlayer music;
+	SoundPlayer sounds;
 
 	
 
-	State::Context context(&console, &textureManager);
+	State::Context context(&console, &textureManager, &music, &sounds);
 
 
 	StateStack stack(context);
@@ -54,17 +55,17 @@ int main()
 
 	while (console.isOpen())
 	{
-		/*sf::Event event;
-		while (console.pollEvent(event))
-		{
-			ImGui::SFML::ProcessEvent(event);
-			stack.handleEvent(event);
+		//sf::Event event;
+		//while (console.pollEvent(event))
+		//{
+		//	ImGui::SFML::ProcessEvent(event);
+		//	stack.handleEvent(event);
 
-			if (event.type == Event::Closed)
-			{
-				console.close();
-			}
-		}*/
+		//	if (event.type == Event::Closed)
+		//	{
+		//		console.close();
+		//	}
+		//}
 
 		sf::Time dt = clock.restart();
 		timeSinceLasUpdate += dt;
@@ -107,7 +108,7 @@ int main()
 			stack.draw();
 			
 			console.show();
-			ImGui::Render();
+			ImGui::SFML::Render(*console.getWindow());
 			console.display();
 
 			

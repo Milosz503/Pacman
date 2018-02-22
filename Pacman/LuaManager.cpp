@@ -114,6 +114,7 @@ void LuaManager::initTypes()
 		);
 
 	lua_.new_usertype<LuaGameHandle>("LuaGameHandle",
+		"playSound", &LuaGameHandle::playSound,
 		"score", sol::property(&LuaGameHandle::getScore),
 		"addScore", &LuaGameHandle::addScore,
 		"lives", sol::property(&LuaGameHandle::getLives),

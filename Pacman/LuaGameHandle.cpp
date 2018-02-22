@@ -9,6 +9,22 @@ LuaGameHandle::LuaGameHandle(World * world) :
 {
 }
 
+void LuaGameHandle::playSound(std::string sound)
+{
+	SoundID id;
+
+	if (sound == "PickedPoint")
+		id = SoundID::PickedPoint;
+	else
+	{
+		std::cout << "Sound " + sound + " does not exist\n";
+		return;
+	}
+
+	world_->getSounds()->play(id);
+
+}
+
 void LuaGameHandle::addScore(int score)
 {
 	world_->addScore(score);

@@ -13,6 +13,7 @@ World::World(State::Context context) :
 	levelFile_(*context.levelFile),
 	console_(context.console),
 	textureManager_(context.textureManager),
+	sounds_(context.sounds),
 	frameCounter_(0),
 	scene_(this),
 	luaManager_(this)
@@ -94,6 +95,11 @@ TextureManager * World::getTextureManager()
 	return textureManager_;
 }
 
+SoundPlayer * World::getSounds()
+{
+	return sounds_;
+}
+
 Scene * World::getScene()
 {
 	return &scene_;
@@ -127,6 +133,16 @@ bool World::isEditMode()
 void World::setEditMode(bool isEdit)
 {
 	isEditMode_ = isEdit;
+}
+
+sf::Vector2i World::getSceneOffset()
+{
+	return sceneOffset_;
+}
+
+void World::setSceneOffset(sf::Vector2i offset)
+{
+	sceneOffset_ = offset;
 }
 
 World::~World()

@@ -3,7 +3,7 @@ YellowGhost = Class:new({
 	type = "entity",
 	category = "ghost",
 		
-	speed = 12,
+	speed = 10,
 
 	texture = {x = 6, y = 2, color = Colors.yellow }
 })
@@ -106,7 +106,7 @@ function YellowGhost:update()
 	pos.x = pos.x + speed.x
 	pos.y = pos.y + speed.y
 	
-	print(speed.x.." "..speed.y.." "..pos.x.." "..pos.y)
+	--print(speed.x.." "..speed.y.." "..pos.x.." "..pos.y)
 	
 	-- handle:guideTo(pos.x, pos.y)
 	-- handle:setGuideType("a_star")

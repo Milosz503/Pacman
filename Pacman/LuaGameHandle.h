@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sol.hpp"
+#include <string>
 
 class World;
 class LuaObjectHandle;
@@ -9,6 +10,8 @@ class LuaGameHandle
 {
 public:
 	LuaGameHandle(World* world);
+
+	void playSound(std::string sound);
 
 	void addScore(int score);
 	int getScore();

@@ -5,6 +5,7 @@
 LevelChoiceState::LevelChoiceState(StateStack& stack, Context context, States::ID nextState) :
 	State(stack, context),
 	nextState_(nextState),
+	menu_(context.sounds),
 	pageNumber_(0)
 {
 	ConsoleWindow* console = getContext().console;
@@ -35,7 +36,7 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 	{
 
 		requestStackPop();
-		requestStackPush(States::Menu);
+		//requestStackPush(States::Menu);
 	}
 
 	if (event.type == Event::KeyPressed)
@@ -52,16 +53,20 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 
 		if (event.key.code == Keyboard::Left)
 		{
+			
 			if (pageNumber_ > 0)
 			{
+				getContext().sounds->play(SoundID::PageChanged);
 				pageNumber_--;
 				changePage();
 			}
 		}
 		else if (event.key.code == Keyboard::Right)
 		{
+			
 			if (pageNumber_ < 3)
 			{
+				getContext().sounds->play(SoundID::PageChanged);
 				pageNumber_++;
 				changePage();
 			}
@@ -70,7 +75,7 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 
 	}
 
-	return true;
+	return false;
 }
 
 void LevelChoiceState::draw()
@@ -85,13 +90,15 @@ void LevelChoiceState::draw()
 		getContext().console->draw(text);
 	}*/
 
-
+	getContext().console->clear();
 	menu_.draw(getContext().console);
 
 }
 
 void LevelChoiceState::changePage()
 {
+	
+
 	menu_.removeItems();
 
 	menu_.addItem(new GUI::Text(L"Choose a level:", CharacterColor::Yellow));
@@ -123,7 +130,7 @@ void LevelChoiceState::changePage()
 
 	}
 
-	menu_.addItem(new GUI::Text(L""));
+	//menu_.addItem(new GUI::Text(L""));
 
 	if(pageNumber_ == 0)
 		menu_.addItem(new GUI::Text(L"   " + std::to_wstring(pageNumber_+1) + L" >>", CharacterColor::Cyan));

@@ -82,6 +82,7 @@ return {
 		
 			if object.handle.category == "player" then
 				world:addScore(1)
+				world:playSound("PickedPoint")
 				self.handle:remove()
 			end
 		

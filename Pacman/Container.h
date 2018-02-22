@@ -3,6 +3,7 @@
 
 #include "Item.h"
 #include <vector>
+#include "SoundPlayer.h"
 
 namespace GUI 
 {
@@ -11,7 +12,7 @@ namespace GUI
 class Container : public Item
 {
 public:
-	Container();
+	Container(SoundPlayer* sounds);
 	~Container();
 
 	void addItem(Item* item);
@@ -26,6 +27,7 @@ protected:
 	virtual void onSizeChange() override;
 
 private:
+	SoundPlayer * sounds_;
 	std::vector<Item*> items_;
 	int focusedItem_;
 	int spacing_;

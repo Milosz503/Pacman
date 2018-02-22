@@ -12,7 +12,7 @@
 #include "Scene.h"
 #include "LuaGameHandle.h"
 #include "SystemManager.h"
-
+#include "SoundPlayer.h"
 
 class LuaGameHandle;
 
@@ -39,6 +39,7 @@ public:
 
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
+	SoundPlayer* getSounds();
 	Scene* getScene();
 	LuaManager& getLuaManager();
 	SystemManager* getSystems();
@@ -46,6 +47,9 @@ public:
 
 	bool isEditMode();
 	void setEditMode(bool isEdit);
+
+	sf::Vector2i getSceneOffset();
+	void setSceneOffset(sf::Vector2i offset);
 
 	~World();
 
@@ -57,10 +61,13 @@ private:
 	int playerLives_;
 	bool isEditMode_;
 
+	sf::Vector2i sceneOffset_;
+
 	std::string levelFile_;
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;
+	SoundPlayer* sounds_;
 	SystemManager* systems_;
 	Scene scene_;
 	LuaManager luaManager_;

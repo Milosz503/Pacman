@@ -75,15 +75,19 @@ void Scene::cleanObjects()
 
 sf::Vector2i Scene::normalize(sf::Vector2i position) const
 {
-	if (position.x >= width_)
-		position.x -= width_;
+		
 	if (position.x < 0)
-		position.x = width_ + position.x;
+		position.x = width_ - ((-position.x)%width_);
 
-	if (position.y >= height_)
-		position.y -= height_;
+
+		
 	if (position.y < 0)
-		position.y = height_ + position.y;
+	{
+		position.y = height_ - ((-position.y)%height_);
+	}
+	
+	position.x %= width_;
+	position.y %= height_;
 
 	return position;
 }

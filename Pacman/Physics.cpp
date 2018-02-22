@@ -15,7 +15,7 @@ Physics::Physics(SystemManager* systemManager, World* world) :
 
 void Physics::update()
 {
-	std::cout << "Physics update" << std::endl;
+	//std::cout << "Physics update" << std::endl;
 
 	std::vector<Entity*>& entities = scene_->getEntities();
 

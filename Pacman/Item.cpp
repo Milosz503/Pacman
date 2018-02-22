@@ -14,6 +14,11 @@ Item::~Item()
 {
 }
 
+void Item::setSounds(SoundPlayer * sounds)
+{
+	sounds_ = sounds;
+}
+
 void Item::setPosition(int x, int y)
 {
 	position_.x = x;
@@ -105,5 +110,12 @@ void Item::onPositionChange()
 void Item::onEvent(sf::Event event)
 {
 }
+
+SoundPlayer * Item::getSounds()
+{
+	return sounds_;
+}
+
+
 
 }

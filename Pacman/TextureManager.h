@@ -35,6 +35,8 @@ public:
 
 	void generateTileset();
 
+	int getFontHeight();
+	int getFontWidth();
 
 
 private:

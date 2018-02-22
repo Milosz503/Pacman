@@ -10,12 +10,13 @@ using namespace sf;
 ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager, string title) :
 	width_(width),
 	height_(height),
-	fontHeight_(8),
+	fontHeight_(textureManager->getFontHeight()),
+	fontWidth_(textureManager->getFontHeight()),
 	offsetX_(0),
 	offsetY_(0),
 	textureManager_(textureManager)
 {
-
+	
 	
 
     if (!font_.loadFromFile("PxPlus_IBM_BIOS.ttf"))
@@ -26,7 +27,7 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
-	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title);
+	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title, Style::Fullscreen);
 
 	if (!texture_.create(width * fontWidth_, height * fontHeight_))
 	{
@@ -44,33 +45,64 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	}
 
 
-    buffer_ = new wchar_t*[height_];
-    colors_ = new Color*[height_];
-	background_ = new Color*[height_];
-	textures_ = new Vector2i*[height_];
+	background_.resize(height_);
+	textures_.resize(height_);
 
 	for (int i = 0; i < height; i++)
 	{
-		buffer_[i] = new wchar_t[width_ + 1];
-		buffer_[i][width_] = '\n';
 
-		colors_[i] = new Color[width_];
-		background_[i] = new Color[width_];
+		background_[i].resize(width_);
 
-		textures_[i] = new Vector2i[width_];
+		textures_[i].resize(width_);
 	}
 
+	int w = window_.getSize().x;
+	int h = window_.getSize().y;
+	float scale1 = w / (float)(width* fontWidth_);
+	float scale2 = h / (float)(height * fontHeight_);
+
+	if (scale1 < scale2)
+		setScale(scale1);
+	else
+		setScale(scale2);
+
+	cout << "Font: " << scale_ << " - " << fontWidth_ << " " << fontHeight_ << "\n";
 }
 
-void ConsoleWindow::setFontSize(unsigned size)
+//void ConsoleWindow::setFontSize(unsigned size)
+//{
+//    fontHeight_ = size;
+//
+//	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
+//
+//	
+//	//window_.setSize(sf::Vector2u(width_ * fontWidth_, height_ * fontHeight_));
+//	//window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
+//
+//	if (!texture_.create(width_ * fontWidth_, height_ * fontHeight_))
+//	{
+//		cout << "Error creating renderTexture!" << std::endl;
+//	}
+//	if (!customTexture_.create(width_ * fontWidth_, height_ * fontHeight_))
+//	{
+//		cout << "Error creating renderTexture!" << std::endl;
+//	}
+//
+//	updatePosition();
+//}
+
+void ConsoleWindow::setScale(float scale)
 {
-    fontHeight_ = size;
+	fontWidth_ = textureManager_->getFontWidth() * scale;
+	fontHeight_ = textureManager_->getFontHeight() * scale;
 
-	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
-
-
-	window_.setSize(sf::Vector2u(width_ * fontWidth_, height_ * fontHeight_));
-	window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
+	if (scale - (int)scale != 0 && fontWidth_ - (int)fontWidth_ == 0)
+	{
+		scale -= 0.01;
+		fontWidth_ = textureManager_->getFontWidth() * scale;
+		fontHeight_ = textureManager_->getFontHeight() * scale;
+	}
+	scale_ = scale;
 
 	if (!texture_.create(width_ * fontWidth_, height_ * fontHeight_))
 	{
@@ -80,9 +112,18 @@ void ConsoleWindow::setFontSize(unsigned size)
 	{
 		cout << "Error creating renderTexture!" << std::endl;
 	}
+
+	updatePosition();
+
+
 }
 
-unsigned ConsoleWindow::getFontSize()
+float ConsoleWindow::getScale()
+{
+	return scale_;
+}
+
+float ConsoleWindow::getFontSize()
 {
 	return fontHeight_;
 }
@@ -93,14 +134,22 @@ void ConsoleWindow::setOffset(int x, int y)
 	offsetY_ = y;
 }
 
+sf::Vector2i ConsoleWindow::getOffset()
+{
+	return Vector2i(offsetX_, offsetY_);
+}
+
+sf::Vector2i ConsoleWindow::getPosition()
+{
+	return Vector2i(startX_, startY_);
+}
+
 void ConsoleWindow::clear(Color color)
 {
-    for (int i = 0; i < width_; i++)
+    for (int i = 0; i < height_; i++)
 	{
-		for (int j = 0; j < height_; ++j)
+		for (int j = 0; j < width_; ++j)
 		{
-			buffer_[j][i] = ' ';
-			colors_[i][j] = Color::White;
 			background_[i][j] = Color::Transparent;
 			textures_[i][j] = Vector2i(15, 15);
 		}
@@ -165,7 +214,7 @@ void ConsoleWindow::show()
 {
 
 
-	sf::Text output;
+	/*sf::Text output;
 	output.setFont(font_);
 	output.setCharacterSize(fontHeight_);
 	output.setFillColor(sf::Color(200, 200, 200));
@@ -174,7 +223,7 @@ void ConsoleWindow::show()
 
 	
 
-	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
+	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;*/
 
 	sf::VertexArray tiles(sf::Quads, width_*height_*4);
 	sf::VertexArray tilesTex(sf::Quads, width_*height_ * 4);
@@ -195,26 +244,26 @@ void ConsoleWindow::show()
 			tile[2].position = sf::Vector2f((j+1)*fontWidth_, (i+1) * fontHeight_);
 
 
-			if (buffer_[i][j] == ' ')
-			{
+			//if (buffer_[i][j] == ' ')
+			//{
 				tile[0].color = background_[i][j];
 				tile[1].color = background_[i][j];
 				tile[2].color = background_[i][j];
 				tile[3].color = background_[i][j];
-			}
-			else
-			{
-				tile[0].color = background_[i][j];
-				tile[1].color = background_[i][j];
-				tile[2].color = background_[i][j];
-				tile[3].color = background_[i][j];
+			//}
+			//else
+			//{
+			//	tile[0].color = background_[i][j];
+			//	tile[1].color = background_[i][j];
+			//	tile[2].color = background_[i][j];
+			//	tile[3].color = background_[i][j];
 
-				output.setString(buffer_[i][j]);
-				output.setPosition(j*fontWidth_, i * fontHeight_);
-				output.setFillColor(colors_[i][j]);
+			//	output.setString(buffer_[i][j]);
+			//	output.setPosition(j*fontWidth_, i * fontHeight_);
+			//	output.setFillColor(colors_[i][j]);
 
-				window_.draw(output);
-			}
+			//	window_.draw(output);
+			//}
 
 			Vertex* tileTex = &tilesTex[(i + j*height_) * 4];
 
@@ -242,17 +291,22 @@ void ConsoleWindow::show()
 
 	}
 	window_.draw(tiles);
-
+	//texture_.draw(tiles);
 	texture_.draw(tilesTex, &textureManager_->getTileset());
 	texture_.display();
 
 
 	Sprite sprite(texture_.getTexture());
-	sprite.setPosition(0, 0);
+	sprite.setPosition(startX_, startY_);
 
 	shader_.setUniform("texture", sf::Shader::CurrentTexture);
 	shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
 	window_.draw(sprite, &shader_);
+	//window_.draw(sprite);
+
+
+	//sfml additional texture
+
 
 	customTexture_.display();
 	sprite.setTexture(customTexture_.getTexture());
@@ -288,6 +342,7 @@ bool ConsoleWindow::pollEvent(Event & event)
 		if (event.type == sf::Event::Resized)
 		{
 			window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+			updatePosition();
 		}
 
 		return answer;
@@ -324,4 +379,15 @@ sf::RenderWindow* ConsoleWindow::getWindow()
 
 ConsoleWindow::~ConsoleWindow()
 {
+}
+
+void ConsoleWindow::updatePosition()
+{
+	Vector2u size = window_.getSize();
+
+
+	startX_ = ((int)(size.x) - (int)(width_*fontWidth_)) / 2;
+	startY_ = ((int)(size.y) - (int)(height_*fontHeight_)) / 2;
+
+	std::cout << "Pos: " << "  -  " << startX_ << " " << startY_ << "\n";
 }

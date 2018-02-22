@@ -3,7 +3,7 @@ PinkGhost = Class:new({
 	type = "entity",
 	category = "ghost",
 		
-	speed = 12,
+	speed = 10,
 
 	texture = {x = 6, y = 2, color = Colors.pink }
 })

@@ -3,6 +3,7 @@
 #include <SFML\System\Vector2.hpp>
 #include <SFML\Window\Event.hpp>
 #include "ConsoleWindow.h"
+#include "SoundPlayer.h"
 
 namespace GUI
 {
@@ -13,6 +14,8 @@ class Item
 public:
 	Item(bool isFocusable = true);
 	~Item();
+
+	void setSounds(SoundPlayer* sounds);
 
 	void setPosition(int x, int y);
 	int getX();
@@ -40,7 +43,9 @@ protected:
 	virtual void onPositionChange();
 	virtual void onEvent(sf::Event event);
 
+	SoundPlayer* getSounds();
 private:
+	SoundPlayer * sounds_;
 	bool isFocusable_;
 	bool isFocused_;
 	Alignment alignment_;

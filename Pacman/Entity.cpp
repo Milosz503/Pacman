@@ -117,8 +117,6 @@ void Entity::setSpeed(Direction::X x, Direction::Y y)
 
 sf::Vector2i Entity::getSpeed()
 {
-	if(getName() != "Player")
-		std::cout << "speed: " << speed_.x << " " << speed_.y << std::endl;
 	return speed_;
 }
 

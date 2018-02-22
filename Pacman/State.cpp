@@ -35,10 +35,13 @@ State::Context State::getContext() const
 	return context_;
 }
 
-State::Context::Context(ConsoleWindow * console, TextureManager * textureManager) :
+State::Context::Context(ConsoleWindow * console, TextureManager * textureManager,
+	MusicPlayer* music, SoundPlayer* sounds) :
 
 	console(console),
 	textureManager(textureManager),
+	music(music),
+	sounds(sounds),
 	levelFile(new std::string("data/level.lua"))
 {
 }

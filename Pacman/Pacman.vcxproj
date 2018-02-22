@@ -95,7 +95,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Biblioteki\lua-5.3.3-VS14-32-bit;C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua53.lib;opengl32.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua53.lib;opengl32.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,9 +174,11 @@
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="LuaObjectHandle.h" />
     <ClInclude Include="LuaSystem.h" />
+    <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="sol.hpp" />
     <ClInclude Include="sol_old.hpp" />
+    <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="SystemEvent.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="Physics.h" />
@@ -218,11 +220,13 @@
     <ClCompile Include="LuaObjectHandle.cpp" />
     <ClCompile Include="LuaSystem.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="stdafx.cpp" />

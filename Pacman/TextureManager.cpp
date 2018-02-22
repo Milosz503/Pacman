@@ -106,6 +106,16 @@ void TextureManager::generateTileset()
 	}
 }
 
+int TextureManager::getFontHeight()
+{
+	return fontHeight_;
+}
+
+int TextureManager::getFontWidth()
+{
+	return fontHeight_;
+}
+
 void TextureManager::drawTileset(sf::Color color, int offset, sf::RenderTexture * texture)
 {
 	sf::Font font;

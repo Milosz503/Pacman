@@ -21,7 +21,8 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 	console_ = getContext().console;
 
-
+	//getContext().music->stop();
+	getContext().music->play(MusicID::GameTheme);
 	
 
 
@@ -52,14 +53,14 @@ bool GameState::update(sf::Time dt)
 	sf::Clock clock;
 	clock.restart();
 
-	std::cout << "Start update" << std::endl;
+	//std::cout << "Start update" << std::endl;
 	if (!world_.isEditMode())
 	{
 		systems_.update();
 		
 	}
 	world_.update();
-	std::cout << "End update" << std::endl;
+	//std::cout << "End update" << std::endl;
 
 
 	if (world_.getFrameNumber() % 20 == 0)
@@ -143,11 +144,13 @@ void GameState::draw()
 	//console_->draw(updateTime_);
 	//console_->draw(drawTime_);
 
+	world_.setSceneOffset(offset);
 	console_->setOffset(offset.x, offset.y);
 
 	world_.draw();
 	systems_.draw();
 
+	
 	console_->setOffset(0, 0);
 	
 
@@ -155,8 +158,8 @@ void GameState::draw()
 		L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()));
 
 	TextureCharacter texture;
-	texture.rect.x = 12;
-	texture.rect.y = 0 + 16* CharacterColor::LightGrey;
+	texture.rect.x = 14;
+	texture.rect.y = 3 + 16* CharacterColor::LightGrey;
 	//texture.backgroundColor = sf::Color(128, 128, 128);
 	//ConsoleRectangle rect(2, 3, world_.getBounds().width, 1, texture);
 	ConsoleRectangle rect(x-2, offset.y-3, width+4, 1, texture);

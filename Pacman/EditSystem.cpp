@@ -28,12 +28,15 @@ void EditSystem::update()
 
 void EditSystem::draw()
 {
+
 	//ImGui::ShowTestWindow();
 
 	showProperties();
+
 	showPalette();
 
 	updateTileBrush();
+
 
 	Vector2i pos = getSelectedTile();
 	int fontSize = getWorld()->getConsole()->getFontSize();
@@ -65,6 +68,7 @@ void EditSystem::draw()
 
 		getWorld()->getConsole()->drawsf(rect);
 	}
+
 }
 
 EditSystem::~EditSystem()
@@ -160,14 +164,18 @@ void EditSystem::onEvent(SystemEvent * e)
 
 sf::Vector2i EditSystem::getSelectedTile()
 {
-	int fontSize = getWorld()->getConsole()->getFontSize();
+	float fontSize = getWorld()->getConsole()->getFontSize();
 
-	sf::Vector2i offset(2, 4); // do zmiany!
 
-	Vector2i pos = sf::Mouse::getPosition(*getWorld()->getConsole()->getWindow());
+	sf::Vector2i offset = getWorld()->getSceneOffset();
+
+	Vector2i pos = getMousePosition();
+	pos -= getWorld()->getConsole()->getPosition();
 
 	pos.x = pos.x / fontSize - offset.x;
 	pos.y = pos.y / fontSize - offset.y;
+
+	
 
 	return pos;
 }
@@ -506,7 +514,7 @@ void EditSystem::showProperties()
 	Vector2i pos = getSelectedTile();
 
 	ImGui::Separator();
-	ImGui::Text("Tile x:%d, y:%d, %d", pos.x, pos.y, ImGui::IsMouseHoveringAnyWindow());
+	ImGui::Text("Tile x:%d, y:%d", pos.x, pos.y);
 
 	ImGui::End();
 }
@@ -625,13 +633,13 @@ void EditSystem::selectEntityPrefab(int index)
 
 sf::Vector2f EditSystem::realPosition(sf::Vector2i tilePosition)
 {
-	Vector2i offset(2, 4); // DO ZMIANY!
-	int fontSize = getWorld()->getConsole()->getFontSize();
+	Vector2i offset = getWorld()->getSceneOffset();
+	float fontSize = getWorld()->getConsole()->getFontSize();
 
 	tilePosition += offset;
 
-	tilePosition *= fontSize;
+	//tilePosition += getWorld()->getConsole()->getPosition();
 
-	return Vector2f(tilePosition.x, tilePosition.y);
+	return Vector2f(tilePosition.x*fontSize, tilePosition.y*fontSize);
 }
 

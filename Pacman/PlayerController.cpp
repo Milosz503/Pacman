@@ -1,6 +1,8 @@
 #include "PlayerController.h"
 #include <SFML\Graphics.hpp>
 #include "World.h"
+#include "imgui.h"
+#include "imgui-SFML.h"
 
 using namespace sf;
 

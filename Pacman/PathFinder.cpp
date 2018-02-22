@@ -115,7 +115,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath()
 		sf::Vector2i pos = node.second;
 
 		if (pos == goal_) {
-			std::cout << "Found" << iterations << std::endl;
+			//std::cout << "Found" << iterations << std::endl;
 			found = true;
 			break;
 		}
@@ -149,7 +149,7 @@ std::vector<sf::Vector2i>& PathFinder::findPath()
 		++iterations;
 	}
 
-	std::cout << "Path iterations: " << iterations << std::endl;
+	//std::cout << "Path iterations: " << iterations << std::endl;
 
 	if (found)
 	{
@@ -201,7 +201,7 @@ sf::Vector2i PathFinder::findDirection()
 	{
 		if ((start_ + directions[i] != lastPosition_ || canMoveBack_) && !isPhysical(start_ + directions[i]))
 		{
-			std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal_.y << "start:" << start_.y << std::endl;
+			//std::cout << i << ": " << directions[i].x << " " << directions[i].y << " - dir:" << direction.y << " dist:" << distance.y << " goal:" << goal_.y << "start:" << start_.y << std::endl;
 
 			return directions[i];
 		}

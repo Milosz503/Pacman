@@ -55,6 +55,8 @@ void StateStack::applyPendingChanges()
 
 void StateStack::update(sf::Time dt)
 {
+	context_.sounds->removeStoppedSounds();
+
 	applyPendingChanges();
 
 	for (auto itr = stack_.rbegin(); itr != stack_.rend(); ++itr)

@@ -39,7 +39,7 @@ void EntityController::update(Entity * entity)
 		sf::Vector2i lastPosition = entity->getPosition() - entity->getSpeed();
 		GuideType guideType = entity->getGuideType();
 
-		std::cout << "Start: " << start.x << " " << start.y << " last: " << lastPosition.x << " " << lastPosition.y << std::endl;
+		//std::cout << "Start: " << start.x << " " << start.y << " last: " << lastPosition.x << " " << lastPosition.y << std::endl;
 
 		//init finder
 		finder_.init(start, destination, lastPosition);
@@ -55,7 +55,7 @@ void EntityController::update(Entity * entity)
 			
 		}
 
-		std::cout << "destination: " << destination.x << " " << destination.y << std::endl;
+		//std::cout << "destination: " << destination.x << " " << destination.y << std::endl;
 
 		//guide to
 		if (guideType == GuideType::DirectionToTile) //direction

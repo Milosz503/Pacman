@@ -5,7 +5,8 @@
 #include "ConsoleWindow.h"
 #include "TextureManager.h"
 #include "PlayerController.h"
-
+#include "MusicPlayer.h"
+#include "SoundPlayer.h"
 
 class StateStack;
 class ConsoleWindow;
@@ -34,10 +35,12 @@ public:
 
 	struct Context
 	{
-		Context(ConsoleWindow* console, TextureManager* textureManager);
+		Context(ConsoleWindow* console, TextureManager* textureManager, MusicPlayer* music, SoundPlayer* sounds);
 
 		ConsoleWindow* console;
 		TextureManager* textureManager;
+		MusicPlayer* music;
+		SoundPlayer* sounds;
 		std::string* levelFile;
 
 		//Level* level;

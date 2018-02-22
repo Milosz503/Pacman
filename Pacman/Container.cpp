@@ -6,7 +6,8 @@ namespace GUI
 
 
 
-Container::Container() :
+Container::Container(SoundPlayer* sounds) :
+	sounds_(sounds),
 	spacing_(0)
 {
 
@@ -19,6 +20,7 @@ Container::~Container()
 
 void Container::addItem(Item * item)
 {
+	item->setSounds(sounds_);
 	items_.push_back(item);
 	if (items_.size() == 1 || !items_[focusedItem_]->isFocusable())
 	{
@@ -112,6 +114,8 @@ void Container::onSizeChange()
 
 void Container::focusUp()
 {
+	sounds_->play(SoundID::MenuMove);
+
 	int newFocus = focusedItem_;
 	while (newFocus > 0)
 	{
@@ -129,6 +133,8 @@ void Container::focusUp()
 
 void Container::focusDown()
 {
+	sounds_->play(SoundID::MenuMove);
+
 	int newFocus = focusedItem_;
 
 	while (newFocus < items_.size()-1)
