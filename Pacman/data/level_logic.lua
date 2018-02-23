@@ -4,9 +4,15 @@ levelLogic = {
 	
 	testVar = 1,
 	
+	init = function()
+		
+		world:setLives(0)
+	
+	end,
+	
 	update = function()
 		--print("Level LOGIC!")
-
+		
 
 		
 	end,
@@ -24,6 +30,8 @@ levelLogic = {
 				world:removeEntities()
 				world:removeLive()
 				LevelManager.loadEntities()
+			else
+				world:endGame("GAME OVER!", Colors.red)
 			end
 			
 			

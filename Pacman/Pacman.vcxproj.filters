@@ -196,7 +196,10 @@
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SoundPlayer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="EndGameState.h">
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -318,7 +321,10 @@
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="SoundPlayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="EndGameState.cpp">
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -50,6 +50,15 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 bool GameState::update(sf::Time dt)
 {
+	if (world_.isGameEnded())
+	{
+		(*getContext().endGameContent) = world_.getEndGameContent();
+		(*getContext().score) = world_.getScore();
+		(*getContext().endGameColor) = world_.getEndGameColor();
+		requestStackPop();
+		requestStackPush(States::EndGame);
+	}
+
 	sf::Clock clock;
 	clock.restart();
 
@@ -75,6 +84,7 @@ bool GameState::update(sf::Time dt)
 	{
 		fps_ = 1.0 / dt.asSeconds();
 	}
+
 
 	return true;
 	

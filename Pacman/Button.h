@@ -12,7 +12,7 @@ class Button : public Item
 {
 public:
 	Button(std::wstring name, CharacterColor::Color color = CharacterColor::White, std::function<void()> callback = nullptr);
-	
+	void setCallback(std::function<void()> callback);
 
 
 	virtual void draw(ConsoleWindow* console) override;

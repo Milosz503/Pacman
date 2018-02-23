@@ -35,7 +35,7 @@ public:
 
 	int getLives();
 	void removeLive();
-	void addLives(int lives);
+	void setLives(int lives);
 
 	ConsoleWindow* getConsole();
 	TextureManager* getTextureManager();
@@ -50,6 +50,11 @@ public:
 
 	sf::Vector2i getSceneOffset();
 	void setSceneOffset(sf::Vector2i offset);
+
+	void endGame(std::string content, CharacterColor::Color color);
+	bool isGameEnded();
+	std::string getEndGameContent();
+	CharacterColor::Color getEndGameColor();
 
 	~World();
 
@@ -71,6 +76,11 @@ private:
 	SystemManager* systems_;
 	Scene scene_;
 	LuaManager luaManager_;
+
+	bool isGameEnded_;
+	std::string endGameContent_;
+	CharacterColor::Color endGameColor_;
+
 
 
 	

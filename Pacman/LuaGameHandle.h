@@ -11,13 +11,13 @@ class LuaGameHandle
 public:
 	LuaGameHandle(World* world);
 
+	void endGame(std::string content, int color = 0);
 	void playSound(std::string sound);
 
 	void addScore(int score);
 	int getScore();
 
-	void addLive();
-	void addLives(int lives);
+	void setLives(int lives);
 	void removeLive();
 	int getLives();
 

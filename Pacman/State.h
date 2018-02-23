@@ -23,7 +23,7 @@ namespace States
 		Editor,
 		Game,
 		Pause,
-		GameOver
+		EndGame
 	};
 }
 
@@ -42,7 +42,9 @@ public:
 		MusicPlayer* music;
 		SoundPlayer* sounds;
 		std::string* levelFile;
-
+		std::string* endGameContent;
+		int* score;
+		CharacterColor::Color* endGameColor;
 		//Level* level;
 	};
 

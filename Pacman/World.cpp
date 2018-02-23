@@ -8,7 +8,7 @@
 
 World::World(State::Context context) :
 	score_(0),
-	playerLives_(3),
+	playerLives_(1),
 	isEditMode_(false),
 	levelFile_(*context.levelFile),
 	console_(context.console),
@@ -80,9 +80,9 @@ void World::removeLive()
 	--playerLives_;
 }
 
-void World::addLives(int lives)
+void World::setLives(int lives)
 {
-	playerLives_ += lives;
+	playerLives_ = lives;
 }
 
 ConsoleWindow * World::getConsole()
@@ -143,6 +143,28 @@ sf::Vector2i World::getSceneOffset()
 void World::setSceneOffset(sf::Vector2i offset)
 {
 	sceneOffset_ = offset;
+}
+
+void World::endGame(std::string content, CharacterColor::Color color)
+{
+	isGameEnded_ = true;
+	endGameContent_ = content;
+	endGameColor_ = color;
+}
+
+bool World::isGameEnded()
+{
+	return isGameEnded_;
+}
+
+std::string World::getEndGameContent()
+{
+	return endGameContent_;
+}
+
+CharacterColor::Color World::getEndGameColor()
+{
+	return endGameColor_;
 }
 
 World::~World()

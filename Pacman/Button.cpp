@@ -11,6 +11,11 @@ Button::Button(std::wstring name, CharacterColor::Color color, std::function<voi
 	setSize(4 + name.length(), 1);
 }
 
+void Button::setCallback(std::function<void()> callback)
+{
+	callback_ = callback;
+}
+
 
 void Button::draw(ConsoleWindow * console)
 {

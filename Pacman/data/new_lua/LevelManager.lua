@@ -49,6 +49,10 @@ function LevelManager.loadLevel(fileName)
 	
 	LevelManager.loadEntities()
 	
+	if Game.levelLogic ~= nil then
+		Game.levelLogic.init()
+	end
+	
 end
 
 function LevelManager.loadEntities()

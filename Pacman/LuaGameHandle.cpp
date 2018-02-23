@@ -9,6 +9,11 @@ LuaGameHandle::LuaGameHandle(World * world) :
 {
 }
 
+void LuaGameHandle::endGame(std::string content, int color)
+{
+	world_->endGame(content, (CharacterColor::Color)color);
+}
+
 void LuaGameHandle::playSound(std::string sound)
 {
 	SoundID id;
@@ -35,14 +40,10 @@ int LuaGameHandle::getScore()
 	return world_->getScore();
 }
 
-void LuaGameHandle::addLive()
-{
-	world_->addLives(1);
-}
 
-void LuaGameHandle::addLives(int lives)
+void LuaGameHandle::setLives(int lives)
 {
-	world_->addLives(lives);
+	world_->setLives(lives);
 }
 
 void LuaGameHandle::removeLive()

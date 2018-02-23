@@ -42,6 +42,9 @@ State::Context::Context(ConsoleWindow * console, TextureManager * textureManager
 	textureManager(textureManager),
 	music(music),
 	sounds(sounds),
-	levelFile(new std::string("data/level.lua"))
+	levelFile(new std::string("data/level.lua")),
+	endGameContent(new std::string("Error")),
+	score(new int(0)),
+	endGameColor(new CharacterColor::Color(CharacterColor::White))
 {
 }
