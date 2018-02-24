@@ -90,6 +90,35 @@ return {
 	}),
 	
 	
+	Buff = Class:new({
+		
+		type = "tile",
+		category = "pickup",
+		
+		isPhysical = false,
+		
+		texture = {x = 10, y = 11; color = Colors.white},
+		
+		init = function(self)
+			self.state = "pickup"
+		end,
+		
+		collide = function (self, object)
+		
+			if self.state == "pickup" and object.handle.category == "player" then
+				world:playSound("GameWon")
+				world:addScore(10)
+				self.handle:remove()
+			end
+		
+		end,
+		
+		update = function(self)
+		
+		end,
+	}),
+	
+	
 	Floor = { 
 		type = "tile";
 		category = "none";

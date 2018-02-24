@@ -9,5 +9,11 @@ function Class:new(object)
 
 end
 
+function Class:super()
+	
+	return getmetatable(self).__index
+	
+end
+
 
 

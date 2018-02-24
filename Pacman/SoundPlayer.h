@@ -5,7 +5,7 @@
 #include <String>
 #include <SFML/Audio.hpp>
 
-enum class SoundID {MenuSelect, MenuMove, PageChanged, PickedPoint};
+enum class SoundID {MenuSelect, MenuMove, PageChanged, PickedPoint, GameOver, GameWon};
 
 class SoundPlayer
 {

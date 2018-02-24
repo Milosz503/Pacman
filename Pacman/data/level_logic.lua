@@ -2,11 +2,20 @@
 
 levelLogic = {
 	
-	testVar = 1,
+	pointNumber = 0,
+	
 	
 	init = function()
 		
-		world:setLives(0)
+		world:setLives(2)
+		
+		for k, v in pairs(Game.tiles) do
+			
+			if v.category == "point" then
+				levelLogic.pointNumber = levelLogic.pointNumber + 1
+			end
+			
+		end
 	
 	end,
 	
@@ -31,9 +40,18 @@ levelLogic = {
 				world:removeLive()
 				LevelManager.loadEntities()
 			else
+				world:playSound("GameOver")
 				world:endGame("GAME OVER!", Colors.red)
 			end
 			
+			
+		elseif object1.category == "player" and object2.category == "point" then
+		
+			levelLogic.pointNumber = levelLogic.pointNumber - 1
+			if levelLogic.pointNumber <= 0 then
+				world:playSound("GameWon")
+				world:endGame("GOOD JOB!", Colors.green)
+			end
 			
 		end
 		

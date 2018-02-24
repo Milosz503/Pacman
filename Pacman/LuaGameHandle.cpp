@@ -20,6 +20,10 @@ void LuaGameHandle::playSound(std::string sound)
 
 	if (sound == "PickedPoint")
 		id = SoundID::PickedPoint;
+	else if (sound == "GameOver")
+		id = SoundID::GameOver;
+	else if (sound == "GameWon")
+		id = SoundID::GameWon;
 	else
 	{
 		std::cout << "Sound " + sound + " does not exist\n";
