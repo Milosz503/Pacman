@@ -22,14 +22,25 @@ int main()
 {
 
 	TextureManager textureManager;
-	textureManager.generateTileset();
+	//textureManager.generateTileset();
 	textureManager.loadTextures();
+
+	
+
 	ConsoleWindow console(66, 42, &textureManager, "Pacman");
+	//console.clear(sf::Color::Red);
+	//console.display();
+	console.loadingScreen(0);
+	
+
 	ImGui::SFML::Init(*console.getWindow());
+	console.loadingScreen(1);
+
 
 	MusicPlayer music;
+	console.loadingScreen(2);
 	SoundPlayer sounds;
-
+	console.loadingScreen(3);
 	
 
 	State::Context context(&console, &textureManager, &music, &sounds);
@@ -44,6 +55,8 @@ int main()
 	stack.registerState<LevelChoiceState>(States::LevelChoiceGame, States::Game);
 	stack.registerState<LevelChoiceState>(States::LevelChoiceEditor, States::Editor);
 
+
+
 	stack.pushState(States::Menu);
 
 
@@ -53,7 +66,6 @@ int main()
 	sf::Clock clock;
 
 	sf::Time timeSinceLasUpdate = sf::Time::Zero;
-
 
 	while (console.isOpen())
 	{

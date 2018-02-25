@@ -50,7 +50,9 @@ public:
 	void close();
 
 	sf::RenderWindow* getWindow();
+	
 
+	void loadingScreen(int progress);
 
 
 	~ConsoleWindow();

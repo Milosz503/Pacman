@@ -27,21 +27,28 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
-	window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title, Style::Fullscreen);
+	window_.create(sf::VideoMode(width * fontWidth_*2, height * fontHeight_*2), title);//, Style::Fullscreen);
+	window_.clear(Color::Black);
+	window_.display();
 
-	if (!texture_.create(width * fontWidth_, height * fontHeight_))
-	{
-		cout << "Error creating renderTexture!" << std::endl;
-	}
-	if (!customTexture_.create(width * fontWidth_, height * fontHeight_))
-	{
-		cout << "Error creating renderTexture!" << std::endl;
-	}
+	int w = window_.getSize().x;
+	int h = window_.getSize().y;
+	float scale1 = w / (float)(width* fontWidth_);
+	float scale2 = h / (float)(height * fontHeight_);
+
+	setScale(2);
+
+	/*if (scale1 < scale2)
+		setScale(scale1);
+	else
+		setScale(scale2);*/
+
+	cout << "Font: " << scale_ << " - " << fontWidth_ << " " << fontHeight_ << "\n";
 
 
 	if (!shader_.loadFromFile("shader.frag", sf::Shader::Fragment))
 	{
-		cout << "Error shader!" << std::endl;
+		cout << "Error loading shader!" << std::endl;
 	}
 
 
@@ -55,18 +62,6 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 		textures_[i].resize(width_);
 	}
-
-	int w = window_.getSize().x;
-	int h = window_.getSize().y;
-	float scale1 = w / (float)(width* fontWidth_);
-	float scale2 = h / (float)(height * fontHeight_);
-
-	if (scale1 < scale2)
-		setScale(scale1);
-	else
-		setScale(scale2);
-
-	cout << "Font: " << scale_ << " - " << fontWidth_ << " " << fontHeight_ << "\n";
 }
 
 //void ConsoleWindow::setFontSize(unsigned size)
@@ -112,6 +107,9 @@ void ConsoleWindow::setScale(float scale)
 	{
 		cout << "Error creating renderTexture!" << std::endl;
 	}
+
+	window_.setSize(sf::Vector2u(width_ * fontWidth_, height_ * fontHeight_));
+	window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
 
 	updatePosition();
 
@@ -373,6 +371,28 @@ void ConsoleWindow::close()
 sf::RenderWindow* ConsoleWindow::getWindow()
 {
 	return &window_;
+}
+
+void ConsoleWindow::loadingScreen(int progress)
+{
+	clear(Color::Black);
+
+	std::wstring loading = L"LOADING";
+
+	for (int i = 0; i < progress; ++i)
+	{
+		loading += L".";
+	}
+
+	ConsoleText text(loading, CharacterColor::White);
+
+	text.setPosition((width_ - 10) / 2, height_ / 2);
+
+	draw(text);
+
+	show();
+	display();
+
 }
 
 

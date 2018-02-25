@@ -1,6 +1,6 @@
 
 
-levelLogic = {
+LevelLogic = {
 	
 	pointNumber = 0,
 	
@@ -12,7 +12,7 @@ levelLogic = {
 		for k, v in pairs(Game.tiles) do
 			
 			if v.category == "point" then
-				levelLogic.pointNumber = levelLogic.pointNumber + 1
+				LevelLogic.pointNumber = LevelLogic.pointNumber + 1
 			end
 			
 		end
@@ -46,9 +46,13 @@ levelLogic = {
 			
 			
 		elseif object1.category == "player" and object2.category == "point" then
-		
-			levelLogic.pointNumber = levelLogic.pointNumber - 1
-			if levelLogic.pointNumber <= 0 then
+			
+			world:addScore(object2.score or 1)
+			world:playSound("PickedPoint")
+			object2.handle:remove()
+			
+			LevelLogic.pointNumber = LevelLogic.pointNumber - 1
+			if LevelLogic.pointNumber <= 0 then
 				world:playSound("GameWon")
 				world:endGame("GOOD JOB!", Colors.green)
 			end
@@ -61,4 +65,12 @@ levelLogic = {
 
 }
 
-return levelLogic
+function LevelLogic:setGhostScared(seconds)
+	
+	
+	
+end
+
+
+
+return LevelLogic

@@ -20,7 +20,7 @@ function LevelManager.loadLevel(fileName)
 		Game.levelLogic = dofile(level.levelLogic) or {}
 		Game.levelLogicFile = level.levelLogic
 	else
-		Game.levelLogicFile = "data/level_logic.lua"
+		Game.levelLogicFile = "data/LevelLogic.lua"
 		Game.levelLogic = dofile(Game.levelLogicFile) or {}
 	end
 	

@@ -155,7 +155,6 @@ void LuaManager::initTypes()
 void LuaManager::includeScripts()
 {
 	loadScript("data/entities.lua");
-	loadScript("data/level_logic.lua");
 	loadScript("data/new_lua/Game.lua");
 	loadScript("data/new_lua/LevelManager.lua");
 
