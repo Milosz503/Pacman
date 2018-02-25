@@ -14,11 +14,6 @@ Ghost = Class:new({
 function Ghost.getProperties()
 	
 	return {
-		
-		homeX = 0,
-		homeY = 0,
-		color = 4,
-
 	
 	}
 	
@@ -29,13 +24,20 @@ end
 function Ghost:init()
 	
 	self.state = "chase"
-
+	self.isScared = false
 	
 end
 
-function Ghost:update()
+
+function Ghost:setScared(isScared)
 	
-	
+	if isScared then
+		self.handle:setColor(Colors.blue)
+		self.isScared = true
+	else
+		self.handle:setColor(self.texture.color or Colors.white)
+		self.isScared = false
+	end
 	
 end
 

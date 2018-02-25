@@ -4,6 +4,8 @@ LevelLogic = {
 	
 	pointNumber = 0,
 	
+	leftTimeScared = -1,
+	
 	
 	init = function()
 		
@@ -22,6 +24,21 @@ LevelLogic = {
 	update = function()
 		--print("Level LOGIC!")
 		
+		
+		-- remove scared effect
+		if LevelLogic.leftTimeScared > 0 then
+			
+			LevelLogic.leftTimeScared = LevelLogic.leftTimeScared - 1/60
+			if LevelLogic.leftTimeScared < 0 then
+				
+				for k, v in pairs(Game.entities) do
+					if v.category == "ghost" then
+						v:setScared(false)
+					end
+				end
+			end
+		end
+		
 
 		
 	end,
@@ -33,16 +50,33 @@ LevelLogic = {
 		if (object1.category == "player" or object2.category == "player") and
 			(object1.category == "ghost" or object2.category == "ghost") then
 			
-			print("PLAYER - GHOST")
-			
-			if world.lives > 0 then
-				world:removeEntities()
-				world:removeLive()
-				LevelManager.loadEntities()
+			local ghost = {}
+			if object1.category == "ghost" then ghost = object1
+			else ghost = object2 end
+		
+			if not ghost.isScared then
+				if world.lives > 0 then
+					world:removeEntities()
+					world:removeLive()
+					LevelManager.loadEntities()
+				else
+					world:playSound("GameOver")
+					world:endGame("GAME OVER!", Colors.red)
+				end
 			else
-				world:playSound("GameOver")
-				world:endGame("GAME OVER!", Colors.red)
+				
+				
+				entity = Game.createEntity(ghost.prefab.name, ghost.prefab.data)
+				entity.handle:setPosition(ghost.prefab.x or 0, ghost.prefab.y or 0)
+				entity.prefab = ghost.prefab
+				
+				ghost.handle:remove()
+				
+				world:addScore(500)
+				
 			end
+			
+			
 			
 			
 		elseif object1.category == "player" and object2.category == "point" then
@@ -65,8 +99,15 @@ LevelLogic = {
 
 }
 
-function LevelLogic:setGhostScared(seconds)
+function LevelLogic.setGhostScared(seconds)
+	LevelLogic.leftTimeScared = seconds or 10
 	
+	for k, v in pairs(Game.entities) do
+		
+		if v.category == "ghost" then
+			v:setScared(true)
+		end
+	end
 	
 	
 end

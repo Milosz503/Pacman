@@ -1,7 +1,7 @@
 require "data.new_lua.Class"
 
 Colors = dofile("data/colors.lua")
-
+Ghost = dofile("data/entities/Ghost.lua")
  
 function toPlayerBackCosts(nodes)
 	player = world:getPlayer()

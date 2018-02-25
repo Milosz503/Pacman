@@ -63,6 +63,7 @@ function LevelManager.loadEntities()
 	
 		entity = Game.createEntity(object.name, object.data)
 		entity.handle:setPosition(object.x or 0, object.y or 0)
+		entity.prefab = object
 	end
 	
 end

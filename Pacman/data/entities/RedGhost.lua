@@ -1,4 +1,4 @@
-RedGhost = Class:new({
+RedGhost = Ghost:new({
 	
 	type = "entity",
 	category = "ghost",

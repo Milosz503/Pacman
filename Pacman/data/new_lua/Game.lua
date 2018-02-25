@@ -9,6 +9,8 @@ Game.tileFactory = {}
 Game.entities = {}
 Game.tiles = {}
 
+Game.updateObjects = {}
+
 
 function Game.init()
 	
@@ -25,22 +27,15 @@ function Game.update(frameNumber)
 	Game.frameNumber = frameNumber
 	--print "update"
 	i = 0
-	for k,v in pairs(Game.entities) do
+	for k,v in pairs(Game.updateObjects) do
 		if v.update ~= nil then
 			v:update()
 		end
 		i = i+1
 	end
 	
-	--print("updated "..i.." entities")
-	i = 0
-	for k,v in pairs(Game.tiles) do
-		if v.update ~= nil then
-			v:update()
-		end
-		i = i+1
-	end
-	--print("updated "..i.." tiles")
+	--print("updated "..i.." objects")
+
 	
 	if Game.levelLogic ~= nil and Game.levelLogic.update ~= nil then
 		Game.levelLogic.update()
@@ -100,6 +95,10 @@ function Game.initObject(object, properties)
 		--end
 	else
 		table.insert(Game.entities, object)
+	end
+	
+	if object.update ~= nil then
+		table.insert(Game.updateObjects, object)
 	end
 	
 	
@@ -187,22 +186,36 @@ end
 
 function Game.onRemove(handle)
 	
+	
 	e = handle.self
-	for k,v in pairs(Game.entities) do
+	
+	-- remove from updateObjects
+	for k, v in pairs(Game.updateObjects) do
+		
 		if v == e then
-			Game.entities[k].handle:remove()
-			Game.entities[k] = nil
-			print("-")
-			--return
+			Game.updateObjects[k] = nil
+			break
 		end
+		
 	end
 	
-	for k,v in pairs(Game.tiles) do
+	-- remove from entities -> return
+	for k,v in pairs(Game.entities) do
 		if v == e then
-			Game.tiles[k] = nil
-			print("-")
+			Game.entities[k] = nil
 			return
 		end
 	end
 	
+	-- remove from tiles -> return
+	for k,v in pairs(Game.tiles) do
+		if v == e then
+			Game.tiles[k] = nil
+			return
+		end
+	end
+	
+	
+	
 end
+

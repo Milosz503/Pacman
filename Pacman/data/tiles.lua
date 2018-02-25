@@ -48,6 +48,7 @@ return {
 			if self.state == "pickup" and object.handle.category == "player" then
 				world:playSound("GameWon")
 				world:addScore(100)
+				LevelLogic.setGhostScared(3)
 				self.handle:remove()
 			end
 		
