@@ -1,9 +1,6 @@
 PinkGhost = Ghost:new({
-	
-	type = "entity",
-	category = "ghost",
 		
-	speed = 10,
+	speed = 7,
 
 	texture = {x = 6, y = 2, color = Colors.cyan }
 })
@@ -23,6 +20,8 @@ end
 
 
 function PinkGhost:init()
+	Ghost.init(self)
+	
 	
 	handle = self.handle
 	
@@ -36,7 +35,7 @@ function PinkGhost:init()
 end
 
 function PinkGhost:update()
-	
+	Ghost.update(self)
 end
 
 

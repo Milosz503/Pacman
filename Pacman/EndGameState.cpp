@@ -56,6 +56,17 @@ bool EndGameState::update(sf::Time dt)
 bool EndGameState::handleEvent(sf::Event event)
 {
 	menu_.handleEvent(event);
+
+	if (event.type == Event::KeyPressed)
+	{
+		if (event.key.code == Keyboard::Escape)
+		{
+			requestStackClear();
+			requestStackPush(States::Menu);
+		}
+
+	}
+
 	return false;
 }
 

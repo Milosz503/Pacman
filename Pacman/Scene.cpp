@@ -58,10 +58,10 @@ void Scene::cleanObjects()
 	{
 		if (entities_[i]->isToRemove())
 		{
+			world_->getSystems()->sendSystemEvent(new OnRemoveEvent(entities_[i]));
+
 			if (entities_[i] == player_)
 				player_ = nullptr;
-
-			world_->getSystems()->sendSystemEvent(new OnRemoveEvent(entities_[i]));
 
 			delete entities_[i];
 			entities_[i] = nullptr;
@@ -311,16 +311,16 @@ void Scene::update()
 
 	unsigned long long frameNumber = world_->getFrameNumber();
 
-	for (auto& entity : entities_)
-	{
-		entity->update();
+	//for (auto& entity : entities_)
+	//{
+	//	entity->update();
 
-		
-	}
+	//	
+	//}
 
 	cleanObjects();
 
-	//std::cout << entities_.size() << std::endl;
+	//std::cout << "Entities size: " << entities_.size() << std::endl;
 
 }
 

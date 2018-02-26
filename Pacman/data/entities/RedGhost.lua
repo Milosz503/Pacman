@@ -1,9 +1,7 @@
 RedGhost = Ghost:new({
-	
-	type = "entity",
-	category = "ghost",
+
 		
-	speed = 15,
+	speed = 10,
 
 	texture = {x = 6, y = 2, color = Colors.red }
 })
@@ -25,6 +23,8 @@ end
 
 function RedGhost:init()
 	
+	Ghost.init(self)
+	
 	handle = self.handle
 	
 	self.state = "start"
@@ -38,6 +38,8 @@ function RedGhost:init()
 end
 
 function RedGhost:update()
+	
+	Ghost.update(self)
 	
 	handle = self.handle
 	

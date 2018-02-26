@@ -80,3 +80,17 @@ void PlayerController::update()
 	if(x != Direction::ZeroX || y != Direction::ZeroY)
 		getWorld()->getScene()->getPlayer()->setSpeed(x, y);
 }
+
+void PlayerController::onEvent(SystemEvent * event)
+{
+	if (event->type == SystemEvent::onRemove)
+	{
+		OnRemoveEvent* onRemove = static_cast<OnRemoveEvent*>(event);
+
+		if (onRemove->object->getCategory() == "player")
+		{
+			newDirX = Direction::ZeroX;
+			newDirY = Direction::ZeroY;
+		}
+	}
+}

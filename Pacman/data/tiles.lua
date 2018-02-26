@@ -6,7 +6,7 @@ return {
 		
 		isPhysical = true;
 		
-		texture = {x = 4, y = 3, color = Colors.lightGrey};
+		texture = {x = 11, y = 6, color = Colors.red};
 	},
 	
 	
@@ -46,7 +46,7 @@ return {
 		collide = function (self, object)
 		
 			if self.state == "pickup" and object.handle.category == "player" then
-				world:playSound("GameWon")
+				
 				world:addScore(100)
 				LevelLogic.setGhostScared(3)
 				self.handle:remove()

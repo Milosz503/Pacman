@@ -21,5 +21,6 @@ private:
 	Direction::X newDirX;
 	Direction::Y newDirY;
 
+	virtual void onEvent(SystemEvent* event) override;
 };
 

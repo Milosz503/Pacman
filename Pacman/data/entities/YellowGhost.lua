@@ -1,9 +1,7 @@
 YellowGhost = Ghost:new({
-	
-	type = "entity",
-	category = "ghost",
+
 		
-	speed = 10,
+	speed = 9,
 
 	texture = {x = 6, y = 2, color = Colors.yellow }
 })
@@ -26,6 +24,8 @@ end
 
 
 function YellowGhost:init()
+	
+	Ghost.init(self)
 	
 	handle = self.handle
 	
@@ -55,6 +55,8 @@ function YellowGhost:init()
 end
 
 function YellowGhost:update()
+	
+	Ghost.update(self)
 	
 	handle = self.handle
 	

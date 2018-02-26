@@ -4,7 +4,7 @@ LevelLogic = {
 	
 	pointNumber = 0,
 	
-	leftTimeScared = -1,
+	--leftTimeScared = -1,
 	
 	
 	init = function()
@@ -26,18 +26,18 @@ LevelLogic = {
 		
 		
 		-- remove scared effect
-		if LevelLogic.leftTimeScared > 0 then
+		-- if LevelLogic.leftTimeScared > 0 then
 			
-			LevelLogic.leftTimeScared = LevelLogic.leftTimeScared - 1/60
-			if LevelLogic.leftTimeScared < 0 then
+			-- LevelLogic.leftTimeScared = LevelLogic.leftTimeScared - 1/60
+			-- if LevelLogic.leftTimeScared < 0 then
 				
-				for k, v in pairs(Game.entities) do
-					if v.category == "ghost" then
-						v:setScared(false)
-					end
-				end
-			end
-		end
+				-- for k, v in pairs(Game.entities) do
+					-- if v.category == "ghost" then
+						-- v:setScared(false)
+					-- end
+				-- end
+			-- end
+		-- end
 		
 
 		
@@ -55,10 +55,13 @@ LevelLogic = {
 			else ghost = object2 end
 		
 			if not ghost.isScared then
+				
+			
 				if world.lives > 0 then
 					world:removeEntities()
 					world:removeLive()
 					LevelManager.loadEntities()
+					world:playSound("LostLive")
 				else
 					world:playSound("GameOver")
 					world:endGame("GAME OVER!", Colors.red)
@@ -72,6 +75,7 @@ LevelLogic = {
 				
 				ghost.handle:remove()
 				
+				world:playSound("GhostEaten")
 				world:addScore(500)
 				
 			end
@@ -102,10 +106,12 @@ LevelLogic = {
 function LevelLogic.setGhostScared(seconds)
 	LevelLogic.leftTimeScared = seconds or 10
 	
+	world:playSound("Powerup")
+	
 	for k, v in pairs(Game.entities) do
 		
 		if v.category == "ghost" then
-			v:setScared(true)
+			v:setScared(seconds)
 		end
 	end
 	

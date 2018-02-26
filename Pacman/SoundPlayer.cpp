@@ -8,6 +8,9 @@ SoundPlayer::SoundPlayer()
 	loadSound(SoundID::MenuMove, "data/sounds/menu_move.wav");
 	loadSound(SoundID::PageChanged, "data/sounds/page_changed.wav");
 	loadSound(SoundID::PickedPoint, "data/sounds/picked_point.wav");
+	loadSound(SoundID::Powerup, "data/sounds/powerup.wav");
+	loadSound(SoundID::GhostEaten, "data/sounds/ghost_eaten.wav");
+	loadSound(SoundID::LostLive, "data/sounds/lost_live.wav");
 	loadSound(SoundID::GameOver, "data/sounds/game_over.wav");
 	loadSound(SoundID::GameWon, "data/sounds/game_won.wav");
 }

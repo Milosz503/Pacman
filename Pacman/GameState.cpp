@@ -35,12 +35,13 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 	fpsText_.setPosition(0, 0);
 
 
+
 	
 	systems_.addSystem<EntityController>();
 	systems_.addSystem<PlayerController>();
 	systems_.addSystem<LuaSystem>();
 	systems_.addSystem<Physics>();
-
+	
 
 	if(isEditor)
 		systems_.addSystem<EditSystem>();

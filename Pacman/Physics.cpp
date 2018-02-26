@@ -1,7 +1,7 @@
 #include "Physics.h"
 
 #include "Entity.h"
-#include "WOrld.h"
+#include "World.h"
 #include <iostream>
 
 using namespace sf;
@@ -65,9 +65,11 @@ void Physics::checkDynamicCollisions(std::list<DynamicPair>& collisions)
 
 	std::vector<Entity*>& entities = scene_->getEntities();
 
-	for (int i = 0; i < entities.size(); ++i)
+	int n = entities.size();
+
+	for (int i = 0; i < n; ++i)
 	{
-		for (int j = i + 1; j < entities.size(); ++j)
+		for (int j = i + 1; j < n; ++j)
 		{
 			if (entities[i]->getNextMove() == -entities[j]->getNextMove())
 			{
