@@ -177,6 +177,7 @@
     <ClInclude Include="LuaSystem.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PathFinder.h" />
+    <ClInclude Include="PauseState.h" />
     <ClInclude Include="sol.hpp" />
     <ClInclude Include="sol_old.hpp" />
     <ClInclude Include="SoundPlayer.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="PathFinder.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Scene.cpp" />

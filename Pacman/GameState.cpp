@@ -98,9 +98,15 @@ bool GameState::handleEvent(sf::Event event)
 
 		if (event.key.code == Keyboard::Escape)
 		{
+			getContext().sounds->play(SoundID::MenuSelect);
 
-			requestStackPop();
-			requestStackPush(States::Menu);
+			if(!world_.isEditMode())
+				requestStackPush(States::Pause);
+			else
+			{
+				requestStackClear();
+				requestStackPush(States::Menu);
+			}
 
 		}
 		if (event.key.code == Keyboard::S)

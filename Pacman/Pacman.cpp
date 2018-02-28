@@ -10,6 +10,7 @@
 #include "EditState.h"
 #include "EndGameState.h"
 #include "LevelChoiceState.h"
+#include "PauseState.h"
 
 
 
@@ -51,6 +52,7 @@ int main()
 	stack.registerState<GameState>(States::Game, false);
 	stack.registerState<EndGameState>(States::EndGame);
 	stack.registerState<MenuState>(States::Menu);
+	stack.registerState<PauseState>(States::Pause);
 	stack.registerState<GameState>(States::Editor, true);
 	stack.registerState<LevelChoiceState>(States::LevelChoiceGame, States::Game);
 	stack.registerState<LevelChoiceState>(States::LevelChoiceEditor, States::Editor);
