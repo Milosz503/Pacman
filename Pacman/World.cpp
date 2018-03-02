@@ -10,7 +10,7 @@ World::World(State::Context context) :
 	score_(0),
 	playerLives_(1),
 	isEditMode_(false),
-	levelFile_(*context.levelFile),
+	levelName_(*context.levelName),
 	console_(context.console),
 	textureManager_(context.textureManager),
 	sounds_(context.sounds),
@@ -45,9 +45,9 @@ void World::draw()
 	scene_.draw();
 }
 
-std::string World::getLevelFile()
+std::string World::getLevelName()
 {
-	return levelFile_;
+	return levelName_;
 }
 
 sf::IntRect World::getBounds()

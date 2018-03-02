@@ -169,6 +169,7 @@
     <ClInclude Include="EntityController.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="HighScoreManager.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="LevelChoiceState.h" />
     <ClInclude Include="LuaGameHandle.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="EntityController.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="HighScoreManager.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="LevelChoiceState.cpp" />
     <ClCompile Include="LuaGameHandle.cpp" />

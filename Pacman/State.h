@@ -41,7 +41,7 @@ public:
 		TextureManager* textureManager;
 		MusicPlayer* music;
 		SoundPlayer* sounds;
-		std::string* levelFile;
+		std::string* levelName;
 		std::string* endGameContent;
 		int* score;
 		CharacterColor::Color* endGameColor;

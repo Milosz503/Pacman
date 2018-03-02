@@ -16,7 +16,7 @@ public:
 	virtual void draw() override;
 
 private:
-	const std::string PATH_TO_LEVEL = "data/levels/";
+	
 
 	States::ID nextState_;
 

@@ -1,5 +1,5 @@
 #include "LevelChoiceState.h"
-
+#include "HighScoreManager.h"
 
 
 LevelChoiceState::LevelChoiceState(StateStack& stack, Context context, States::ID nextState) :
@@ -41,15 +41,6 @@ bool LevelChoiceState::handleEvent(sf::Event event)
 
 	if (event.type == Event::KeyPressed)
 	{
-		if (event.key.code >= Keyboard::Num1 && event.key.code <= Keyboard::Num9)
-		{
-			int value = event.key.code - Keyboard::Num1 + 1;
-
-			*(getContext().levelFile) = PATH_TO_LEVEL + "save" + std::to_string(value) + ".lua";
-
-			requestStackClear();
-			requestStackPush(nextState_);
-		}
 
 		if (event.key.code == Keyboard::Left)
 		{
@@ -110,7 +101,7 @@ void LevelChoiceState::changePage()
 		GUI::Button* button = new GUI::Button(L"Save " + std::to_wstring(i), CharacterColor::White,
 			[=]() {
 
-			*(getContext().levelFile) = PATH_TO_LEVEL + "save" + std::to_string(i) + ".lua";
+			*(getContext().levelName) = "save" + std::to_string(i);
 
 			requestStackClear();
 			requestStackPush(nextState_);
@@ -121,7 +112,10 @@ void LevelChoiceState::changePage()
 
 		menu_.addItem(button);
 
-		GUI::Text* text = new GUI::Text(L"High score: 0", CharacterColor::Grey);
+		std::string levelName = "save" + std::to_string(i);
+		int highScore = HighScoreManager::getHighScore(levelName);
+
+		GUI::Text* text = new GUI::Text(L"High score: " + std::to_wstring(highScore), CharacterColor::Grey);
 		text->setAlignment(GUI::Alignment::Center);
 		menu_.addItem(text);
 

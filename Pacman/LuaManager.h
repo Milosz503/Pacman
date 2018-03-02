@@ -24,6 +24,8 @@ public:
 
 private:
 
+	const std::string PATH_TO_LEVEL = "data/levels/";
+
 	sol::state lua_;
 	World* world_;
 

@@ -12,7 +12,7 @@ EditState::EditState(StateStack & stack, Context context) :
 	State(stack, context),
 	textureManager_(context.textureManager),
 	console_(context.console),
-	levelFile_(*context.levelFile),
+	levelFile_(*context.levelName),
 	objectData_(lua_, sol::create),
 	brush_(Brush::Tile, 0),
 	width_(20),

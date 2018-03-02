@@ -26,7 +26,7 @@ public:
 	void update();
 	void draw();
 
-	std::string getLevelFile();
+	std::string getLevelName();
 	sf::IntRect getBounds();
 
 	unsigned long long getFrameNumber();
@@ -68,7 +68,7 @@ private:
 
 	sf::Vector2i sceneOffset_;
 
-	std::string levelFile_;
+	std::string levelName_;
 
 	ConsoleWindow* console_;
 	TextureManager* textureManager_;

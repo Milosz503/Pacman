@@ -43,7 +43,7 @@ LuaManager::~LuaManager()
 
 void LuaManager::init()
 {
-	loadLevel(world_->getLevelFile());
+	loadLevel(world_->getLevelName());
 }
 
 
@@ -56,6 +56,8 @@ sol::state & LuaManager::getLua()
 
 void LuaManager::loadScript(std::string fileName)
 {
+	
+
 	try {
 		lua_.script_file(fileName);
 	}
@@ -67,6 +69,8 @@ void LuaManager::loadScript(std::string fileName)
 
 void LuaManager::saveLevel(std::string fileName)
 {
+	fileName = PATH_TO_LEVEL + fileName + ".lua";
+
 	try {
 		sol::table levelManager = lua_["LevelManager"];
 		auto result = levelManager["saveLevel"](fileName);
@@ -78,6 +82,8 @@ void LuaManager::saveLevel(std::string fileName)
 
 void LuaManager::loadLevel(std::string fileName)
 {
+	fileName = PATH_TO_LEVEL + fileName + ".lua";
+
 	try {
 		sol::table luaLevel = lua_["LevelManager"];
 		luaLevel["loadLevel"](fileName);

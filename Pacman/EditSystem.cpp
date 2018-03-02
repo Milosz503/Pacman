@@ -223,7 +223,7 @@ void EditSystem::showPalette()
 
 			if (ImGui::MenuItem("Save"))
 			{
-				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelFile());
+				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelName());
 			}
 
 			ImGui::Separator();
@@ -236,8 +236,8 @@ void EditSystem::showPalette()
 		{
 			if (ImGui::Button("Play"))
 			{
-				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelFile());
-				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelFile());
+				getWorld()->getLuaManager().saveLevel(getWorld()->getLevelName());
+				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelName());
 				getWorld()->setEditMode(false);
 			}
 		}
@@ -246,7 +246,7 @@ void EditSystem::showPalette()
 			if (ImGui::Button("Stop"))
 			{
 				getWorld()->setEditMode(true);
-				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelFile());
+				getWorld()->getLuaManager().loadLevel(getWorld()->getLevelName());
 			}
 		}
 
@@ -267,7 +267,7 @@ void EditSystem::showPalette()
 	if (saveAs)
 	{
 		
-		sprintf_s(levelFile, "%s", getWorld()->getLevelFile().c_str());
+		sprintf_s(levelFile, "%s", getWorld()->getLevelName().c_str());
 		ImGui::OpenPopup("Save as");
 	}
 

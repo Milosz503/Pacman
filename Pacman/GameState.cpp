@@ -9,6 +9,7 @@
 #include "EditSystem.h"
 #include "StateStack.h"
 #include "LuaSystem.h"
+#include "HighScoreManager.h"
 
 GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 	State(stack, context),
@@ -56,6 +57,14 @@ bool GameState::update(sf::Time dt)
 		(*getContext().endGameContent) = world_.getEndGameContent();
 		(*getContext().score) = world_.getScore();
 		(*getContext().endGameColor) = world_.getEndGameColor();
+
+		int highScore = HighScoreManager::getHighScore(*getContext().levelName);
+
+		if (world_.getScore() > highScore)
+		{
+			HighScoreManager::setHighScore(*getContext().levelName, world_.getScore());
+		}
+
 		requestStackPop();
 		requestStackPush(States::EndGame);
 	}
