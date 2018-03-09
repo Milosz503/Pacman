@@ -81,6 +81,9 @@ void MenuState::callbackEditor()
 
 void MenuState::callbackSettings()
 {
+	requestStackPush(States::Settings);
+	return;
+
 	unsigned scale = getContext().console->getScale();
 
 	if (scale < 4)

@@ -8,6 +8,8 @@ using namespace sf;
 
 
 ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* textureManager, string title) :
+	title_(title),
+	isFullscreen_(false),
 	width_(width),
 	height_(height),
 	fontHeight_(textureManager->getFontHeight()),
@@ -27,7 +29,11 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
-	window_.create(sf::VideoMode(width * fontWidth_*2, height * fontHeight_*2), title);//, Style::Fullscreen);
+	if(isFullscreen_)
+		window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title, Style::Fullscreen);
+	else
+		window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title);
+
 	window_.clear(Color::Black);
 	window_.display();
 
@@ -38,10 +44,10 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 	setScale(2);
 
-	/*if (scale1 < scale2)
-		setScale(scale1);
-	else
-		setScale(scale2);*/
+	//if (scale1 < scale2)
+	//	setScale(scale1);
+	//else
+	//	setScale(scale2);
 
 	cout << "Font: " << scale_ << " - " << fontWidth_ << " " << fontHeight_ << "\n";
 
@@ -88,6 +94,22 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 
 void ConsoleWindow::setScale(float scale)
 {
+	if (scale <= 0)
+	{
+
+		int w = window_.getSize().x;
+		int h = window_.getSize().y;
+		float scale1 = w / (float)(width_* textureManager_->getFontWidth());
+		float scale2 = h / (float)(height_ * textureManager_->getFontHeight());
+
+		if (scale1 < scale2)
+			scale = scale1;
+		else
+			scale = scale2;
+
+		
+	}
+
 	fontWidth_ = textureManager_->getFontWidth() * scale;
 	fontHeight_ = textureManager_->getFontHeight() * scale;
 
@@ -108,8 +130,12 @@ void ConsoleWindow::setScale(float scale)
 		cout << "Error creating renderTexture!" << std::endl;
 	}
 
-	window_.setSize(sf::Vector2u(width_ * fontWidth_, height_ * fontHeight_));
-	window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
+	if (!isFullscreen_)
+	{
+		window_.create(sf::VideoMode(width_ * fontWidth_, height_ * fontHeight_), title_);
+		//window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
+	}
+	
 
 	updatePosition();
 
@@ -140,6 +166,26 @@ sf::Vector2i ConsoleWindow::getOffset()
 sf::Vector2i ConsoleWindow::getPosition()
 {
 	return Vector2i(startX_, startY_);
+}
+
+void ConsoleWindow::setFullscreen(bool isFullscreen)
+{
+	if (isFullscreen_ == isFullscreen)
+		return;
+
+	isFullscreen_ = isFullscreen;
+
+	if (isFullscreen)
+		window_.create(sf::VideoMode(width_ * fontWidth_, height_ * fontHeight_), title_, Style::Fullscreen);
+	else
+		window_.create(sf::VideoMode(width_ * fontWidth_, height_ * fontHeight_), title_);
+
+	setScale(scale_);
+}
+
+bool ConsoleWindow::isFullscreen()
+{
+	return isFullscreen_;
 }
 
 void ConsoleWindow::clear(Color color)

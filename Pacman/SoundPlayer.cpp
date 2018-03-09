@@ -2,7 +2,8 @@
 
 
 
-SoundPlayer::SoundPlayer()
+SoundPlayer::SoundPlayer() :
+	volume_(100)
 {
 	loadSound(SoundID::MenuSelect, "data/sounds/menu_select.wav");
 	loadSound(SoundID::MenuMove, "data/sounds/menu_move.wav");
@@ -23,6 +24,7 @@ SoundPlayer::~SoundPlayer()
 void SoundPlayer::play(SoundID effect)
 {
 	sounds_.push_back(sf::Sound(buffers_[effect]));
+	sounds_.back().setVolume(volume_);
 	sounds_.back().play();
 }
 
@@ -32,6 +34,16 @@ void SoundPlayer::removeStoppedSounds()
 	{
 		return sound.getStatus() == sf::Sound::Stopped; 
 	});
+}
+
+void SoundPlayer::setVolume(float volume)
+{
+	volume_ = volume;
+}
+
+float SoundPlayer::getVolume()
+{
+	return volume_;
 }
 
 void SoundPlayer::loadSound(SoundID id, std::string file)

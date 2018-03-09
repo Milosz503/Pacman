@@ -50,6 +50,16 @@ void Container::removeItems()
 	items_.clear();
 }
 
+void Container::setSelectedItem(int selectedItem)
+{
+	changeFocus(selectedItem);
+}
+
+int Container::getSelectedItem()
+{
+	return focusedItem_;
+}
+
 void Container::draw(ConsoleWindow * console)
 {
 	for (auto& item : items_)
@@ -122,9 +132,7 @@ void Container::focusUp()
 		newFocus--;
 		if (items_[newFocus]->isFocusable())
 		{
-			items_[focusedItem_]->setFocus(false);
-			focusedItem_ = newFocus;
-			items_[focusedItem_]->setFocus(true);
+			changeFocus(newFocus);
 			break;
 		}
 	}
@@ -142,12 +150,17 @@ void Container::focusDown()
 		newFocus++;
 		if (items_[newFocus]->isFocusable())
 		{
-			items_[focusedItem_]->setFocus(false);
-			focusedItem_ = newFocus;
-			items_[focusedItem_]->setFocus(true);
+			changeFocus(newFocus);
 			break;
 		}
 	}
+}
+
+void Container::changeFocus(int newFocus)
+{
+	items_[focusedItem_]->setFocus(false);
+	focusedItem_ = newFocus;
+	items_[focusedItem_]->setFocus(true);
 }
 
 }

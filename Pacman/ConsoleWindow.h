@@ -29,6 +29,9 @@ public:
 	sf::Vector2i getOffset();
 	sf::Vector2i getPosition();
 
+	void setFullscreen(bool isFullscreen);
+	bool isFullscreen();
+
 	void clear(sf::Color color = sf::Color::Black);
 	void draw(ConsoleCharacter& character);
 	void draw(ConsoleText& consoleText);
@@ -58,6 +61,9 @@ public:
 	~ConsoleWindow();
 
 private:
+
+	std::string title_;
+	bool isFullscreen_;
 
 	unsigned width_;
 	unsigned height_;

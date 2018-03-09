@@ -16,11 +16,15 @@ public:
 	void play(SoundID effect);
 	void removeStoppedSounds();
 
+	void setVolume(float volume);
+	float getVolume();
+
 
 private:
 
 	std::map<SoundID, sf::SoundBuffer> buffers_;
 	std::list<sf::Sound> sounds_;
+	float volume_;
 
 	void loadSound(SoundID id, std::string file);
 };

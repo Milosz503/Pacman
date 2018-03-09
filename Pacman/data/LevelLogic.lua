@@ -3,6 +3,7 @@
 LevelLogic = {
 	
 	pointNumber = 0,
+	attacked = false,
 	
 	--leftTimeScared = -1,
 	
@@ -22,6 +23,8 @@ LevelLogic = {
 	end,
 	
 	update = function()
+	
+		LevelLogic.attacked = false
 		--print("Level LOGIC!")
 		
 		
@@ -47,7 +50,8 @@ LevelLogic = {
 		
 		--print (object1.category .. "  " .. object2.category)
 		
-		if (object1.category == "player" or object2.category == "player") and
+		if 	LevelLogic.attacked == false and
+			(object1.category == "player" or object2.category == "player") and
 			(object1.category == "ghost" or object2.category == "ghost") then
 			
 			local ghost = {}
@@ -56,7 +60,8 @@ LevelLogic = {
 		
 			if not ghost.isScared then
 				
-			
+				LevelLogic.attacked = true
+				
 				if world.lives > 0 then
 					world:removeEntities()
 					world:removeLive()

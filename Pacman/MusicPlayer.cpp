@@ -40,3 +40,8 @@ void MusicPlayer::setVolume(float volume)
 
 	music_.setVolume(volume);
 }
+
+float MusicPlayer::getVolume()
+{
+	return volume_;
+}

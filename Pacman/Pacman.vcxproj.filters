@@ -207,6 +207,9 @@
     <ClInclude Include="HighScoreManager.h">
       <Filter>Header Files\Game\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="SettingsState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -337,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="HighScoreManager.cpp">
       <Filter>Source Files\Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsState.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

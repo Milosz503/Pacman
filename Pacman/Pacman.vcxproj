@@ -179,6 +179,7 @@
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="PauseState.h" />
+    <ClInclude Include="SettingsState.h" />
     <ClInclude Include="sol.hpp" />
     <ClInclude Include="sol_old.hpp" />
     <ClInclude Include="SoundPlayer.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateStack.cpp" />

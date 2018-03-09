@@ -18,6 +18,11 @@ public:
 	void addItem(Item* item);
 	void setSpacing(int spacing);
 	void removeItems();
+	
+
+	void setSelectedItem(int selectedItem);
+	int getSelectedItem();
+
 
 	virtual void draw(ConsoleWindow* console) override;
 
@@ -34,6 +39,7 @@ private:
 
 	void focusUp();
 	void focusDown();
+	void changeFocus(int newFocus);
 };
 
 }
