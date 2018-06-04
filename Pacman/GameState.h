@@ -30,7 +30,7 @@ private:
 	ConsoleText updateTime_;
 	ConsoleText drawTime_;
 	ConsoleText fpsText_;
-	float fps_;
+	Clock dt_;
 	float averageUpdate_;
 
 

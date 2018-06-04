@@ -15,7 +15,6 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 	State(stack, context),
 	world_(context),
 	systems_(&world_),
-	fps_(0),
 	averageUpdate_(0)
 {
 	world_.setSystems(&systems_);
@@ -28,8 +27,8 @@ GameState::GameState(StateStack & stack, Context context, bool isEditor) :
 
 
 
-	updateTime_.setPosition(0, 47);
-	drawTime_.setPosition(0, 48);
+	updateTime_.setPosition(0, 1);
+	drawTime_.setPosition(0, 2);
 
 	fpsText_.setColor(CharacterColor::Grey);
 	fpsText_.setBackground(sf::Color::Black);
@@ -90,10 +89,10 @@ bool GameState::update(sf::Time dt)
 		L" " + std::to_wstring(1.0/clock.getElapsedTime().asSeconds()) +
 		L" avarage: " + std::to_wstring(averageUpdate_/(world_.getFrameNumber()%20+1)));
 
-	if (dt.asSeconds() != 0)
-	{
-		fps_ = 1.0 / dt.asSeconds();
-	}
+	//if (dt.asSeconds() != 0)
+	//{
+	//	fps_ = 1.0 / dt.asSeconds();
+	//}
 
 
 	return true;
@@ -116,12 +115,6 @@ bool GameState::handleEvent(sf::Event event)
 				requestStackClear();
 				requestStackPush(States::Menu);
 			}
-
-		}
-		if (event.key.code == Keyboard::S)
-		{
-
-			world_.getLuaManager().saveLevel("data/levels/save2.lua");
 
 		}
 	
@@ -161,7 +154,7 @@ void GameState::draw()
 	livesText_.setPosition(x + width - livesText_.getWidth(), offset.y - 4);
 	
 
-	fpsText_.setText(L"fps: " + std::to_string(fps_));
+	fpsText_.setText(L"fps: " + std::to_string(1/dt_.restart().asSeconds()));
 
 
 	console_->draw(fpsText_);

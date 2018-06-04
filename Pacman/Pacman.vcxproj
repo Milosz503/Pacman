@@ -123,6 +123,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Biblioteki\SFML-2.4.2-VS14\include;C:\Biblioteki\lua-5.3.3-VS14-32-bit\include;C:\Biblioteki\LuaBridge;C:\Biblioteki\imgui-sfml</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +131,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Biblioteki\lua-5.3.3-VS14-32-bit;C:\Biblioteki\SFML-2.4.2-VS14\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua53.lib;opengl32.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua53.lib;opengl32.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

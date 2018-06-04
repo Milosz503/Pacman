@@ -68,7 +68,7 @@ int main()
 
 	sf::Clock clock;
 
-	sf::Time timeSinceLasUpdate = sf::Time::Zero;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
 	while (console.isOpen())
 	{
@@ -83,55 +83,59 @@ int main()
 		//		console.close();
 		//	}
 		//}
-
-		sf::Time dt = clock.restart();
-		timeSinceLasUpdate += dt;
-
-		while (timeSinceLasUpdate >= TimePerFrame)
+		if (timeSinceLastUpdate + clock.getElapsedTime() >= TimePerFrame)
 		{
-			sf::Event event;
-			while (console.pollEvent(event))
-			{
-				ImGui::SFML::ProcessEvent(event);
-				stack.handleEvent(event);
+			timeSinceLastUpdate += clock.restart();
 
-				if (event.type == Event::Closed)
+
+			while (timeSinceLastUpdate >= TimePerFrame)
+			{
+				timeSinceLastUpdate -= TimePerFrame;
+				if (timeSinceLastUpdate > TimePerFrame)
+				{
+					timeSinceLastUpdate = TimePerFrame;
+				}
+
+				sf::Event event;
+				while (console.pollEvent(event))
+				{
+					ImGui::SFML::ProcessEvent(event);
+					stack.handleEvent(event);
+
+					if (event.type == Event::Closed)
+					{
+						console.close();
+					}
+				}
+				
+				ImGui::SFML::Update(*console.getWindow(), TimePerFrame);
+				stack.update(TimePerFrame);
+
+				
+
+				
+
+				if (stack.isEmpty())
 				{
 					console.close();
 				}
+
+				
+
+				console.clear(sf::Color::Black);
+				stack.draw();
+				console.show();
+
+				ImGui::SFML::Render(*console.getWindow());
+				console.display();
+
+				
+
+
 			}
 
-			ImGui::SFML::Update(*console.getWindow(), timeSinceLasUpdate);
-			stack.update(timeSinceLasUpdate);
-			
-			timeSinceLasUpdate -= TimePerFrame;
-
-			if (timeSinceLasUpdate > TimePerFrame)
-			{
-				timeSinceLasUpdate = TimePerFrame;
-			}
-			//stack.update(TimePerFrame);
-
-			if (stack.isEmpty())
-			{
-				console.close();
-			}
-
-			
-
-			
-
-			console.clear(sf::Color::Black);
-			stack.draw();
-			
-			console.show();
-			ImGui::SFML::Render(*console.getWindow());
-			console.display();
-
-			
 		}
-
-	
+		
 
 		/*console.clear(sf::Color::Black);
 		stack.draw();

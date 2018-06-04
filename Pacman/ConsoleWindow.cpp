@@ -16,18 +16,20 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	fontWidth_(textureManager->getFontHeight()),
 	offsetX_(0),
 	offsetY_(0),
+	tiles(sf::Quads, width_*height_ * 4),
+	tilesTex(sf::Quads, width_*height_ * 4),
 	textureManager_(textureManager)
 {
 	
 	
 
-    if (!font_.loadFromFile("PxPlus_IBM_BIOS.ttf"))
-	{
-		cout << "ERROR";
-	}
+ //   if (!font_.loadFromFile("PxPlus_IBM_BIOS.ttf"))
+	//{
+	//	cout << "ERROR";
+	//}
 
-
-	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
+	fontWidth_ = textureManager_->getFontWidth();
+	//fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;
 
 	if(isFullscreen_)
 		window_.create(sf::VideoMode(width * fontWidth_, height * fontHeight_), title, Style::Fullscreen);
@@ -52,10 +54,10 @@ ConsoleWindow::ConsoleWindow(unsigned width, unsigned height, TextureManager* te
 	cout << "Font: " << scale_ << " - " << fontWidth_ << " " << fontHeight_ << "\n";
 
 
-	if (!shader_.loadFromFile("shader.frag", sf::Shader::Fragment))
-	{
-		cout << "Error loading shader!" << std::endl;
-	}
+	//if (!shader_.loadFromFile("shader.frag", sf::Shader::Fragment))
+	//{
+	//	cout << "Error loading shader!" << std::endl;
+	//}
 
 
 	background_.resize(height_);
@@ -136,6 +138,30 @@ void ConsoleWindow::setScale(float scale)
 		//window_.setView(sf::View(sf::FloatRect(0, 0, width_ * fontWidth_, height_ * fontHeight_)));
 	}
 	
+
+	for (int i = 0; i < height_; ++i)
+	{
+		for (int j = 0; j < width_; ++j)
+		{
+
+			Vertex* tile = &tiles[(i + j * height_) * 4];
+
+			tile[0].position = sf::Vector2f(j*fontWidth_, i*fontHeight_);
+			tile[3].position = sf::Vector2f(j*fontWidth_, (i + 1) * fontHeight_);
+			tile[1].position = sf::Vector2f((j + 1)*fontWidth_, i * fontHeight_);
+			tile[2].position = sf::Vector2f((j + 1)*fontWidth_, (i + 1) * fontHeight_);
+
+
+			Vertex* tileTex = &tilesTex[(i + j * height_) * 4];
+
+			tileTex[0].position = sf::Vector2f(j*fontWidth_, i*fontHeight_);
+			tileTex[3].position = sf::Vector2f(j*fontWidth_, (i + 1) * fontHeight_);
+			tileTex[1].position = sf::Vector2f((j + 1)*fontWidth_, i * fontHeight_);
+			tileTex[2].position = sf::Vector2f((j + 1)*fontWidth_, (i + 1) * fontHeight_);
+
+		}
+
+	}
 
 	updatePosition();
 
@@ -257,24 +283,6 @@ void ConsoleWindow::draw(ConsoleObject & consoleObject)
 void ConsoleWindow::show()
 {
 
-
-	/*sf::Text output;
-	output.setFont(font_);
-	output.setCharacterSize(fontHeight_);
-	output.setFillColor(sf::Color(200, 200, 200));
-
-	RectangleShape background(Vector2f(fontWidth_, fontHeight_));
-
-	
-
-	fontWidth_ = font_.getGlyph(L'W', fontHeight_, false).advance;*/
-
-	sf::VertexArray tiles(sf::Quads, width_*height_*4);
-	sf::VertexArray tilesTex(sf::Quads, width_*height_ * 4);
-
-
-
-
 	for (int i = 0; i < height_; ++i)
 	{
 		for (int j = 0; j < width_; ++j)
@@ -282,60 +290,31 @@ void ConsoleWindow::show()
 
 			Vertex* tile = &tiles[(i + j*height_)*4];
 
-			tile[0].position = sf::Vector2f(j*fontWidth_, i*fontHeight_);
-			tile[3].position = sf::Vector2f(j*fontWidth_, (i+1) * fontHeight_);
-			tile[1].position = sf::Vector2f((j+1)*fontWidth_, i * fontHeight_);
-			tile[2].position = sf::Vector2f((j+1)*fontWidth_, (i+1) * fontHeight_);
+			tile[0].color = background_[i][j];
+			tile[1].color = background_[i][j];
+			tile[2].color = background_[i][j];
+			tile[3].color = background_[i][j];
 
 
-			//if (buffer_[i][j] == ' ')
-			//{
-				tile[0].color = background_[i][j];
-				tile[1].color = background_[i][j];
-				tile[2].color = background_[i][j];
-				tile[3].color = background_[i][j];
-			//}
-			//else
-			//{
-			//	tile[0].color = background_[i][j];
-			//	tile[1].color = background_[i][j];
-			//	tile[2].color = background_[i][j];
-			//	tile[3].color = background_[i][j];
-
-			//	output.setString(buffer_[i][j]);
-			//	output.setPosition(j*fontWidth_, i * fontHeight_);
-			//	output.setFillColor(colors_[i][j]);
-
-			//	window_.draw(output);
-			//}
 
 			Vertex* tileTex = &tilesTex[(i + j*height_) * 4];
-
-			tileTex[0].position = sf::Vector2f(j*fontWidth_, i*fontHeight_);
-			tileTex[3].position = sf::Vector2f(j*fontWidth_, (i + 1) * fontHeight_);
-			tileTex[1].position = sf::Vector2f((j + 1)*fontWidth_, i * fontHeight_);
-			tileTex[2].position = sf::Vector2f((j + 1)*fontWidth_, (i + 1) * fontHeight_);
-
+			sf::Vector2i texture = textures_[i][j] * 9;
 			
 
-			tileTex[0].texCoords = Vector2f(textures_[i][j].x*9, textures_[i][j].y*9 + 1);
-			tileTex[1].texCoords = Vector2f((textures_[i][j].x) * 9 + 8, textures_[i][j].y * 9 + 1);
-			tileTex[2].texCoords = Vector2f((textures_[i][j].x)*9+8, (textures_[i][j].y)*9+8 + 1);
-			tileTex[3].texCoords = Vector2f(textures_[i][j].x * 9, (textures_[i][j].y)*9+8 + 1);
+			tileTex[0].texCoords = Vector2f(texture.x, texture.y + 1);
+			tileTex[1].texCoords = Vector2f((texture.x) + 8, texture.y + 1);
+			tileTex[2].texCoords = Vector2f((texture.x)+8, (texture.y)+8 + 1);
+			tileTex[3].texCoords = Vector2f(texture.x , (texture.y)+8 + 1);
 			
 
 			
 
-			//background.setPosition(j*fontWidth_, i * fontHeight_ + fontHeight_ / 8);
-			//background.setFillColor(background_[i][j]);
 
-			//window_.draw(background);
 			
 		}
 
 	}
 	window_.draw(tiles);
-	//texture_.draw(tiles);
 	texture_.draw(tilesTex, &textureManager_->getTileset());
 	texture_.display();
 
@@ -343,9 +322,9 @@ void ConsoleWindow::show()
 	Sprite sprite(texture_.getTexture());
 	sprite.setPosition(startX_, startY_);
 
-	shader_.setUniform("texture", sf::Shader::CurrentTexture);
-	shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
-	window_.draw(sprite, &shader_);
+	//shader_.setUniform("texture", sf::Shader::CurrentTexture);
+	//shader_.setUniform("resolution", sf::Vector2f(width_ * fontWidth_, height_ * fontHeight_));
+	window_.draw(sprite/*, &shader_*/);
 	//window_.draw(sprite);
 
 

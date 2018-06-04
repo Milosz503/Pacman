@@ -38,7 +38,7 @@ entities = {
 		type = "entity";
 		category = "player";
 		
-		speed = 6;
+		speed = 9;
 		texture = {x = 2, y = 2, color = Colors.yellow};
 		
 

@@ -3,7 +3,7 @@ Ghost = Class:new({
 	type = "entity",
 	category = "ghost",
 		
-	speed = 10,
+	speed = 13,
 
 	texture = {x = 6, y = 2, color = Colors.yellow },
 	

@@ -1,7 +1,7 @@
 YellowGhost = Ghost:new({
 
 		
-	speed = 9,
+	speed = 12,
 
 	texture = {x = 6, y = 2, color = Colors.yellow }
 })

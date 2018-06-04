@@ -77,16 +77,18 @@ private:
 	int offsetX_;
 	int offsetY_;
 
+	sf::VertexArray tiles;
+	sf::VertexArray tilesTex;
 
 	sf::RenderTexture texture_;
 	sf::RenderTexture customTexture_;
 	sf::RenderWindow window_;
 
-	sf::Shader shader_;
+	//sf::Shader shader_;
 
 	TextureManager* textureManager_;
 
-	sf::Font font_;
+	//sf::Font font_;
 	sf::Texture tileset_;
 
 
